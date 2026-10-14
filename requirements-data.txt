@@ -1,0 +1,3 @@
+# Optional, for downloading/preparing BrowseComp-Plus data.
+huggingface-hub>=0.34,<2
+datasets>=3,<5

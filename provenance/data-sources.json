@@ -1,0 +1,168 @@
+{
+  "browsecomp_dataset": {
+    "repository": "Tevatron/browsecomp-plus",
+    "revision": "144cff8e35b5eaef7e526346aa60774a9deb941f"
+  },
+  "neuclir_benchmark": {
+    "repository": "neuclir/bench",
+    "revision": "8f02c196151e2efcb035ce453cd866dc0d1adf39",
+    "qrels_sha256": "35538038818f73f8bb40dacf9cc894cd8356c885f2aa361706f7f7cfa21796c2"
+  },
+  "neuclir_corpus": {
+    "repository": "neuclir/neuclir1",
+    "revision": "eae8670cf1a4b63f4c4718e48698f4c27613cc68",
+    "files": [
+      "data/fas.mt.eng-00000-of-00001.jsonl.gz",
+      "data/rus.mt.eng-00000-of-00001.jsonl.gz",
+      "data/zho.mt.eng-00000-of-00001.jsonl.gz"
+    ],
+    "revision_note": "Download revision recorded during release preparation. The original paper index used 10038763 documents from this collection; equivalence of every translation to the original corpus was not independently checked."
+  },
+  "document_index": {
+    "repository": "Tevatron/browsecomp-plus-indexes",
+    "revision": "b3f37f70c33829eb09d04784a54277a31871fd63",
+    "prefix": "bm25",
+    "files": {
+      "_3.fdm": {
+        "sha256": "fc9944ba7f16c140c2e8d99ac64d252eb78f58aac4ac309b48f80a18c81e3ee7",
+        "bytes": 957
+      },
+      "_3.fdt": {
+        "sha256": "756db803e706c6f372c5b9ff7ae90a7ebbc511812026d4ea92117b6fa0aaba7b",
+        "bytes": 1991597789
+      },
+      "_3.fdx": {
+        "sha256": "e71b113388397f896f38388968207b1842aed36f14ad8d457f5fd6d27a1e5474",
+        "bytes": 81648
+      },
+      "_3.fnm": {
+        "sha256": "22e9099dbfccf427cd9d19c96f33d0073b9a9a1edea905cb3d8b3a00bf1eae99",
+        "bytes": 343
+      },
+      "_3.nvd": {
+        "sha256": "ecc4f5218929dc41da8b1d6ae1a24eafa58f78c5fe139e7d1ea1d694fb88311a",
+        "bytes": 100254
+      },
+      "_3.nvm": {
+        "sha256": "6b3932f8da1886e06e059e2c7f06bc793bc258cb7d1e0cff63d6a773494c2a43",
+        "bytes": 103
+      },
+      "_3.si": {
+        "sha256": "7c8ab5a2b8002983d91785a762771d7231b7209b0153b83b94ccc66efb7dd417",
+        "bytes": 474
+      },
+      "_3_Lucene90_0.dvd": {
+        "sha256": "40c91ac892c45d0d35ca47118f1b5c0173c2c1cbf856a0727e566198c3a29317",
+        "bytes": 590329
+      },
+      "_3_Lucene90_0.dvm": {
+        "sha256": "a42c3f7b8a782a3daec2f92c0063fdb460f15938fd875e9ca8f84f279498d7be",
+        "bytes": 192
+      },
+      "_3_Lucene99_0.doc": {
+        "sha256": "e2fef3a4511048a8217e82e958b95e532f5993d30c8d75e8d859d949229bbecf",
+        "bytes": 140473531
+      },
+      "_3_Lucene99_0.tim": {
+        "sha256": "01311e1096e3917dada8da2af01b6072b3899400a79b5fd47f61a5b47a9934ba",
+        "bytes": 36731670
+      },
+      "_3_Lucene99_0.tip": {
+        "sha256": "ce663e3f8e341eac97596413bcda8ab63fd1a698206019eb29e8538031c47fa3",
+        "bytes": 1046419
+      },
+      "_3_Lucene99_0.tmd": {
+        "sha256": "fedef29c806a393397c5bdbd17818225a44d359cb89c5cebb428f68370231457",
+        "bytes": 284
+      },
+      "segments_3": {
+        "sha256": "e0a7e730510505f90596fc6438061b947dd5e786fc4b5fc2c722442c2b493a65",
+        "bytes": 154
+      }
+    },
+    "original_local_index_matches_pinned_download": true
+  },
+  "passage_index": {
+    "repository": "grill-lab/browsecomp-plus-indexes",
+    "revision": "11a7f3f0f9ce45619f5aa4dcc08c93451b657b07",
+    "prefix": "index.bm25.passage",
+    "files": {
+      "_1.fdm": {
+        "sha256": "b1481f2b3b0ffe952428409621e642b1130ba04ec3c544dae81c2e8e7a9fd53c",
+        "bytes": 1923
+      },
+      "_1.fdt": {
+        "sha256": "9de5272bdd159045e458d62f63563e3fc44f4f0cd2ae0c33aefd51d556653bd4",
+        "bytes": 2063894977
+      },
+      "_1.fdx": {
+        "sha256": "09d4f68a95da5f94a54bab65a4744e12f3b2afd9991b4da9d2755428fc745a3f",
+        "bytes": 176633
+      },
+      "_1.fnm": {
+        "sha256": "cd5486336edc6c931028852af714c8a4f5696bcf8dcb623d9e3c3f3582844aad",
+        "bytes": 343
+      },
+      "_1.nvd": {
+        "sha256": "8fc9b3c7b9203a076c9a7aaa359e5bcc224bf74f75a2586035cd9cc94ec821e4",
+        "bytes": 2772314
+      },
+      "_1.nvm": {
+        "sha256": "ff3e6b3cd67ab9d663497591524d9a0d904ad247aa5c797db6e9dfe39087bc2b",
+        "bytes": 103
+      },
+      "_1.si": {
+        "sha256": "9c1ad1069e6989a54f96115a43cb4143f54aaee50acb7f67ce2b10e7b7d3acbc",
+        "bytes": 507
+      },
+      "_1.tvd": {
+        "sha256": "819e81929d6965da560ad274d228f484b151a9dcda7e99da596b1ad3b16f6e17",
+        "bytes": 1630810079
+      },
+      "_1.tvm": {
+        "sha256": "b8b19a9ab0a9ea31da9d8ea7e4839537397118403bb013306d402fd08543a93f",
+        "bytes": 10538
+      },
+      "_1.tvx": {
+        "sha256": "7f293f81d7ee81123b8b09fbfb73276aac4d3341d749221f60010411b93de8de",
+        "bytes": 852665
+      },
+      "_1_Lucene90_0.dvd": {
+        "sha256": "4856af16cc36a75457d66884e13187de8cacf43d5de80a86dccbcd8435f49b56",
+        "bytes": 71862972
+      },
+      "_1_Lucene90_0.dvm": {
+        "sha256": "a0698ba5f05cf287c8dbac5b7ff09a6994953f71e4c476c6cc6a8d2d5c516c9a",
+        "bytes": 1053
+      },
+      "_1_Lucene99_0.doc": {
+        "sha256": "64dff2da96dc258e5ecdf2857a0e17102db345f1a990c153a5189bf6f7546756",
+        "bytes": 459747907
+      },
+      "_1_Lucene99_0.pos": {
+        "sha256": "08704404403318c2948c31416cc5c2d1f6ffb2a72cb84ff9b3c4711453293034",
+        "bytes": 390959487
+      },
+      "_1_Lucene99_0.tim": {
+        "sha256": "9d1a1ed05f322ed050ce56b7929ac2f85ec6c1528b72c2d92be001d0badef0da",
+        "bytes": 55095040
+      },
+      "_1_Lucene99_0.tip": {
+        "sha256": "55f60f63c449004ddf187455295c636259371eb79110790ece3c551739474a6a",
+        "bytes": 1521794
+      },
+      "_1_Lucene99_0.tmd": {
+        "sha256": "dafc96e64a45b1b30dc3f0e8a7889fb6113ada23e2d3b2c3f5601936186672eb",
+        "bytes": 323
+      },
+      "segments_2": {
+        "sha256": "3d3cc34f7962f87a7a985ea3c837d368b842f8708f1339fa21e5ca851b6ea9fd",
+        "bytes": 154
+      }
+    },
+    "original_local_index_matches_pinned_download": true
+  },
+  "browsecomp_questions_sha256": "1e1e62a81aac92eb6bcab14c1800391c56dbae3d6db368bcff21a88b8a363406",
+  "anserini_sha256": "b46c41046bc0c72048094d7bd34422276c04e9cef7ab25f76f5b8ea583c9aaf2",
+  "document_lengths_sha256": "19f3b4e312520feb2d47eb2e0a3564369e0a707d418e57958c5ec26cc2057e33"
+}

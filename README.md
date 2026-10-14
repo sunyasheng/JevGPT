@@ -13,17 +13,21 @@
 
 <p align="center">
   <a href="https://arxiv.org/abs/2610.18272"><img src="https://img.shields.io/badge/arXiv-2610.18272-b31b1b?logo=arxiv&amp;logoColor=white" alt="arXiv 2610.18272"></a>
-  <a href="https://huggingface.co/papers/2610.18272"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Paper-ffd21e" alt="Hugging Face paper"></a>
   <a href="https://huggingface.co/datasets/yashengsun/JevGPT-runs"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-Runs-ff9d00" alt="Hugging Face dataset: runs"></a>
   <a href="https://sunyasheng.github.io/projects/JevGPT.html"><img src="https://img.shields.io/badge/Project-Page-1f6feb?logo=googlechrome&amp;logoColor=white" alt="Project page"></a>
-  <a href="#-code-release"><img src="https://img.shields.io/badge/Code-coming%20soon-lightgrey?logo=github" alt="Code: coming soon"></a>
+  <a href="https://huggingface.co/papers/2610.18272"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Paper-ffd21e" alt="Hugging Face paper"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-2ea44f" alt="License: Apache-2.0"></a>
+  <img src="https://img.shields.io/badge/Python-3.10%2B-3776ab?logo=python&amp;logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/Node.js-Pi--Serini%20runtime-339933?logo=nodedotjs&amp;logoColor=white" alt="Node.js runtime">
 </p>
 
 <p align="center">
   <a href="#-tldr">TL;DR</a> ·
   <a href="#-how-jevgpt-works">Method</a> ·
   <a href="#-results">Results</a> ·
-  <a href="#-code-release">Code</a> ·
+  <a href="#-quick-start">Quick start</a> ·
+  <a href="#-run-new-experiments">Run</a> ·
+  <a href="#-runs-and-trajectories">Runs</a> ·
   <a href="#-citation">Citation</a>
 </p>
 
@@ -31,8 +35,9 @@
 
 ## 🔥 News
 
-- **2026-10-14** · Run outputs (per-item records and full trajectories) for the JevGPT rows of Tables 1 and 2 are on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
-- **2026-10-14** · The paper is on [arXiv](https://arxiv.org/abs/2610.18272) and [Hugging Face Papers](https://huggingface.co/papers/2610.18272). The code is under review and will follow.
+- **2026-10-14** · Code released: the JevGPT runtime, frozen configurations, evaluation scripts and per-item records for Tables 1 and 2.
+- **2026-10-14** · Run outputs (per-item records and full trajectories) are on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
+- **2026-10-14** · The paper is on [arXiv](https://arxiv.org/abs/2610.18272) and [Hugging Face Papers](https://huggingface.co/papers/2610.18272).
 
 ## 💡 TL;DR
 
@@ -87,7 +92,7 @@ Evidence requests flow from System Two to System One. Selected original passages
 | Pi-Serini | 0.5240 | 177.0 | 0.8515 |
 | **JevGPT** | **0.5390** | **79.3** | **0.5838** |
 
-Time and cost are per-question or per-topic means from the paper. Cost covers both systems: GPT-5.5 at medium effort for System Two and Jev-1.13.0 for System One. The full tables with retrievers, tokens, searches and the per-system cost split are in the [paper](https://arxiv.org/abs/2610.18272).
+Time and cost are per-question or per-topic means. Cost covers both systems: GPT-5.5 at medium effort for System Two and Jev-1.13.0 for System One. The full tables with retrievers, tokens, searches and the per-system cost split are in the [paper](https://arxiv.org/abs/2610.18272). This release reproduces the **JevGPT** rows exactly; baseline rows are quoted from the paper.
 
 <p align="center">
   <img src="assets/cost-quality.png" alt="Quality versus API cost" width="46%">
@@ -97,16 +102,83 @@ Time and cost are per-question or per-topic means from the paper. Cost covers bo
   <em><b>Left:</b> quality versus API cost (upper left is better). <b>Right:</b> how gold evidence reaches the research loop on BrowseComp-Plus.</em>
 </p>
 
-## 🚧 Code release
+## 🚀 Quick start
 
-We are reviewing the code before it goes public. This repository will contain:
+Rebuild the paper rows from the released per-item records. Python 3.10+ is enough, and no model is called:
 
-- [ ] The research runtime and the JevGPT evidence readers for System One
-- [ ] Frozen configurations for BrowseComp-Plus and NeuCLIRBench
-- [ ] Per-item records that rebuild the JevGPT rows of Tables 1 and 2 without any model calls
-- [ ] Evaluation scripts and a step-by-step reproduction guide
+```bash
+python3 scripts/report.py --check --out artifacts/paper-tables
+```
 
-⭐ Star or watch this repository to be notified when the code is released.
+The script checks every unrounded aggregate and token cost against `results/paper.json`, then writes Markdown, CSV, JSON and LaTeX rows.
+
+| Task | Retriever | N | Main metric | Tokens (K) | Searches | Time (s) | S2 ($) | S1 ($) |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| BrowseComp-Plus | Hybrid BM25 | 830 | 90.48 % accuracy | 433 | 9.13 | 91.7 | 0.6081 | 0.0600 |
+| NeuCLIRBench | Hybrid BM25 | 105 | 0.5390 nDCG@20 · 36.10 % F1@20 | 158 | 2.68 | 79.3 | 0.5756 | 0.0082 |
+
+Tokens include cached GPT input and output. Costs use the paper's frozen nominal rates and exclude grading and local compute. See [evaluation and attempt selection](docs/protocol.md).
+
+## 🧪 Run new experiments
+
+Install the runtime, prepare the data and configure model access with the [reproduction guide](docs/reproduce.md). Then:
+
+```bash
+python scripts/run.py browsecomp --out runs/browsecomp
+python scripts/run.py neuclir --out runs/neuclir
+```
+
+- `--dry-run` prints the frozen settings, the selected IDs and the first worker command without starting services.
+- `--ids 1,2` runs a BrowseComp-Plus subset; `--ids 200,201` runs a NeuCLIRBench subset.
+- Every live run writes to a fresh output directory and keeps failed outcomes.
+
+Live experiments need GPT and Jev access and the benchmark indexes.
+
+## 📦 Runs and trajectories
+
+The per-item records in `results/` are enough to rebuild the paper rows. The full trajectories of the same runs, with every System Two step and every System One judgment, are on Hugging Face at [yashengsun/JevGPT-runs](https://huggingface.co/datasets/yashengsun/JevGPT-runs):
+
+```bash
+hf download yashengsun/JevGPT-runs --repo-type dataset --local-dir runs/paper
+```
+
+The BrowseComp-Plus trajectories are encrypted with the official BrowseComp-Plus canary, as in the benchmark itself; the dataset card shows how to decrypt them. The NeuCLIRBench trajectories are in plain text.
+
+## 🗂️ Repository layout
+
+| Path | Contents |
+| --- | --- |
+| `runtime/pi-serini/` | Pi-Serini runtime and the JevGPT evidence readers, imported from the evaluated code |
+| `configs/` | Frozen settings for each task |
+| `scripts/` | Data preparation, experiment launcher, accounting and table generation |
+| `services/` | NeuCLIRBench hybrid BM25 service and document adapter |
+| `evaluation/` | Official BrowseComp-Plus grader prompt and parser, NeuCLIRBench metrics |
+| `results/`, `splits/` | Per-item records, rankings and the original cohort and attempt selections |
+| `provenance/` | Source mappings, pinned data versions and file hashes |
+| `assets/` | Figures used in this README |
+
+The live entry points are `pi_search_jev_hybrid_v2.ts` for question answering and `pi_search_jev_unified_v1.ts` for ranking. Some historical file names inside the runtime are kept because the evaluated readers import them. See [source provenance and packaging changes](docs/provenance.md).
+
+## ✅ Verify the release
+
+Install the Python and Node dependencies first. The runtime tests call the pinned Python text splitter through `JEV_SPLITTER_PYTHON`, so point it at the Python that has `requirements.txt` installed:
+
+```bash
+python -m pip install -r requirements.txt
+npm ci --prefix runtime/pi-serini --ignore-scripts --no-audit --no-fund
+```
+
+Then run:
+
+```bash
+python scripts/check_release.py
+python -m unittest discover -s tests -v
+JEV_SPLITTER_PYTHON="$(python -c 'import sys; print(sys.executable)')" \
+  npm --prefix runtime/pi-serini test
+npm --prefix runtime/pi-serini run typecheck
+```
+
+[Release validation](docs/validation.md) lists the checks performed for this release.
 
 ## 📝 Citation
 
@@ -124,6 +196,8 @@ If you find JevGPT useful, please cite:
 }
 ```
 
-## 🙏 Acknowledgments
+## 🙏 Acknowledgments and license
 
 JevGPT builds on [Pi-Serini](https://github.com/justram/pi-serini), [BrowseComp-Plus](https://github.com/texttron/BrowseComp-Plus) and [NeuCLIRBench](https://arxiv.org/abs/2511.14758), and uses Jev, the System One model from [TypeSafe AI](https://typesafe.ai/blog/introducing-system-one-models-and-jev).
+
+Project code is released under Apache-2.0. The vendored Pi-Serini components and the official BrowseComp-Plus grader keep their MIT notices; see [third-party notices](THIRD_PARTY_NOTICES.md). Datasets and hosted models keep their own licenses and access requirements.

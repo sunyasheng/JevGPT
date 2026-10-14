@@ -1,0 +1,41 @@
+{
+  "method": "JevGPT",
+  "system_two_model": "gpt-5.5",
+  "thinking": "medium",
+  "system_one_model": "jev-1.13.0",
+  "timeout_seconds": 300,
+  "submit_now_seconds": 210,
+  "batch_size": 60,
+  "gpt_source_chars": 100000,
+  "prices_usd_per_million": {
+    "input": 5.0,
+    "cached_input": 0.5,
+    "output": 30.0,
+    "jev_input": 0.042
+  },
+  "benchmark": "neuclir",
+  "workers": 4,
+  "extension": "src/extensions/pi_search_jev_unified_v1.ts",
+  "prompt_variant": "rank_documents",
+  "topic_fields": [
+    "title",
+    "description"
+  ],
+  "retriever": {
+    "candidates": 500,
+    "passage_words": 250,
+    "lambda": 0.5,
+    "passage_bm25": {
+      "k1": 0.9,
+      "b": 0.4
+    },
+    "mean_passage_tokens": 144.7,
+    "idf": "document-level",
+    "units": "whole documents"
+  },
+  "bm25": {
+    "k1": 0.9,
+    "b": 0.4
+  },
+  "environment": {}
+}

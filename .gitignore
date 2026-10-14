@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+.pi/
+.venv*/
+__pycache__/
+*.py[cod]
+node_modules/
+data/
+runs/
+artifacts/
+runtime/pi-serini/vendor/
+runtime/pi-serini/jvm/build/
+*.log
+.DS_Store

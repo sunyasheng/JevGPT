@@ -1,0 +1,4 @@
+# The lossless text splitter used in both paper configurations.
+semantic-text-splitter==0.33.0
+# Explicit trust store for HTTPS downloads and the independent grader.
+certifi==2025.8.3

@@ -1,0 +1,26 @@
+{
+  "method": "JevGPT",
+  "paper_title": "JevGPT: Thinking Fast and Slow in Autonomous Research",
+  "snapshot_date": "2026-10-05",
+  "browsecomp": {
+    "n": 830,
+    "correct": 751,
+    "accuracy_percent": 90.48192771084338,
+    "tokens_mean_k": 433.0211698795181,
+    "searches_mean": 9.125301204819277,
+    "seconds_mean": 91.69607590361446,
+    "s2_usd_mean": 0.6080784060240964,
+    "s1_usd_mean": 0.060049634501204825
+  },
+  "neuclir": {
+    "n": 105,
+    "ndcg20": 0.5390493274856352,
+    "recall20_percent": 33.483509103600916,
+    "f1_20_percent": 36.102530241692904,
+    "tokens_mean_k": 158.25569523809526,
+    "searches_mean": 2.676190476190476,
+    "seconds_mean": 79.25706100195238,
+    "s2_usd_mean": 0.5756244761904762,
+    "s1_usd_mean": 0.0081986568
+  }
+}
