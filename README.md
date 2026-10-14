@@ -14,6 +14,7 @@
 <p align="center">
   <a href="https://arxiv.org/abs/2610.18272"><img src="https://img.shields.io/badge/arXiv-2610.18272-b31b1b?logo=arxiv&amp;logoColor=white" alt="arXiv 2610.18272"></a>
   <a href="https://huggingface.co/papers/2610.18272"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Paper-ffd21e" alt="Hugging Face paper"></a>
+  <a href="https://huggingface.co/datasets/yashengsun/JevGPT-runs"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-Runs-ff9d00" alt="Hugging Face dataset: runs"></a>
   <a href="https://sunyasheng.github.io/projects/JevGPT.html"><img src="https://img.shields.io/badge/Project-Page-1f6feb?logo=googlechrome&amp;logoColor=white" alt="Project page"></a>
   <a href="#-code-release"><img src="https://img.shields.io/badge/Code-coming%20soon-lightgrey?logo=github" alt="Code: coming soon"></a>
 </p>
@@ -30,7 +31,8 @@
 
 ## 🔥 News
 
-- **2026-10-14** · The paper is on [arXiv](https://arxiv.org/abs/2610.18272) and [Hugging Face Papers](https://huggingface.co/papers/2610.18272). Code and per-item records are being prepared for release.
+- **2026-10-14** · Run outputs (per-item records and full trajectories) for the JevGPT rows of Tables 1 and 2 are on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
+- **2026-10-14** · The paper is on [arXiv](https://arxiv.org/abs/2610.18272) and [Hugging Face Papers](https://huggingface.co/papers/2610.18272). The code is under review and will follow.
 
 ## 💡 TL;DR
 
