@@ -20,7 +20,7 @@ def main():
     parser.add_argument("--javac", default="javac")
     args = parser.parse_args()
     if not args.doc_index.is_dir():
-        parser.error("Download or provide the BCP document index first; see docs/data.md")
+        parser.error("Download or provide the BCP document index first; see docs/reproduce.md#browsecomp-plus")
     if args.out.exists():
         parser.error("Use a new output path for the document-length table")
     if not args.anserini_jar.is_file():

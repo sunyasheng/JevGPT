@@ -61,7 +61,7 @@ def main():
         else:
             password = os.environ.get("BROWSECOMP_PLUS_CANARY")
             if not password:
-                parser.error("Set BROWSECOMP_PLUS_CANARY to the official dataset canary; see docs/data.md")
+                parser.error("Set BROWSECOMP_PLUS_CANARY to the official dataset canary; see docs/reproduce.md#browsecomp-plus")
             from datasets import load_dataset
             dataset = load_dataset("Tevatron/browsecomp-plus", revision=BCP_REVISION, split="test")
             rows = [{"query_id": str(row["query_id"]), "query": decrypt(row["query"], password),

@@ -155,9 +155,9 @@ The BrowseComp-Plus trajectories are encrypted with the official BrowseComp-Plus
 | `evaluation/` | Official BrowseComp-Plus grader prompt and parser, NeuCLIRBench metrics |
 | `results/`, `splits/` | Per-item records, rankings and the original cohort and attempt selections |
 | `provenance/` | Source mappings, pinned data versions and file hashes |
-| `assets/` | Figures used in this README |
+| `assets/` | Figures from the paper and an AI-generated banner |
 
-The live entry points are `pi_search_jev_hybrid_v2.ts` for question answering and `pi_search_jev_unified_v1.ts` for ranking. Some historical file names inside the runtime are kept because the evaluated readers import them. See [source provenance and packaging changes](docs/provenance.md).
+The live entry points are `pi_search_jev_hybrid_v2.ts` for question answering and `pi_search_jev_unified_v1.ts` for ranking, which dispatches to `pi_search_jev_ranking_autoscan_v1.ts`. Hybrid retrieval is in `runtime/pi-serini/src/pi-search/searcher/adapters/passage_bm25/hybrid.ts` for BrowseComp-Plus and in `services/neuclir_hybrid.py` for NeuCLIRBench. Some file names and run tags keep historical internal names, such as `neuclir_assay_hybrid`, because the evaluated code and records use them. `provenance/source-files.json` records the original hash of every imported file and each packaging change.
 
 ## ✅ Verify the release
 
@@ -177,8 +177,6 @@ JEV_SPLITTER_PYTHON="$(python -c 'import sys; print(sys.executable)')" \
   npm --prefix runtime/pi-serini test
 npm --prefix runtime/pi-serini run typecheck
 ```
-
-[Release validation](docs/validation.md) lists the checks performed for this release.
 
 ## 📝 Citation
 

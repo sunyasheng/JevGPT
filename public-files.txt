@@ -10,11 +10,8 @@ assets/method.png
 assets/teaser.png
 configs/browsecomp.json
 configs/neuclir.json
-docs/data.md
 docs/protocol.md
-docs/provenance.md
 docs/reproduce.md
-docs/validation.md
 evaluation/browsecomp.py
 evaluation/browsecomp_parser.py
 evaluation/browsecomp_prompt.txt

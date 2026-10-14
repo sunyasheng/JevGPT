@@ -401,7 +401,7 @@
     "source": "neuclir-runtime/tests/jev_auto_scan_v1.test.ts",
     "source_sha256": "f21f9b358ea04feb8bda27be57cac9ae8c49acd146605f123e562952af849dda",
     "release_sha256": "a7f8a5e283c04cbfa93047cf7aac116dd6695e3723626377f55aad60ae5ad0eb",
-    "portability_change": "Replace the BrowseComp-Plus questions used as inputs in the clue-extraction test with invented questions of the same structure, so no benchmark question appears in plain text."
+    "portability_change": "Replace the BrowseComp-Plus questions used as inputs in the clue-extraction test with invented questions of the same structure, so no BrowseComp-Plus question appears in plain text."
   },
   "runtime/pi-serini/tests/jev_document_ranking.test.ts": {
     "source": "neuclir-runtime/tests/jev_document_ranking.test.ts",

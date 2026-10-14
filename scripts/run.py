@@ -233,7 +233,7 @@ def main():
         for p in (args.doc_index, args.passage_index, args.doc_lengths, args.anserini_jar,
                   RUNTIME / "jvm/build/classes/dev/jhy/piserini/Bm25Server.class"):
             if not p.exists():
-                parser.error(f"Missing BCP asset: {p}; see docs/data.md")
+                parser.error(f"Missing BCP asset: {p}; see docs/reproduce.md#browsecomp-plus")
         manifest["retrieval"] = {"doc_index": str(args.doc_index), "passage_index": str(args.passage_index),
                                  "doc_lengths_sha256": sha256(args.doc_lengths), "anserini_sha256": sha256(args.anserini_jar)}
     else:
