@@ -212,20 +212,6 @@ If you find JevGPT useful, please cite:
 }
 ```
 
-For the CMASS benchmark used in the additional evaluation, please also cite its authors:
-
-```bibtex
-@misc{sharifymoghaddam2026cmassclimbmixagenticsearch,
-      title={CMASS: A ClimbMix Agentic Search Suite for Evaluating Search Agents Across Heterogeneous Tasks},
-      author={Sahel Sharifymoghaddam and Lingwei Gu and Yijun Ge and Jimmy Lin},
-      year={2026},
-      eprint={2608.20317},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2608.20317},
-}
-```
-
 ## 🙏 Acknowledgments and license
 
 JevGPT builds on [Pi-Serini](https://github.com/justram/pi-serini), [BrowseComp-Plus](https://github.com/texttron/BrowseComp-Plus), [NeuCLIRBench](https://arxiv.org/abs/2511.14758) and [CMASS](https://github.com/castorini/cmass), and uses Jev, the System One model from [TypeSafe AI](https://typesafe.ai/blog/introducing-system-one-models-and-jev).
