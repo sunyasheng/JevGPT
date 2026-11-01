@@ -35,6 +35,7 @@
 
 ## 🔥 News
 
+- **2026-11-01** · [CMASS results](#cmass) with GPT-6.1-Sol/high are available: 423 questions, with per-question records and trajectories on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
 - **2026-10-14** · Code released: the JevGPT runtime, frozen configurations, evaluation scripts and per-item records for Tables 1 and 2.
 - **2026-10-14** · Run outputs (per-item records and full trajectories) are on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
 - **2026-10-14** · The paper is on [arXiv](https://arxiv.org/abs/2610.18272) and [Hugging Face Papers](https://huggingface.co/papers/2610.18272).
@@ -102,6 +103,26 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
   <em><b>Left:</b> quality versus API cost (upper left is better). <b>Right:</b> how gold evidence reaches the research loop on BrowseComp-Plus.</em>
 </p>
 
+### CMASS
+
+We also evaluate JevGPT on the [ClimbMix Agentic Search Suite (CMASS)](https://github.com/castorini/cmass), introduced by [Sharifymoghaddam et al.](https://arxiv.org/abs/2608.20317). CMASS projects BrowseComp-Plus (BCP), Total Recall QA (TRQA), DeepSearchQA (DSQA) and HotpotQA onto a shared ClimbMix retrieval corpus.
+
+This evaluation uses **GPT-6.1-Sol at high reasoning effort** for System Two, a **1,800-second budget per question**, the [CMASS v2026.10.25 dataset](https://huggingface.co/datasets/castorini/cmass/tree/v2026.10.25), and the official CMASS grading prompts. It covers **423 distinct questions**.
+
+| Dataset / scoring | Correct / total | Accuracy |
+| --- | ---: | ---: |
+| BCP | 65 / 80 | **81.25%** |
+| TRQA | 66 / 68 | **97.06%** |
+| DSQA — strict | 68 / 71 | **95.77%** |
+| DSQA — relaxed | 70 / 71 | **98.59%** |
+| HotpotQA | 196 / 204 | **96.08%** |
+| **Overall — DSQA strict** | **395 / 423** | **93.38%** |
+| **Overall — DSQA relaxed** | **397 / 423** | **93.85%** |
+
+DSQA strict requires the complete answer set with no incorrect extras; relaxed accepts a nonempty correct subset with no incorrect extras. The two overall rows each count the same 423 questions once and differ only in the DSQA scoring rule.
+
+[Per-question records](https://huggingface.co/datasets/yashengsun/JevGPT-runs/blob/main/records/cmass-sol61-high-1800s.jsonl), [exact aggregates](https://huggingface.co/datasets/yashengsun/JevGPT-runs/blob/main/records/cmass-sol61-high-1800s-summary.json), and [trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs/tree/main/trajectories/cmass-sol61-high-1800s) are available on Hugging Face. The [offline verification script](https://huggingface.co/datasets/yashengsun/JevGPT-runs/blob/main/scripts/verify_cmass_sol61.py) rebuilds the table without model calls. Missing usage and incomplete costs remain `null` in the released records.
+
 ## 🚀 Quick start
 
 Rebuild the paper rows from the released per-item records. Python 3.10+ is enough, and no model is called:
@@ -136,13 +157,13 @@ Live experiments need GPT and Jev access and the benchmark indexes.
 
 ## 📦 Runs and trajectories
 
-The per-item records in `results/` are enough to rebuild the paper rows. The full trajectories of the same runs, with every System Two step and every System One judgment, are on Hugging Face at [yashengsun/JevGPT-runs](https://huggingface.co/datasets/yashengsun/JevGPT-runs):
+The per-item records in `results/` are enough to rebuild the original paper rows. Those runs and the CMASS evaluation are available with System Two/System One trajectories on Hugging Face at [yashengsun/JevGPT-runs](https://huggingface.co/datasets/yashengsun/JevGPT-runs):
 
 ```bash
 hf download yashengsun/JevGPT-runs --repo-type dataset --local-dir runs/paper
 ```
 
-The BrowseComp-Plus trajectories are encrypted with the official BrowseComp-Plus canary, as in the benchmark itself; the dataset card shows how to decrypt them. The NeuCLIRBench trajectories are in plain text.
+The BrowseComp-Plus trajectories are encrypted with the official BrowseComp-Plus canary, as in the benchmark itself; the dataset card shows how to decrypt them. The NeuCLIRBench trajectories are in plain text. CMASS is available as the `cmass_sol61` configuration; its trajectories use the same canary encoding, with decoding instructions in the dataset card.
 
 ## 🗂️ Repository layout
 
@@ -194,8 +215,22 @@ If you find JevGPT useful, please cite:
 }
 ```
 
+For the CMASS benchmark used in the additional evaluation, please also cite its authors:
+
+```bibtex
+@misc{sharifymoghaddam2026cmassclimbmixagenticsearch,
+      title={CMASS: A ClimbMix Agentic Search Suite for Evaluating Search Agents Across Heterogeneous Tasks},
+      author={Sahel Sharifymoghaddam and Lingwei Gu and Yijun Ge and Jimmy Lin},
+      year={2026},
+      eprint={2608.20317},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2608.20317},
+}
+```
+
 ## 🙏 Acknowledgments and license
 
-JevGPT builds on [Pi-Serini](https://github.com/justram/pi-serini), [BrowseComp-Plus](https://github.com/texttron/BrowseComp-Plus) and [NeuCLIRBench](https://arxiv.org/abs/2511.14758), and uses Jev, the System One model from [TypeSafe AI](https://typesafe.ai/blog/introducing-system-one-models-and-jev).
+JevGPT builds on [Pi-Serini](https://github.com/justram/pi-serini), [BrowseComp-Plus](https://github.com/texttron/BrowseComp-Plus), [NeuCLIRBench](https://arxiv.org/abs/2511.14758) and [CMASS](https://github.com/castorini/cmass), and uses Jev, the System One model from [TypeSafe AI](https://typesafe.ai/blog/introducing-system-one-models-and-jev).
 
 Project code is released under Apache-2.0. The vendored Pi-Serini components and the official BrowseComp-Plus grader keep their MIT notices; see [third-party notices](THIRD_PARTY_NOTICES.md). Datasets and hosted models keep their own licenses and access requirements.
