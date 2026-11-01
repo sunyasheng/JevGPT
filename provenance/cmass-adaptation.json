@@ -1,0 +1,91 @@
+{
+  "date": "2026-11-01",
+  "base_commit": "13a31de538d353985e80997df68b1947b92d89d8",
+  "dataset_revision": "b45390693461d948d47fdd835f27b46026b5e2a2",
+  "protocol_commit": "c99792cc025a8f1feba7b9b2d03309ed5964e85b",
+  "evaluated_sources_sha256": {
+    "configs/cmass.json": "5ffee05cff284461bc3b996d063b2d71fdeabe4f962c8bba64e020c7f6aaa725",
+    "scripts/prepare_cmass.py": "c9f5be6af04fc879fae966fb59c82a69ded93770bfa81815557dbd4ca4adf5f5",
+    "scripts/prepare_data.py": "9a10acf7205ddd7a635303df2b030f85b67f62051788597f88d2c4235af0e962",
+    "scripts/run.py": "249c972339682c70bc308239472dbff3f15f0ae913aefb0c17a8ec808dffabb6",
+    "scripts/collect.py": "2a85f0eb2a2c703780dd6e4f4085054c4619a837afb3fa26284c7b3ba358fec0",
+    "services/cmass_bridge.py": "0fb05527e59376b29a825acc7bc664a268457f6ff1efc494e167a9f1fcfb7839",
+    "evaluation/cmass.py": "a05a9ddcc12a10394399fbaca9390ea6641ad8960fb2b766b177a0b70b512fea",
+    "runtime/pi-serini/scripts/run_cmass_v1.ts": "7f0bb2f92a0dfa3ee07db6137dac59d37f270b55a8fa0a2c4cc1fc30d3d8688a",
+    "runtime/pi-serini/scripts/run_neuclir_unified_medium_v1.ts": "b7eb66ee8e0f528208d04e697e60dd10be96492f04ab021ff91c463ebe8a3cf7",
+    "runtime/pi-serini/src/benchmarks/cmass.ts": "9649d65372c719493d6ec5d61cefd7dd93c42508da87fb23ff12cfec7c36a6ba",
+    "runtime/pi-serini/src/benchmarks/registry.ts": "0e43da400f43351b0a0fd938aa23dd650ae66801e29ded6879f4865feee3fc2d",
+    "runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts": "84a1937cbd393b3e9548d73664190c3ebeede2fed9bb02f3424eec6a027feeb8",
+    "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts": "574cf5974ddb850554fec5779b31071b62a93fb15c9ec63e455a8887a8d244ec",
+    "runtime/pi-serini/src/pi-search/tool_handlers.ts": "da1b2a78da69c301589cb1b03c90563e41c0ba0a81f23cd39aa1e6a72b6579fd",
+    "runtime/pi-serini/tests/pi-search/backend_limits.test.ts": "1ab1fadd0de97f3f02a3fe5a1ecc7dfad35b00ca0c1291579f2678fd8cbcea01",
+    "provenance/cmass-data.json": "089fa8898c60b438d532b7a8c8e4b6f875110550f727def906df6683fa8f7360",
+    "tests/test_cmass.py": "3354cf593b5a912e538e0002392c5dd37ea9430fc466cd1a296b6b99f85f73f8",
+    "evaluation/cmass_protocol/LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "evaluation/cmass_protocol/protocol.py": "82560f9b3d6c307d9d42329827ccd8d704ccf529b7d636829ddb0285f28644a3",
+    "evaluation/cmass_protocol/PROVENANCE.md": "0badccc80e589590fbd8628ed2173d77da249d7a5d7688b4105435a734f29fa8",
+    "evaluation/cmass_protocol/prompts/dsqa_complete_set.txt": "0cc3a4c29270ee54d000a97b9d6ee91023f5d697fe0e3d0136ef5068ceea7bce",
+    "evaluation/cmass_protocol/prompts/gold_answer_judge.txt": "e44a9fa86472a3645e4947c81a20a8eae3bc35d8cf3c589b4fbf8c4bec533588",
+    "evaluation/cmass_protocol/prompts/dsqa_judge.txt": "85c097a86b1c3702cedec05dbedd1575259510c9413b1bf9fae8b70b5c31c33f"
+  },
+  "research_settings": {
+    "model": "gpt-6.1-sol",
+    "reasoning_effort": "high",
+    "timeout_seconds": 1800,
+    "submit_now_seconds": 1260,
+    "configured_context_tokens": 200000,
+    "max_output_tokens": 16384
+  },
+  "retrieval": {
+    "corpus": "ClimbMix",
+    "unit": "whole_document",
+    "bm25": {
+      "k1": 0.9,
+      "b": 0.4
+    },
+    "cached_hits": 100,
+    "preview_title_snippet_utf16": 500
+  },
+  "release_changes": [
+    "Use the shared prepare/run/evaluate/report workflow; --workers defaults to 8 research tasks and the independent judge to 1.",
+    "Keep benchmark data, evidence readers, retrieval behavior, DSQA instruction and official judge prompts/protocol fixed.",
+    "Replace workstation-specific account, auth, broker and service-controller code with explicit standard Pi/Responses provider configuration.",
+    "Validate explicit context/output limits, bind evaluator inputs to the generation manifest, and keep interrupted or invalid judgments unknown on resume.",
+    "Normalize only serialized scalar gold-echo outer quotes; preserve original responses and the judge Boolean verdict.",
+    "Use actual displayed search IDs for recall; retain known usage separately from unknown compaction or failed-request amounts.",
+    "New portable runs account from Pi events. Frozen release records preserve the campaign transport accounting; costs with incomplete usage stay null.",
+    "Format newly released Python adapters and add offline boundary tests; existing BrowseComp-Plus and NeuCLIR settings/results are retained.",
+    "Expose the evaluated Anserini search/doc behavior through a portable loopback HTTP service with a pinned jar and corpus/indexing recipe.",
+    "Centralize retrieval limits and model budgets in configs/cmass.json, reject implicit model changes, and preflight retrieval before starting questions.",
+    "Verify the existing BCP tool descriptions, system/user prompts and both legacy configurations against a snapshot from the previous release."
+  ],
+  "public_records": {
+    "repository": "https://huggingface.co/datasets/yashengsun/JevGPT-runs",
+    "revision": "e5bac3cd77b60c0a75ac15225961fd194e7362ad",
+    "files": {
+      "results/cmass.jsonl": "records/cmass-sol61-high-1800s.jsonl",
+      "results/cmass-summary.json": "records/cmass-sol61-high-1800s-summary.json",
+      "splits/cmass.json": "records/split-cmass-sol61-high-1800s.json"
+    }
+  },
+  "reproduction_scope": "Portable JevGPT configuration and offline verification of frozen results. Provider behavior and external index ranking are not claimed to be bit-identical across deployments.",
+  "index_service_sources_sha256": {
+    "api.py": "71937dd96233ec720d915e06eeb8fc73d8f52d00e01ada3007425a7978a27d8e",
+    "runtime.py": "7af1767769172273fe14a61564030f067aeb171c92b957a36a389e06721823d8",
+    "pipeline.py": "1790d14798b9bf6414fb36f8e90ae62ee04437dce3198a6ba700896f1b3756fc"
+  },
+  "record_selection": {
+    "unit": "One completed and independently scored output per fixed query.",
+    "candidate_order": "Use the latest completed, scored output represented by the frozen selection manifest; do not choose the maximum correctness value among candidates.",
+    "attempt_field": "Number of retained researcher trial paths per query at export; not extra accuracy observations.",
+    "selection_manifest_sha256": "02c848029557a88a7c105424bea0cdf4dc99a26b617e68691046a760150566aa",
+    "bindings": [
+      "raw_result_sha256",
+      "answer_sha256",
+      "grade_sha256",
+      "trajectory_sha256"
+    ],
+    "source_history_preserved": true,
+    "public_history": "provenance/cmass-selection.json"
+  }
+}

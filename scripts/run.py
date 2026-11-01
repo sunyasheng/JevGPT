@@ -1,10 +1,11 @@
-"""Run JevGPT with one of the two frozen paper configurations."""
+"""Run released JevGPT on BrowseComp, NeuCLIR, or the CMASS document-BM25 adapter."""
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import ExitStack, contextmanager
 from datetime import datetime, timezone
 import json
 import os
+import re
 from pathlib import Path
 import select
 import signal
@@ -14,12 +15,19 @@ from urllib.parse import urlsplit
 
 from common import ROOT, RUNTIME, browsecomp_research_query, by_id, read_json, read_jsonl, sha256, write_json, write_jsonl
 from collect import collect_trial
+from cmass_config import validate_health as validate_cmass_health, validate_budget as validate_cmass_budget
 
 
 def inputs(path, benchmark):
     rows = []
     for item in read_jsonl(path):
         qid = str(item.get("query_id", item.get("topic_id", "")))
+        if benchmark == "cmass":
+            if not re.fullmatch(r"(?:bcp|trqa|dsqa|hotpotqa)__[A-Za-z0-9_-]+", qid) or item.get("dataset") != qid.split("__", 1)[0]:
+                raise ValueError("CMASS requires dataset-scoped safe IDs")
+            query = browsecomp_research_query(item["query"])
+            rows.append({"query_id": qid, "dataset": item["dataset"], "query": query})
+            continue
         if not qid.isdigit():
             raise ValueError("Query IDs must be nonnegative integers")
         if benchmark == "browsecomp":
@@ -63,6 +71,8 @@ def environment(config, args):
                    PI_BM25_THREADS="1", ANSERINI_FATJAR_PATH=str(args.anserini_jar),
                    PI_PASSAGE_ID_PREFIX="browsecomp_plus_", PI_HYBRID_DOC_LENGTHS=str(args.doc_lengths),
                    PI_SEARCH_TASK_MODE="answer_question")
+    elif args.benchmark == "cmass":
+        env["PI_SEARCH_TASK_MODE"] = "answer_question"
     else:
         env["PI_SEARCH_TASK_MODE"] = "rank_documents"
     return env
@@ -79,10 +89,11 @@ def command(qid, config, args):
                          "--qrels", str(args.out / "inputs/empty-qrels.txt"),
                          "--pi", str(RUNTIME / "node_modules/.bin/pi"), "--extension", config["extension"],
                          "--output-dir", str(trial)]
-    return prefix + ["scripts/run_neuclir_unified_medium_v1.ts", "--benchmark", "neuclir",
+    return prefix + ["scripts/run_cmass_v1.ts" if args.benchmark == "cmass" else "scripts/run_neuclir_unified_medium_v1.ts", "--benchmark", args.benchmark,
                      "--topic", str(args.out / "inputs" / f"{qid}.json"), "--topic-mode", "title_description",
                      "--output", str(trial), "--model", args.model, "--extension", config["extension"],
-                     "--timeout-seconds", str(config["timeout_seconds"]), "--query-set-id", args.split]
+                     "--timeout-seconds", str(config["timeout_seconds"]), "--query-set-id", args.split,
+                     "--thinking", config["thinking"]]
 
 
 def stop(child):
@@ -140,14 +151,15 @@ def trial(qid, config, args, env):
                              PI_PASSAGE_RPC_HOST=passage["host"], PI_PASSAGE_RPC_PORT=str(passage["port"]))
                 write_json(folder / "backend.json", {"document": doc, "passage": passage})
             else:
-                backend = stack.enter_context(service([sys.executable, str(ROOT / "services/neuclir_bridge.py"),
+                backend = stack.enter_context(service([sys.executable, str(ROOT / ("services/cmass_bridge.py" if args.benchmark == "cmass" else "services/neuclir_bridge.py")),
                     "--upstream", args.search_url, "--artifact-dir", str(folder)], folder / "backend.log", local))
                 fingerprint = backend["fingerprint"]
-                if fingerprint.get("hybrid") != config["retriever"] or fingerprint.get("bm25") != config["bm25"]:
+                if args.benchmark == "neuclir" and (fingerprint.get("hybrid") != config["retriever"] or fingerprint.get("bm25") != config["bm25"]):
                     raise ValueError("NeuCLIR service does not match the frozen hybrid BM25 configuration")
                 url = f"http://127.0.0.1:{backend['port']}"
                 local["PI_SEARCH_EXTENSION_CONFIG"] = json.dumps({"backend": {
-                    "kind": "http-json", "capabilities": {"backendId": "neuclir-mt-bm25", "supportsScore": True,
+                    "kind": "http-json", "capabilities": {"backendId": "cmass-climbmix-bm25" if args.benchmark == "cmass" else "neuclir-mt-bm25",
+                    **({"maxPageSize": config["retrieval"]["max_cached_hits"]} if args.benchmark == "cmass" else {}), "supportsScore": True,
                     "supportsSnippets": True, "supportsExactTotalHits": False},
                     "endpoints": {"searchUrl": url + "/search", "readDocumentUrl": url + "/readDocument"}}})
                 write_json(folder / "backend.json", backend)
@@ -160,10 +172,11 @@ def trial(qid, config, args, env):
                     child.wait(timeout=config["timeout_seconds"] + 120)
                 finally:
                     stop(child)
-            row = collect_trial(folder, qid, args.benchmark)
+            row = collect_trial(folder, qid, args.benchmark, config["prices_usd_per_million"])
     except Exception as error:
         # Every selected ID retains a terminal record, including startup failures.
         row = {"query_id": qid, "status": "infrastructure_failed", "final_answer": "",
+               **({"dataset": qid.split("__", 1)[0]} if args.benchmark == "cmass" else {}),
                "usage_unknown": True, "error": f"{type(error).__name__}: {error}",
                "submitted_docids": [], "parse_error": "Trial failed"}
     write_json(args.out / "answers" / f"{qid}.json", row)
@@ -173,23 +186,37 @@ def trial(qid, config, args, env):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("benchmark", choices=("browsecomp", "neuclir"))
+    parser.add_argument("benchmark", choices=("browsecomp", "neuclir", "cmass"))
     parser.add_argument("--questions", type=Path)
     parser.add_argument("--split", default="all", help="Key in splits/<benchmark>.json")
     parser.add_argument("--ids", help="Comma-separated subset of the selected split")
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--model", default=os.environ.get("JEVGPT_MODEL", "openai/gpt-5.5"))
-    parser.add_argument("--workers", type=int, help="Defaults: 3 BCP questions or 4 NeuCLIR topics")
+    parser.add_argument("--model", default=os.environ.get("JEVGPT_MODEL"))
+    parser.add_argument("--allow-model-change", action="store_true", help="Explicitly allow a different CMASS model for a new experiment")
+    parser.add_argument("--workers", type=int, help="Defaults: 3 BCP, 4 NeuCLIR, 8 CMASS questions")
     parser.add_argument("--doc-index", type=Path, default=ROOT / "data/browsecomp/document-index")
     parser.add_argument("--passage-index", type=Path, default=ROOT / "data/browsecomp/passage-index")
     parser.add_argument("--doc-lengths", type=Path, default=ROOT / "data/browsecomp/doc-lengths.tsv")
     parser.add_argument("--anserini-jar", type=Path, default=RUNTIME / "vendor/anserini/anserini-1.6.0-fatjar.jar")
     parser.add_argument("--java", default="java")
-    parser.add_argument("--search-url", default="http://127.0.0.1:19421")
+    parser.add_argument("--search-url", help="Defaults to localhost:19431 for CMASS, :19421 for NeuCLIR")
+    parser.add_argument("--splits", type=Path, help="CMASS prepared splits.json; defaults beside --questions")
     parser.add_argument("--dry-run", action="store_true", help="Print the plan; no services, credentials or model calls")
     args = parser.parse_args()
     config = read_json(ROOT / "configs" / f"{args.benchmark}.json")
-    splits = read_json(ROOT / "splits" / f"{args.benchmark}.json")
+    args.model = args.model or config.get("provider", "openai") + "/" + config["system_two_model"]
+    if args.benchmark == "cmass":
+        validate_cmass_budget(config)
+        if args.model.split("/", 1)[-1] != config["system_two_model"] and not args.allow_model_change:
+            parser.error("CMASS requires gpt-6.1-sol; check JEVGPT_MODEL or explicitly use --allow-model-change")
+    args.search_url = args.search_url or ("http://127.0.0.1:19431" if args.benchmark == "cmass" else "http://127.0.0.1:19421")
+    if args.benchmark == "cmass":
+        args.questions = (args.questions or ROOT / "data/cmass/inputs/questions.jsonl").expanduser().resolve()
+        splits_path = args.splits or (args.questions.parent / "splits.json"
+                                     if args.questions.exists() else ROOT / "splits/cmass.json")
+    else:
+        splits_path = args.splits or ROOT / "splits" / f"{args.benchmark}.json"
+    splits = read_json(splits_path)
     if args.split not in splits or not isinstance(splits[args.split], list) or not all(isinstance(q, str) for q in splits[args.split]):
         parser.error("Unknown ID split")
     ids = args.ids.split(",") if args.ids else splits[args.split]
@@ -238,12 +265,41 @@ def main():
                                  "doc_lengths_sha256": sha256(args.doc_lengths), "anserini_sha256": sha256(args.anserini_jar)}
     else:
         url = urlsplit(args.search_url)
-        if url.scheme not in ("http", "https") or not url.netloc or url.username or url.password:
+        if url.scheme not in ("http", "https") or not url.netloc or url.username or url.password or url.query or url.fragment:
             parser.error("--search-url must be an HTTP(S) service URL without embedded credentials")
         manifest["retrieval"] = {"search_url": args.search_url}
+    if args.benchmark == "cmass":
+        prepared_path = args.questions.parent / "prepared.json"
+        prepared = read_json(prepared_path)
+        if prepared["revision"] != read_json(ROOT / "provenance/cmass-data.json")["revision"]:
+            parser.error("CMASS prepared dataset revision differs from the release")
+        if prepared["files"]["questions.jsonl"] != sha256(args.questions) or prepared["files"]["splits.json"] != sha256(splits_path):
+            parser.error("CMASS prepared inputs were changed")
+        manifest["data"] = {"revision": prepared["revision"], "prepared_sha256": sha256(prepared_path)}
+        agent_dir = Path(os.environ.get("PI_CODING_AGENT_DIR", str(Path.home() / ".pi/agent"))).expanduser()
+        models_path = agent_dir / "models.json"
+        if not models_path.is_file() or "/" not in args.model:
+            parser.error("CMASS needs an explicit Pi model profile; see configs/cmass-models.example.json")
+        provider, model = args.model.split("/", 1)
+        definitions = read_json(models_path).get("providers", {}).get(provider, {}).get("models", [])
+        matches = [entry for entry in definitions if entry.get("id") == model]
+        if len(matches) != 1 or matches[0].get("contextWindow") != config["configured_context_tokens"] or matches[0].get("maxTokens") != config["max_output_tokens"]:
+            parser.error("CMASS model profile must explicitly set contextWindow=200000 and maxTokens=16384")
+        manifest["provider_profile_sha256"] = sha256(models_path)
+        # Reject unavailable/mismatched retrieval before consuming any question.
+        from urllib.request import urlopen
+        import ssl
+        import certifi
+        try:
+            with urlopen(args.search_url.rstrip("/") + "/health", timeout=30,
+                         context=ssl.create_default_context(cafile=certifi.where())) as response:
+                manifest["retrieval"]["fingerprint"] = validate_cmass_health(json.load(response), config)
+        except Exception as error:
+            parser.error("CMASS retrieval preflight failed (" + type(error).__name__ + "); no questions started")
     manifest["started_at"] = datetime.now(timezone.utc).isoformat()
     manifest["runtime_sources"] = {str(p.relative_to(ROOT)): sha256(p)
-                                   for p in sorted((RUNTIME / "src").rglob("*.ts"))}
+        for base, pattern in [(RUNTIME / "src", "*.ts"), (RUNTIME / "scripts", "*.ts"), (ROOT / "scripts", "*.py"), (ROOT / "services", "*.py"), (ROOT / "scripts", "*.mjs"), (ROOT / "evaluation/cmass_protocol/prompts", "*.txt")]
+        for p in sorted(base.rglob(pattern))}
     args.out.mkdir(parents=True, exist_ok=False)
     write_json(args.out / "manifest.json", manifest)
     (args.out / "inputs").mkdir()

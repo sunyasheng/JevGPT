@@ -1,0 +1,15 @@
+{
+  "base_commit": "13a31de538d353985e80997df68b1947b92d89d8",
+  "snapshot": {
+    "tools_sha256": "19b330178df55bb9cc04e50959a44a5452f83217b8e80324bd4802ed6f58aa61",
+    "system_prompt_sha256": "07d88ddae00e7ae834397e19857b9c924b8d9fc937148500bedec02dffda4609",
+    "user_prompts": {
+      "browsecomp-plus": "c9c64c60a52b5de0eb0f5900ad1e1bc8b1565254beef97652c0513026433b673",
+      "neuclir": "ea35a2286de651099085f8cd9db7e8d79a15e901e91f5a7aa9ced86f36817e7a"
+    },
+    "config_sha256": {
+      "browsecomp": "c3a0f4df44cbaf11c6c4f0d8d3e2cf71fe1da03e7567818e3fdf34a08a775036",
+      "neuclir": "2df72949f315fd57614831eaa4b77948ae05bcefaffb7948759939054e4da9b8"
+    }
+  }
+}

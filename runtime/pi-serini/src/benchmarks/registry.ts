@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { browsecompPlusBenchmark } from "./browsecomp_plus";
+import { cmassBenchmark } from "./cmass";
 import { neuclirBenchmark } from "./neuclir";
 import { buildTsxCommand } from "../runtime/tsx";
 import {
@@ -23,6 +24,7 @@ import {
 const BENCHMARKS: BenchmarkDefinition[] = [
   browsecompPlusBenchmark,
   neuclirBenchmark,
+  cmassBenchmark,
 ];
 
 const DEFAULT_INTERNAL_RETRIEVAL_METRICS: Required<BenchmarkInternalRetrievalMetricSemantics> = {

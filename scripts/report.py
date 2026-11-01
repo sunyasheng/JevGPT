@@ -120,10 +120,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Compare every unrounded paper value and GPT token cost")
     parser.add_argument("--out", type=Path, help="Write Markdown, JSON, CSV and LaTeX rows to a generated directory")
-    parser.add_argument("--benchmark", choices=COLUMNS)
+    parser.add_argument("--benchmark", choices=tuple(COLUMNS) + ("cmass",))
     parser.add_argument("--records", type=Path, help="Scored JSONL from a new run")
     parser.add_argument("--cohort", type=Path, help="New run manifest.json (or a split with an all/ids list)")
     args = parser.parse_args()
+    if args.benchmark == "cmass":
+        try:
+            from .cmass_results import report_cli
+        except ImportError:
+            from cmass_results import report_cli
+        report_cli(args)
+        return
     if args.records or args.benchmark or args.cohort:
         if not (args.records and args.benchmark and args.cohort) or args.check:
             parser.error("A new run needs --benchmark, --records and --cohort; --check applies to released paper records")

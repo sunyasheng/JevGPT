@@ -1,0 +1,20 @@
+{
+  "providers": {
+    "cmass": {
+      "baseUrl": "https://api.openai.com/v1",
+      "api": "openai-responses",
+      "apiKey": "OPENAI_API_KEY",
+      "models": [
+        {
+          "id": "gpt-6.1-sol",
+          "name": "CMASS Sol 6.1",
+          "reasoning": true,
+          "input": ["text"],
+          "contextWindow": 200000,
+          "maxTokens": 16384,
+          "cost": {"input": 0, "output": 0, "cacheRead": 0, "cacheWrite": 0}
+        }
+      ]
+    }
+  }
+}

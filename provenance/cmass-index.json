@@ -1,0 +1,20 @@
+{
+  "corpus": "karpathy/climbmix-400b-shuffle",
+  "corpus_revision": "915333b4f8b8684f39aeaafea600fea6f43fb703",
+  "parquet_shards": 6543,
+  "documents": 553240576,
+  "anserini": "2.3.0",
+  "anserini_jar_sha256": "375848a9bb0a7514d2a8fe13df20086961570991bf20343abf0e5312af977def",
+  "pyserini_distribution": "2.4.0",
+  "java_major": 21,
+  "pyjnius": "1.7.0",
+  "collection": "FineWebCollection",
+  "generator": "DefaultLuceneDocumentGenerator",
+  "storeRaw": true,
+  "storePositions": false,
+  "storeDocvectors": false,
+  "stemmer": "porter",
+  "keepStopwords": false,
+  "bm25": {"k1": 0.9, "b": 0.4},
+  "hosted_api_parity_verified": false
+}

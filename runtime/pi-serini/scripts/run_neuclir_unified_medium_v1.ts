@@ -20,7 +20,7 @@ export function buildPrompt(query: string, benchmarkName: string): string {
   return formatPiSearchPrompt(query, benchmark.piSearchPromptVariant);
 }
 
-async function main() {
+export async function main() {
   const args = process.argv.slice(2);
   const value = (flag: string) => {
     const i = args.indexOf(flag);
@@ -43,6 +43,10 @@ async function main() {
     args.includes("--extension") ? value("--extension") : "src/extensions/pi_search_jev_unified_v1.ts",
   );
   const model = args.includes("--model") ? value("--model") : "openai/gpt-5.5";
+  const thinking = args.includes("--thinking") ? value("--thinking") : "medium";
+  if (!["off", "minimal", "low", "medium", "high", "xhigh"].includes(thinking)) {
+    throw new Error("Invalid --thinking effort");
+  }
   const timeoutSeconds = Number(value("--timeout-seconds"));
   const qid = String(topic.query_id);
   if (existsSync(resolve(output, `${qid}.json`))) throw new Error("Never overwrite a trial");
@@ -53,6 +57,15 @@ async function main() {
   writeFileSync(rawPath, "", { flag: "wx" });
   writeFileSync(stderrPath, "", { flag: "wx" });
   const agentDir = prepareIsolatedAgentDir(output);
+  if (benchmark.id === "cmass") {
+    writeFileSync(resolve(output, "budget-settings.json"), JSON.stringify({
+      timeout_seconds: timeoutSeconds,
+      submit_now_ratio: 0.7,
+      submit_now_seconds: Math.floor(timeoutSeconds * 0.7),
+      thinking,
+      model,
+    }, null, 2) + "\n", { flag: "wx" });
+  }
   const started = performance.now();
   const events: any[] = [];
   let timedOut = false;
@@ -62,8 +75,10 @@ async function main() {
     piBinary: resolve("node_modules/.bin/pi"),
     extensionPath: extension,
     model,
-    thinking: "medium",
-    prompt: buildPrompt(topic.query, benchmark.id),
+    thinking,
+    prompt: (benchmark.id === "cmass" && input.dataset === "dsqa"
+      ? readFileSync(resolve("../../evaluation/cmass_protocol/prompts/dsqa_complete_set.txt"), "utf8").trim() + "\nPut the complete array in Exact Answer.\n\n"
+      : "") + buildPrompt(topic.query, benchmark.id),
     isolatedAgentDir: agentDir,
     extraEnv: {
       PI_BENCHMARK: benchmark.id,
@@ -139,11 +154,11 @@ async function main() {
     result.push({ type: "output_text", tool_name: null, arguments: null, output: final } as any);
   const record = {
     metadata: {
-      benchmark_id: "neuclirbench-mono-eng",
+      benchmark_id: benchmark.id === "cmass" ? "cmass" : "neuclirbench-mono-eng",
       task_registry_id: benchmark.id,
       task_mode: benchmark.taskMode ?? "answer_question",
       query_set_id: args.includes("--query-set-id") ? value("--query-set-id") : "unspecified",
-      thinking: "medium",
+      thinking,
       query: topic.query,
       topic_fields: topic.topic_fields,
       model,

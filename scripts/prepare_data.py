@@ -1,4 +1,4 @@
-"""Prepare input-only BCP questions or download the pinned NeuCLIRBench qrels."""
+"""Prepare pinned BrowseComp-Plus, NeuCLIRBench and CMASS inputs."""
 import argparse
 import base64
 import hashlib
@@ -54,7 +54,14 @@ def main():
     bcp.add_argument("--out", type=Path, default=ROOT / "data/browsecomp/inputs")
     neuclir = commands.add_parser("neuclir")
     neuclir.add_argument("--out", type=Path, default=ROOT / "data/neuclir/qrels.mlir.gains.txt")
+    cmass = commands.add_parser("cmass")
+    cmass.add_argument("--source", type=Path, help="Existing pinned obfuscated CMASS snapshot; omit to download")
+    cmass.add_argument("--out", type=Path, default=ROOT / "data/cmass/inputs")
     args = parser.parse_args()
+    if args.benchmark == "cmass":
+        from prepare_cmass import prepare
+        prepare(args.source, args.out)
+        return
     if args.benchmark == "browsecomp":
         if args.source:
             rows = read_jsonl(args.source)

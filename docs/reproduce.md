@@ -177,6 +177,29 @@ python evaluation/neuclir.py --run results/neuclir.trec \
   --qrels data/neuclir/qrels.mlir.gains.txt --out artifacts/neuclir-rescored.json
 ```
 
+## CMASS
+
+CMASS uses the same prepare/run/grade/report workflow with a full-corpus
+ClimbMix BM25 endpoint. Follow [CMASS setup and evaluation](cmass.md) for the
+pinned data, model profile, retrieval service contract and strict/relaxed DSQA
+criteria. Rebuild the published table without model access:
+
+```bash
+python scripts/report.py --benchmark cmass --check --out artifacts/cmass
+```
+
+After configuring the required service and model access:
+
+```bash
+python scripts/prepare_data.py cmass
+python scripts/run.py cmass --model cmass/gpt-6.1-sol --out runs/cmass --dry-run
+python scripts/run.py cmass --model cmass/gpt-6.1-sol --out runs/cmass
+python evaluation/cmass.py --run runs/cmass --out runs/cmass/evaluator-only
+python scripts/report.py --benchmark cmass \
+  --records runs/cmass/evaluator-only/scored.jsonl \
+  --cohort runs/cmass/manifest.json --out artifacts/cmass-new
+```
+
 ## Run artifacts
 
 Each run records its selected IDs, settings, input/source hashes and prices in `manifest.json`. `trials/<id>/` contains Pi events, Jev decisions, backend provenance and prompt snapshots. `answers/<id>.json` and `records.jsonl` contain terminal outcomes and observed token usage. `complete.json` records how many selected items succeeded or failed. A failed run exits nonzero while retaining those artifacts.

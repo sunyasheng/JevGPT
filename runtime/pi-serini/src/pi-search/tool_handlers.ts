@@ -84,10 +84,11 @@ export async function executeSearchTool(
     );
   }
   const queryMode = SEARCH_QUERY_MODE;
+  const cacheLimit = Math.min(SEARCH_CACHE_K, backend.capabilities.maxPageSize ?? SEARCH_CACHE_K);
   const response = await backend.search(
     {
       query: rawQuery,
-      limit: SEARCH_CACHE_K,
+      limit: cacheLimit,
     },
     signal,
   );
@@ -113,7 +114,7 @@ export async function executeSearchTool(
       searchId: cached.searchId,
       rawQuery,
       queryMode: cached.queryMode,
-      k: SEARCH_CACHE_K,
+      k: cacheLimit,
       totalCached: cached.results.length,
       returnedRankStart: page.returnedRankStart,
       returnedRankEnd: page.returnedRankEnd,

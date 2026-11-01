@@ -14,6 +14,7 @@ if (auditPath) {
         appendFileSync(auditPath, JSON.stringify({
           at: new Date().toISOString(), request_sha256: createHash("sha256").update(body).digest("hex"),
           model: payload.model, reasoning_effort: payload.reasoning?.effort, stream: payload.stream,
+          max_output_tokens: payload.max_output_tokens ?? null,
         }) + "\n");
       }
     }

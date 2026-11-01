@@ -1,0 +1,27 @@
+{
+  "revision": "b45390693461d948d47fdd835f27b46026b5e2a2",
+  "tag": "v2026.10.25",
+  "files": {
+    "bcp/qrel_roles.jsonl": "98c635eba71b8164148ef8049df88e54d85c266a",
+    "bcp/qrels.jsonl": "01d40d9975f2cd03e5fbe46a0e2362d136e10fc2",
+    "bcp/qrels_exclusion.jsonl": "97e71cde1289b0efacc66b2772603d22571c58e1",
+    "bcp/qrels_inclusion.jsonl": "5fb8ba89f593db009f73c886f3bd87420cc79bc8",
+    "bcp/queries.jsonl": "3690e1c894bbbaec5575731efeae97dd687b85ad",
+    "dsqa/answer_sets.jsonl": "d3c67ad51d6cf636f478713ddd4e5c368016df70",
+    "dsqa/qrel_roles.jsonl": "2894d993c6012398f9981b68f1e5635b7f042ff0",
+    "dsqa/qrels.jsonl": "50ccb481e039391d53282d82992ece0bede07faa",
+    "dsqa/qrels_exclusion.jsonl": "8e2bd2309f478b474cca0b55d5deb69a02e29c3e",
+    "dsqa/qrels_inclusion.jsonl": "26fcce72be4813e2c340750cceebd3638209ae9e",
+    "dsqa/queries.jsonl": "05d4b7b3706199f7da85586d921768d60221ed8b",
+    "hotpotqa/qrel_roles.jsonl": "9c93809e4fee3ae16e043a9ebb0a23845ca6376e",
+    "hotpotqa/qrels.jsonl": "08185d121aeec695a6c1330189aba3538d6844c9",
+    "hotpotqa/qrels_exclusion.jsonl": "1fd39554bc5b58728debbf84646e57aef059e85f",
+    "hotpotqa/qrels_inclusion.jsonl": "cc20d39a7c9d1e56d113269eded7958c94909676",
+    "hotpotqa/queries.jsonl": "a9ccb3e533c743fd266deafbaebb4a1be09bf6d5",
+    "trqa/qrel_roles.jsonl": "6106b23b20a514feff34451a9bcb41a8e6e14ea0",
+    "trqa/qrels.jsonl": "126b13b0be00a652ea81b8063b5e622de5b17227",
+    "trqa/qrels_exclusion.jsonl": "4da1741b92bec99b7469b7245e9d1912fbb0ced7",
+    "trqa/qrels_inclusion.jsonl": "e142453865089f869091d621f78486ee7f75b184",
+    "trqa/queries.jsonl": "db41f5353fc2ab30f33cf56b1fd540fd5965d250"
+  }
+}

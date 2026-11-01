@@ -1,0 +1,1365 @@
+{
+  "query_count": 423,
+  "historical_attempt_count": 448,
+  "queries_with_multiple_artifacts": [
+    {
+      "query_id": "bcp__1083",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "a6058830f7e5385e31aff9a823e2ce575d20328126adfd4d48f5cd03758eb646",
+      "history": [
+        {
+          "started_at": "2026-10-31T15:00:22.084493+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1362.593706588,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 24,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "27273488b2c0056e44a85e97ca48a476731467dcb05265ad78eab78cd5f61434",
+            "record_file_sha256": "22905c54875a4a04b2da294841aba4c62b7c8fec737c6f85700ae5bec51160d3",
+            "outcome_sha256": "382998191f08f1b964d7733b8644bca3bbf660b4a189dbbd89f8eee15a73e26c",
+            "transport_ledger_sha256": "fa91a9d0b81a61bbfbc6530080cfe6f694aa3fc360f60f7eeb570bb8f076174f",
+            "jev_ledger_sha256": "d0f7321ae63d4d46ec693e9a85caa94078b0b710a9f103ce6bdd4d355a3e1baa",
+            "manifest_sha256": "aad3aeea617177073a66696e07e4b35b46f5d2f98ca1bf64e85117b784d81efe"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T22:18:03.429172+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 482.97027575699997,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "a6058830f7e5385e31aff9a823e2ce575d20328126adfd4d48f5cd03758eb646",
+            "record_file_sha256": "db1c58a24818e605b61600d49f584ce5904a67cac87b64d4726e1ff717651108",
+            "outcome_sha256": "705633ea1bc8a6152545dc1179cd69c4526365bccff7d2558faff2e78880e393",
+            "transport_ledger_sha256": "8503ee762a4154b4ecf72c33607e60a2598190fa0af4991047fc4d03a3dd18ea",
+            "jev_ledger_sha256": "dffbf88778f368890680cbf9850bef20a382885482f9da2a30523075dd7fcb9f",
+            "manifest_sha256": "436678a0690f6d99dcfbd65ea40e06bbbcc3e6bf54ec3104fa9856771cac63f0"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__1131",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "b839301cf44b0d7d7fe277f0e3f67f6f4377de38af2b061e83bc1244db53e447",
+      "history": [
+        {
+          "started_at": "2026-10-31T15:00:22.084493+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1342.226707135,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 22,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "b0567f4011138461cfaa09500238d6978efda488e03aaa4e184c2efa0f7f9a3c",
+            "record_file_sha256": "22905c54875a4a04b2da294841aba4c62b7c8fec737c6f85700ae5bec51160d3",
+            "outcome_sha256": "fddf5ffc6fb7b25d45b3fd807f06a1a5783de2242e87c86c27a1f5ffaea691a1",
+            "transport_ledger_sha256": "f960a0fb3e74800786f54d72411c0d37f5583ab37a1bd200a92b212f02971931",
+            "jev_ledger_sha256": "64055b1bb17dc9f0ad9047015c659bdfc1f80cb9517d8f3c146d0b85898aa09e",
+            "manifest_sha256": "aad3aeea617177073a66696e07e4b35b46f5d2f98ca1bf64e85117b784d81efe"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-11-01T03:51:45.397400+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 227.24407191300003,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "b839301cf44b0d7d7fe277f0e3f67f6f4377de38af2b061e83bc1244db53e447",
+            "record_file_sha256": "9389a3ac6504e3cbe39e7148d5e46f07ef520dcdbb1fa6a5ec1952a9bc96cc5a",
+            "outcome_sha256": "196546839b987bff457b5f709d64f0bcfde909f7e4d93add9112fcb1b3bf01d0",
+            "transport_ledger_sha256": "fa5de9cd56b40d6f90e39b46037bc50d3614245ea3daf02a3e425c796ae4cc7b",
+            "jev_ledger_sha256": "e17cc967292fa7c30def2a6fd671ead5e6a3db23747a4f6badfd91d5bdb268b6",
+            "manifest_sha256": "7dd77401db2c96a50722b46948e79b28e070b8d062fe0f28c0d5511cd7687b4c"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__1265",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "da0dd8a0dcb6794c2a3db8b56c3530dde466978d3a5cd0cc25ab5c5f53844a00",
+      "history": [
+        {
+          "started_at": "2026-10-31T18:22:22.335465+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1212.6952589789998,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 24,
+            "transport_retry_events": 6,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "e1e1d0800bd4c6b5eb68f27535346565bd8d9383c683698cb3eaead6d0addc78",
+            "record_file_sha256": "f13a65a69cec986f251381ab98a2e2cdc7460adb6da7b5d1534de4c3c6111371",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": "e4a1f62fdea41a6e5e6e872208f3c793f14cead425d21afca28b24317f81632a",
+            "jev_ledger_sha256": "0e27d6b74dcee6ee571cdaf07cfc99865e80a2642ec167612d460630040720ea",
+            "manifest_sha256": "bb03119d838283bd850dcb5f4ca8c146055e8673140366679812a19d44411b69"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T20:58:41.990732+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 871.885319337,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "da0dd8a0dcb6794c2a3db8b56c3530dde466978d3a5cd0cc25ab5c5f53844a00",
+            "record_file_sha256": "0dec82851c1ee38a268a188a4982d48680c46bd26eb48b3fd3e5be26f69c2007",
+            "outcome_sha256": "537bcdaf4019a7b637179e7d0737b9738c5f91e62e86c52eaf35fb23f7debd15",
+            "transport_ledger_sha256": "d7ac80cfd504b5dd1506d37c369c46adab52238994d2865178f3b1c58bf7e7c0",
+            "jev_ledger_sha256": "aa64e82e5506f2f93d6547241546f69f40de51404387b040b19c67a552714dc2",
+            "manifest_sha256": "35efd88de2a9968efc890e1bae13e75e36ad51ae1374ac9a77da552a15adfd1a"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__223",
+      "dataset": "bcp",
+      "recorded_attempts": 3,
+      "selected_raw_sha256": "5c895abbbfe19c455bfef5254d0141b635941583c1d8b4f4a44f4f0c028d29e6",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 110.272892479,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 2,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "996d986e9cafb120d5f6d299d323103ee5deb9a0e29726278a25cf4f95de5e84",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": "46563dad007a35ff3290d464e1ad597e6e8dba61ab3948ad35e21d1aeabf062a",
+            "jev_ledger_sha256": "1c9217fde2d33a45f7b60eee7dda6362d9efaa95495a6a89a800ae62574f7020",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T13:28:42.053894+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1381.368844958,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 25,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "0f224b8c5991d8b9dcd5ec8cd67e007a4100d3b6eccfe192336f4e05fffae1ce",
+            "record_file_sha256": "b24443649bc2e259a8d37b7c2508d5ddb687e25b72c2695edc11c50ca2cc3f38",
+            "outcome_sha256": "33abfc1d6caef428176482b215e4a6e6273f164fbbf142d8e6ad2299f9c1459d",
+            "transport_ledger_sha256": "0326317467e1dfe84a7830f665f3adfc70f113151b0e5562dffd0ad6b9baef84",
+            "jev_ledger_sha256": "a8c3c916c944d5bf556bdcc6a0ab3bdfc1f61bb443481eebf6f9723531fbee19",
+            "manifest_sha256": "c44dbe4dd8ac694fd01f09f86a44bae1551c75446c3030e48b6433945ea15be1"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T21:50:49.780931+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 628.607685586,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "5c895abbbfe19c455bfef5254d0141b635941583c1d8b4f4a44f4f0c028d29e6",
+            "record_file_sha256": "37dbe87c5a42f5c4277e5b63b7916ed001b548b1a76edca666dee5b1823b613c",
+            "outcome_sha256": "00baafa0ccae78fe362c9b19b5b18f8c1619ddebb24eb80b2039a2244b52ef36",
+            "transport_ledger_sha256": "30cbf134dc15fa90bff65a10343fae6dcce739df2241021d5ab6dcc9c6998bbb",
+            "jev_ledger_sha256": "cd119f7b121a0bff4ffac745bd8c6b193041f57cbbbf79b22fe706f4629566b0",
+            "manifest_sha256": "853f326eaabf173b086ee211a1418e428cc1c9251970564cf3907033bd7dbc55"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__25",
+      "dataset": "bcp",
+      "recorded_attempts": 3,
+      "selected_raw_sha256": "114910c7ca480ecf2ede25714965f87c36550c04358e1167fa3d4140d94dffcd",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1364.404725247,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 22,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "bfae750a1249d7f5ffb286783e4bfebbe190a798112a5731259f49c3f0cd5e8d",
+            "record_file_sha256": "9c840383c9b114f088b2f31b62d26fb2e431e49e972ed40fef82ed3d914d3228",
+            "outcome_sha256": "cb2bfde4b656ac32f011f5c62574daf4d6daa0aac5d2dbbb5db8d76ef6944c5e",
+            "transport_ledger_sha256": "bd1257a15a7ffaa9e84540401ca1687a03d0bfc8f86acf64c8336bdd72ab0075",
+            "jev_ledger_sha256": "d8130fc0354f87f4f67432d4c2db2f941c995d2f367b86ea47b36fb214145f2a",
+            "manifest_sha256": "1b65f05f64b1eb02b8986370f85e43e36f0adbc9133091e76ffb29a0f179e5c3"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T21:50:49.772349+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 558.833932429,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {
+              "503": 7,
+              "400": 1
+            },
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "58245402eb43664f03f40e250061c2c90349a0d7c2e53172deaa667a92b27638",
+            "record_file_sha256": "0df54c7b2989736dfa28bd6428ef4d2ca5f6ca5e6a500ceee5deb4665d2b0401",
+            "outcome_sha256": "06ea2f1ab428784619e5c3dfb3a64b01b84b664f6accda7c658942bccf997a6e",
+            "transport_ledger_sha256": "5691d45b567ee6e81df81121b2b4290aa34d501b0328c2d78a0a5492d0a177fd",
+            "jev_ledger_sha256": "fc5feb42e5f25e9dcce5a02759f50382ebcd5104ea57bb29ea79734354f7c852",
+            "manifest_sha256": "7b33b6c8ac34ba83b053d21fbf583785c08fabbd8bc4a68df6bbd6c49f7c2d39"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-11-01T03:51:45.351602+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 185.20597729299996,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "114910c7ca480ecf2ede25714965f87c36550c04358e1167fa3d4140d94dffcd",
+            "record_file_sha256": "c3ff9d3003dc7c6960ac95e2469ad1def4720ebc297f3fe4406af2788c6aa720",
+            "outcome_sha256": "7607056fe64c1a87bb9acddb128e89ee5be2387abdfa89a9655f15b89e99837d",
+            "transport_ledger_sha256": "3db4141f5c21e150b4b62c8e8ad46d73bccf83765f42c2e95d4be6b1cf391f8d",
+            "jev_ledger_sha256": "a96f9ff97a7f8344966a4235fb176d63c7d9c76e0091a272de64c66f659c1b1e",
+            "manifest_sha256": "a7b49325985fc3a814f58767ab347276d843a2333fc6f013182e01b2aff0dab1"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__342",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "1e038e77f44f3f1b0e3c08c3d7d49820e137ef6b4f1aacb55b5abbc98d070a1c",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 9.972946505,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "d40a63a652d39d6eed535b9684e44630f9f46dba0b31fa4acf1903eb2049b905",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": "b7d38e1d7dbb996127cda1b7c7fe7869f856c593ad3d6d66e17003bee6ed623f",
+            "jev_ledger_sha256": "4ff1a3121fbce77795978c5a2632ea73ecbb8c41ad3d2df3d36025a59d7310be",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T13:28:42.053894+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 923.9861034370001,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 15,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "1e038e77f44f3f1b0e3c08c3d7d49820e137ef6b4f1aacb55b5abbc98d070a1c",
+            "record_file_sha256": "b24443649bc2e259a8d37b7c2508d5ddb687e25b72c2695edc11c50ca2cc3f38",
+            "outcome_sha256": "9d2c239443ba1c7d46b00d6beadda3f3135e7f7606f32fd72ed794d867676ef5",
+            "transport_ledger_sha256": "1f4a4c597fbdda9592a852f9d387651289a0ad253cab82c1c2ea9161fce59b4c",
+            "jev_ledger_sha256": "13f23a15a6f35132b8f5de7fd8a316c2bdaa936200f748f8c4923eb9c76fe36f",
+            "manifest_sha256": "c44dbe4dd8ac694fd01f09f86a44bae1551c75446c3030e48b6433945ea15be1"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__409",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "eb2941d7a9e516a8c47e05b1011d745d7886e3482f3a84bfdfb6cfedf4ab092b",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1.063921802,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "57a1623063a63c3d157df807d9a6f0cb59f2e056e3e67922779473e4c1ca5081",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": null,
+            "jev_ledger_sha256": "c75001db6c63aef1b024e7c6871c67279d47e894c0cc95a4a8ba6369db5a1ef6",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T13:28:42.053894+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 440.875377178,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 7,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "eb2941d7a9e516a8c47e05b1011d745d7886e3482f3a84bfdfb6cfedf4ab092b",
+            "record_file_sha256": "b24443649bc2e259a8d37b7c2508d5ddb687e25b72c2695edc11c50ca2cc3f38",
+            "outcome_sha256": "6243e1cf02680ccd49737ec721e23f7ce87d627031f5946b1928c902d1cb8aeb",
+            "transport_ledger_sha256": "6bf765826b16345cdfec8505945bf7664c36dd4f5bf1af59f455131dac5aa939",
+            "jev_ledger_sha256": "50c91c3322dcc5d81680a6e70dde9cd0cace0a4310014bb63d01d326d3d593b3",
+            "manifest_sha256": "c44dbe4dd8ac694fd01f09f86a44bae1551c75446c3030e48b6433945ea15be1"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__500",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "be467819b821b73abc92fbe0ec6aa07f2293b7cc3e2d66afe03d955ffec3fd25",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1.2787869760000001,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "897441af7c5653fb47fd229a68e7cf9e2baf0c66db41b06cd5c65d26a23e164e",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": null,
+            "jev_ledger_sha256": "1665e5fe913df0b136cb5a47a9b3253287aee2e2fa292067348ee19801f04cb1",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T13:28:42.053894+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 115.89524920000001,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 2,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "be467819b821b73abc92fbe0ec6aa07f2293b7cc3e2d66afe03d955ffec3fd25",
+            "record_file_sha256": "b24443649bc2e259a8d37b7c2508d5ddb687e25b72c2695edc11c50ca2cc3f38",
+            "outcome_sha256": "7552dd4939efb24e8c1248401b0b7136b1d29c7ea6f2d46f210a85368feb62e3",
+            "transport_ledger_sha256": "a796e74dbbe2bca70f452a6c32561db9cfc61cbc1b087f130e40b8e3bfd5a101",
+            "jev_ledger_sha256": "6646d924749f6162146bdb7d9377ebbd7f2049f0360fa5353bf66950732888fc",
+            "manifest_sha256": "c44dbe4dd8ac694fd01f09f86a44bae1551c75446c3030e48b6433945ea15be1"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__512",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "fd16fa34bf353f9f6c7e55d9d3f791bbc17041789e2b5027695cb4c75527943c",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1.242797139,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "76eda29c829872306d899d6310cdb5b18bb8ecb82050cc7410cc17a6d4539147",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": null,
+            "jev_ledger_sha256": "fc44a98006b079a9178b6e5c220c920cd51421f36ac11beb4e315549bb510ebc",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T13:28:42.053894+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 143.07668584799998,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {
+              "400": 1
+            },
+            "quota_wait_events": 4,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "fd16fa34bf353f9f6c7e55d9d3f791bbc17041789e2b5027695cb4c75527943c",
+            "record_file_sha256": "b24443649bc2e259a8d37b7c2508d5ddb687e25b72c2695edc11c50ca2cc3f38",
+            "outcome_sha256": "df1c35842fa5cc5f3082af7e71224688cdfe8f7eefe89b9e34620efa37fae2d4",
+            "transport_ledger_sha256": "e93a6bbc03f3e15a02131bbcdb1e3f295012b9fe2ac6d9150c86308359d4d284",
+            "jev_ledger_sha256": "ba73a9a1f0048a54f15776fd6f19eb77009d04b58880ee214a518ee9fb679a6f",
+            "manifest_sha256": "c44dbe4dd8ac694fd01f09f86a44bae1551c75446c3030e48b6433945ea15be1"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__555",
+      "dataset": "bcp",
+      "recorded_attempts": 4,
+      "selected_raw_sha256": "3ae821d226a1448af295900ebb4452635dabfad723ba59ac979e4a147b87dc84",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1.081981075,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "ae5ad5f6f4c4da4eb320a51e28d8ebff4ca9319eb6573df8a8b6b3019cb50854",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": null,
+            "jev_ledger_sha256": "21bf54be3b90f5e1bad8fa1219aa5b1c3cdf8b951ea9450188354072e34e52c0",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T14:36:24.342511+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1358.5969994319998,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 22,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "0d70b0880cefcf6e40f80204697804871e5ce39869460096d96eb18dc02a9a8b",
+            "record_file_sha256": "ca7f2896759df99606494e50a583ada0b6a8881cc3ec55a0c42f9bd48853d155",
+            "outcome_sha256": "d04617e8ee1806742cca3858146e61f07d8a491647a3f7ef52d5863ce6ce52e5",
+            "transport_ledger_sha256": "87dbdfddc8f5f57f36e08b8102160eddfbcf5370a525d0836deae3a47fd7d040",
+            "jev_ledger_sha256": "76b384e246ab2b60bd043f94fa40722e490ce273361902336e6358bb5e16e1b3",
+            "manifest_sha256": "323ae62fb17595d56d803f5615c5d2c41e4e0d53218e417db27bc18e8f484c88"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T21:50:49.792462+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 833.85051587,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {
+              "503": 3
+            },
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "4d3bb29d8a4fa91769283d1d9644a8f1170b976b86439687154e55223d731748",
+            "record_file_sha256": "ed8848fd57b2cb39eb11c137a87b23876bd091bd26adc3675dafb7cf09593eae",
+            "outcome_sha256": "70a464cca812e5f85f6b5eac36a2b59ea8b31910275feae3a9080f3eae84e847",
+            "transport_ledger_sha256": "872a487f6ac0e06ae734ed50763ff8ea9663e6cfcf66c66edd32ad9d0cda5b8e",
+            "jev_ledger_sha256": "62ce3cf7daa2153e9a37e96dde1896f2d3c583df1ade5aba29e5ad10cf7df9f1",
+            "manifest_sha256": "1d8517eb517a4dbe70eefb7ecce3e1acf902530a38f21fc68d8dd33026ddd9bd"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-11-01T03:51:45.450470+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 983.8873751579999,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "3ae821d226a1448af295900ebb4452635dabfad723ba59ac979e4a147b87dc84",
+            "record_file_sha256": "507b9c2197874fac999b66859a194774fbd155ce2748965f6b5752db784745da",
+            "outcome_sha256": "fe88b17297ce5337691ebda692677731f25269cb299d40228af5712b217218e7",
+            "transport_ledger_sha256": "22e533a6988730f8d718eba84803a6da99975f03741c54ff7070914ead773fc3",
+            "jev_ledger_sha256": "a990b06a347e1c579a44612e1e5a14de68b857582adb4d5e13aacc7e95a89b56",
+            "manifest_sha256": "f7ba0a5a860d22adbf5107753e1cb96539c802a6b72016ffdc303f99b601e14b"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__569",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "c2f448bd046e3b65886717436da79b7e451ac9616122a93fca217235840c9ad0",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1.255424488,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "0d88e14e0c3a2d434b0cc593a1ae2981a2d2ee0001958fa8e4cb300a1dab77a3",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": null,
+            "jev_ledger_sha256": "fefe3ce8b656c71015bc8126f316320a65e0b2a1688828dae59f644684ca7b0e",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T14:36:24.342511+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 77.278308787,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 1,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "c2f448bd046e3b65886717436da79b7e451ac9616122a93fca217235840c9ad0",
+            "record_file_sha256": "ca7f2896759df99606494e50a583ada0b6a8881cc3ec55a0c42f9bd48853d155",
+            "outcome_sha256": "da2ed232c59e120f1407b4f00cfa534cfdb087a45f54b58a724d3352e6719d8c",
+            "transport_ledger_sha256": "7da79257e6519b1790b0595660c2fc258f4d096ce310e10a25412ce4bfe2c131",
+            "jev_ledger_sha256": "94f2b0519971ce8e5f43d35fd80ea0e9b09b338659970d46ecf4f4ac78139f68",
+            "manifest_sha256": "323ae62fb17595d56d803f5615c5d2c41e4e0d53218e417db27bc18e8f484c88"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__576",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "80f1a2a7712117658d420b1b0c2d78a0e160c4cef8652bea0abe8c97c2ff752c",
+      "history": [
+        {
+          "started_at": "2026-10-31T09:02:52.641074+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 1.128535364,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "e6265d8b05172bba6babe8540d1e8e3a11239118b03eb72bda0d8825d20aed78",
+            "record_file_sha256": "8dc2b2f75d38384284eca02fd88bf43e6485cbeabb0c4d10ede798bd9f44067a",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": null,
+            "jev_ledger_sha256": "c25b58d69e62e4f86692d676c0a68875fffaf88618fb8ae8b769b13158935283",
+            "manifest_sha256": "ee0181cf5cee4c46de2b5036773cc04e2ba3e241a53b061b183a7a366d2f8589"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T14:36:24.345820+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 251.27782115,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 4,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "80f1a2a7712117658d420b1b0c2d78a0e160c4cef8652bea0abe8c97c2ff752c",
+            "record_file_sha256": "24934b806e03b6bdc2dd9775f52f8ec0403d5f63dffd98507a989cd3384ad279",
+            "outcome_sha256": "12f57477a06435d5eced1d67e5e142cb566afe87e8d5f32e1299923dacf7bea3",
+            "transport_ledger_sha256": "e76613061609b3563109b88895a520ee431a34c1659b0b8b0015283f4399bc15",
+            "jev_ledger_sha256": "6426810388cb665e3faccce0499c1325a9f1f9b1af7ed3873466b00823d9f8de",
+            "manifest_sha256": "ec281726f38a602b512a201b747ba90078534b953e10e85174360ce278280525"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__588",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "9ad8541188629b9ac2766a83532f4d9d94477ad6164247ea7dcd0cfdc12586d5",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1368.695249702,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 23,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "8f16154e881652fcd7f3c7cf2a21148b3e94191cc2e481ba8a9511a49b9d5bc7",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "99b406de9bd09cb2e6277d03aeaaebb2fe6767a8e57f03722783855de39f5fa2",
+            "transport_ledger_sha256": "1fcc9e941bf97e919aa7d86892b8d88616f87965f3cfe1f00befbf2e60b7a525",
+            "jev_ledger_sha256": "518360b4d5931a6e08677840f21ed7622af69d4753ea0861f6b0276d1d84a6ad",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T21:50:49.799289+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 421.98316851600003,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {
+              "400": 4
+            },
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "9ad8541188629b9ac2766a83532f4d9d94477ad6164247ea7dcd0cfdc12586d5",
+            "record_file_sha256": "12b3af785d6d5515b49d5de08025898be3acd68421418172c9ce100bca245554",
+            "outcome_sha256": "a3a8545f7aee6dc85b86554f7e2633a8bd42e935c6a6bf1888e4004c1f0e5278",
+            "transport_ledger_sha256": "1c1640eea508a18e7b7e0ed2004546d67f5a0680da4efbb15c480309b4e339f6",
+            "jev_ledger_sha256": "fd11ff713d937e9b28c63fdb07cfb85b7f1a173e1bfea8a5f506ca0cf3fab520",
+            "manifest_sha256": "7ffbc7c96b5d0bb81d346f7b46956786305301343701f5d3b79c782320aa8962"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__688",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "358b974cf159d0032877cfb905b0f2c82280557395cf3118f5a37901469bcde0",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1345.264370148,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 21,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "257493142d2358c9289e1d304017325b3c664d56c880e19600822b01b344b39e",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "8e9a7830b52b49c4bc5a5cc00713cfd1894d954779c7879360fb83da985cd448",
+            "transport_ledger_sha256": "479777a0825c6cefc824753498429eb8cd8a371a43f2031df7e8e48d3e09080c",
+            "jev_ledger_sha256": "8916259496efea2c39dac5707e9a7159fc8ad0c2d0e2f388b1cb5fd70fa10046",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T21:57:56.352007+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 257.129576486,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "358b974cf159d0032877cfb905b0f2c82280557395cf3118f5a37901469bcde0",
+            "record_file_sha256": "18d28cfdd4a10e17e1c74df8ea667c65bf7b2eb603b75341d3f9dcf4852a2023",
+            "outcome_sha256": "4b9992c739178896052b6a96369e820035ac62c12bd5d32da03ef55fb0a7891f",
+            "transport_ledger_sha256": "3535f0752b437493dae14be53dd0ce3428616b87cd1ffd07aa8d7a1e1c927e4d",
+            "jev_ledger_sha256": "bbfcb33d2375b45ad616a4cf379733b77c2ae8bfabb1257ad9b6746631d40259",
+            "manifest_sha256": "f13ea51e35dd8914044b8b1ffa05fa3f153e48e8f6ddc71d61e647b3aae3cd71"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__692",
+      "dataset": "bcp",
+      "recorded_attempts": 3,
+      "selected_raw_sha256": "336fc56401c9ad6dedce86f9502dd9bb359f00a253108745cb363792218a0b4e",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1330.8754800399997,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 23,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "89072b7bac4f118e7e3e949dc333a9f95dedeec8a17373c70754d927cfe82180",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "3e700a413c6852f2efcf966bb2c0151ce8e3c508bfae1e5fe5e9051a9873a520",
+            "transport_ledger_sha256": "eeea18ab09a51a18e020703d571ca02e18aaaec7acc47f8968b9cd08a47fe34f",
+            "jev_ledger_sha256": "7b8565a838c0bac1d8c438e07c14cf1263cdace137b9e0838850f5fcb3dd87a6",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T22:13:00.716648+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 693.27066993,
+          "usage_unknown": true,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {
+              "529": 4
+            },
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "feaaf0b9e57f87eb36bad97cfbacda11dfc622b51c8d5ea6105a8330e40d4cdd",
+            "record_file_sha256": "a4efaa7ebd3885390db1f97b3faccd91a73592dbfe6fcc4b4f559d057a8bc8ec",
+            "outcome_sha256": "56673a90ace128572533cb4744822b8e188a117bd39b6531f8b60d2292e97613",
+            "transport_ledger_sha256": "c73d194a4f0db6494925cacf41c2c18115b5436c6219b3067b1ea5b994535684",
+            "jev_ledger_sha256": "0507f02ecf861b74e66b93e68d6c2c4fac433447d6e2496f6183ab35522d697e",
+            "manifest_sha256": "f6ba03d1ade9634784a2aa145a8f7a82ce76622603f1acbb8d62be06325e63bf"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-11-01T03:51:45.449095+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 599.540582642,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "336fc56401c9ad6dedce86f9502dd9bb359f00a253108745cb363792218a0b4e",
+            "record_file_sha256": "1e349fd8accc2c06827ab6beaf582e0283d449aa689175b99f5b341956f856b4",
+            "outcome_sha256": "e16b07ed01b2259c6c335ccddf5ca01af5f469c156f9eef116cfc45a91d57bf8",
+            "transport_ledger_sha256": "bb3667ec45718bfab85e89ed8f5dd2960225d771a64824e7b3fffef3ca73a884",
+            "jev_ledger_sha256": "9618125ab32c58dabdaa481af9bdf6752df4d3f2144a2738c612d64f9e8da916",
+            "manifest_sha256": "3114e2cfe9d3419d845732c7565b6b2c1a6a02333d491d2c98f81cd51c2d4a8d"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__732",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "abd71e40d5c282ea9c3dff4830fd9b07963930ffa0a2cf2a050d6056f11a5132",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1379.0690765499999,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 24,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "c74499d6b9fb488c56cc3296924118915629da4d49ae71e6c9d6e627faad65a4",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "05792fdae44d448f59322f32c83eb2966c6098e1e7f1e3844c157f7615dfb284",
+            "transport_ledger_sha256": "8fe2b47abc2c6b2cfabfb5628b24e49cfd5d0260c8af090724afec4af16b3610",
+            "jev_ledger_sha256": "593f111675d61d908b1ef8c016f082508df6efd75a851fb9a3cf84c3ea280f07",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T22:13:00.730446+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 235.44059880400002,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "abd71e40d5c282ea9c3dff4830fd9b07963930ffa0a2cf2a050d6056f11a5132",
+            "record_file_sha256": "9ecfb0a3a1803e530e3a7eaadd9f1de05a1f9f49c12116d2aed13c2705953eff",
+            "outcome_sha256": "527a7958e3114706c0f3d9e908a7bb993cff2cf4f10209468052ba3f810dd9bd",
+            "transport_ledger_sha256": "c799eb94612d027ea897d478a36fe413897a61b939a2c82a6a322a3fde5551d0",
+            "jev_ledger_sha256": "bd68359b2569ec03f1b8cb9e670f1917b76ac86f9bd27433644f13f8ca570dd8",
+            "manifest_sha256": "af4f76bfb336ab47a7b4f16821596e584f94c9e31411a5defd72d204eeabacfe"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__830",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "b5a3144ca84d03074b4db903d72c2b8543cfa02af047b2d6c56a854dca98e661",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1336.058289288,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 24,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "fc747f714f8ab25df8b689860c7f8085a1b3299924a3bcb78f3ac291fe304bc6",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "7cad04ad7056b9ebb7d37740c032949f60854329cc2dee6cca10e57fe9e4ba44",
+            "transport_ledger_sha256": "d65d063f42c95e5a0878cc939395e974164f13ad2a466d0f779a8669cc8ab16f",
+            "jev_ledger_sha256": "75d2c780c999267857622eedf4cdb39234b67d7a6013f0f040c60c1e3801dfdc",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T22:13:00.735957+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 926.946160146,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "b5a3144ca84d03074b4db903d72c2b8543cfa02af047b2d6c56a854dca98e661",
+            "record_file_sha256": "8d721ee7f15d779a6e64ca3c920ff621bbd3bf38e9d738ba87fda82d4044380a",
+            "outcome_sha256": "c058b3f760109e550aad65682dec20bc0303d97fd768a1414baa62fd82e1a86b",
+            "transport_ledger_sha256": "659c879e509b07acf80d32c811439e044eb7ec922f05b725bca9f9db84c18f09",
+            "jev_ledger_sha256": "1005c63709793d6a4a1f26ede977f8df75c5ac9030c8f85e0074ddeabd391621",
+            "manifest_sha256": "384cb247598112c778f3af5bd3fc33436fccd15be36153a7aaee51f5f61c9609"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__947",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "60401739a0f7fdb57d34fc0451b971d3bc08a0c6fa53080ee5f216657d2006ee",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1343.919719985,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 23,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "974ac5d47cc4787221bcd2c40af6b888b7fe68b4b9790c53ade52ed200aa30ae",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "5198be7aa4da00161bcbee95a80acb205ab076c702f5c3832cd2113e08fb18ac",
+            "transport_ledger_sha256": "a79599be0b72926debb3e4915e5a03dbc963a6662511bc16fb07909583596a81",
+            "jev_ledger_sha256": "4f8c74a213fd53bfdbf945b419dbad3e17c492366daac686a24c05c667bebcc9",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T22:13:00.731689+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 300.604420392,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "60401739a0f7fdb57d34fc0451b971d3bc08a0c6fa53080ee5f216657d2006ee",
+            "record_file_sha256": "61ed5b0a61fb927df2b959e16fef2b48f42939d563991ef10fdf6d0303dc6d51",
+            "outcome_sha256": "de9f5cc76b44fdddad3dd470f218ac80892d269e6c43f6a3fefbef2d2ff6f04e",
+            "transport_ledger_sha256": "5388a2a828195a4669ca8d661aa55d87ab1f44495926bc95259a61ae092d81de",
+            "jev_ledger_sha256": "09b92047b45f8f469e8c8ff1cf98df1f059f96d5a2cd938a1462b5276eef58c5",
+            "manifest_sha256": "bf0a2fd9ae7ca0b675ef82f28e54f4e0e24ba3951b4ca0f83cb322621f01e408"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "bcp__948",
+      "dataset": "bcp",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "4a6ae51e82a14c06dd430d221d630ebd236597c9e632247fc669c19d0e6f376e",
+      "history": [
+        {
+          "started_at": "2026-10-31T14:40:36.616803+00:00",
+          "status": "completed",
+          "selected": false,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 1397.503806938,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 24,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "7e7d2c8ba12a6fff51d33e607258e47f56bb03fa6e571f4e8ecbec38faf578ad",
+            "record_file_sha256": "6430db515a028c1c3840581d3468eb92baa0e40cf026eddd138f06144356aa5c",
+            "outcome_sha256": "3bd319b44b82b7843e1fa3640ef695738ad0e83ed7b1e2ddf1ed42315ff74cf8",
+            "transport_ledger_sha256": "457b0730d9e9690f9524aae2cf82f23960d5257ad26a44b538491794bedc7c78",
+            "jev_ledger_sha256": "8b519463f8ccdb92568fdff05f2cc20aa81b7b9e98a6a68b632a3f91586853ea",
+            "manifest_sha256": "421068a3a2b02679043b73d3e9f10ececa69efa8b14d3fafc95833aca43e786a"
+          },
+          "execution_class": "completed_with_recorded_service_events"
+        },
+        {
+          "started_at": "2026-10-31T22:16:57.434701+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": false,
+          "relaxed_correct": false,
+          "grade_status": "valid",
+          "elapsed_seconds": 817.062734419,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 1
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "4a6ae51e82a14c06dd430d221d630ebd236597c9e632247fc669c19d0e6f376e",
+            "record_file_sha256": "0504dc7a335588bc88ede7ec15e1ba218341d897e5917a0a4d3f3ce6869da043",
+            "outcome_sha256": "445ddf2bae6f3304200d385cb7262a4d3fbe8ddd41aa448c392e2ca16f718cc1",
+            "transport_ledger_sha256": "5281305138d3a85cd0f4e2680f47d004e9e976eb174b899977c0bf1c090947ab",
+            "jev_ledger_sha256": "6673cd38cef7f9e9c8c5fd29342119a9323269c4a6878f691c8af5aa6c00fc2f",
+            "manifest_sha256": "79ce17f1d72b478262728ebbbeb83bd977e450b72e99b2fd2d7975e32e279fdd"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    },
+    {
+      "query_id": "trqa__wiki2__56_p571",
+      "dataset": "trqa",
+      "recorded_attempts": 2,
+      "selected_raw_sha256": "41ed47ef89b0001aa692be74c9325a3e359b6d203b0094a511810f8989981ccf",
+      "history": [
+        {
+          "started_at": "2026-10-31T19:43:36.399639+00:00",
+          "status": "failed",
+          "selected": false,
+          "correct": null,
+          "relaxed_correct": null,
+          "grade_status": "not_graded",
+          "elapsed_seconds": 40.692169676,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "8774ebb9a4930ebee8a10a1ed28be7a8ca4c71e769c9f76ad826ebcd8c6cddac",
+            "record_file_sha256": "cbf8c3aaf4cccebddeacb00ae206cc4e60b8a32be12cf5ce2271c5a0aea7a673",
+            "outcome_sha256": null,
+            "transport_ledger_sha256": "d4b1269b6af3a8eb85d7783e0dfbd959c97235a7d5414d0597c44650db9caba5",
+            "jev_ledger_sha256": "83c69e031958e4811767a9171124a058ff4b80b960eb47c3a6ecc7be8d28613b",
+            "manifest_sha256": "6308256900a123598b61c5152ca7ff2e17f1202fcc56db6fd22147fb09bb80a2"
+          },
+          "execution_class": "non_completed"
+        },
+        {
+          "started_at": "2026-10-31T20:58:42.006208+00:00",
+          "status": "completed",
+          "selected": true,
+          "correct": true,
+          "relaxed_correct": true,
+          "grade_status": "valid",
+          "elapsed_seconds": 22.522994955999998,
+          "usage_unknown": false,
+          "observed_events": {
+            "provider_non_200": {},
+            "jev_failed_http_statuses": {},
+            "quota_wait_events": 0,
+            "transport_retry_events": 0,
+            "compaction_requests": 0
+          },
+          "artifact_hashes": {
+            "raw_result_sha256": "41ed47ef89b0001aa692be74c9325a3e359b6d203b0094a511810f8989981ccf",
+            "record_file_sha256": "c72e835844f538f49c3ca7dba74d3b5bfc95e3f3c5a7d399f5149f994f00fe25",
+            "outcome_sha256": "2b7e0277771e359e7051c27f373f8523c8daeb734e8ff9e89003f9ec2b13748c",
+            "transport_ledger_sha256": "6cfae044b8ccdeceaaedbc227354e17f0e554cd14b32ea440e70ccaf2883462a",
+            "jev_ledger_sha256": "a77435ec4d0784b7087760f50674b32e0582f43c66276289498555540b245e68",
+            "manifest_sha256": "e23fc470fd24d052a3d84c5f175f2ac901d24e95d326fee8e655b27f1bf3ba16"
+          },
+          "execution_class": "completed_without_recorded_service_errors"
+        }
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "selection_rule": "One finalized completed and independently scored output per fixed query. Where multiple completed scored outputs exist, use the latest completed output, not the highest score.",
+  "execution_policy": "Infrastructure and execution interruptions are recorded separately. Observed service errors/waits below describe the artifacts; they do not establish that an error caused an incorrect answer.",
+  "attempt_field": "Number of retained researcher trial paths per query at export; not extra accuracy observations.",
+  "resource_scope": "Published time and token summaries cover only the selected outputs. Other execution artifacts and judging usage are not added to those means.",
+  "numeric_records_sha256": "e8291c61d91e857308185bbacfd6cf74d83e961d815b60ba02a0f76453643345",
+  "historical_manifest_commitment": "02c848029557a88a7c105424bea0cdf4dc99a26b617e68691046a760150566aa",
+  "historical_manifest_note": "Commitment to the private path-bearing source manifest. This public projection uses artifact hashes instead of machine paths.",
+  "single_artifact_queries": 403,
+  "selected_attempt_count_distribution": {
+    "2": 16,
+    "3": 3,
+    "4": 1
+  },
+  "ungraded_history": "Null correctness means no valid saved judgment was available; it is not an incorrect grade.",
+  "additional_execution_trigger": "Manual decisions: recovery of noncompleted attempts; a targeted review of already-graded incorrect BCP outputs with substantial local quota waits; and further recovery following service or transport interruptions. Grades were visible, and correctness was used to identify the BCP review subset. This was not a uniformly applied outcome-blind retry policy.",
+  "single_artifact_trigger_count": null,
+  "single_artifact_trigger_count_note": "Not defined: no single predeclared event threshold was applied to all 423 questions. The event counts describe saved artifacts and do not establish that service faults caused incorrect answers."
+}

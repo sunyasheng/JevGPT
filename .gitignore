@@ -13,3 +13,4 @@ runtime/pi-serini/vendor/
 runtime/pi-serini/jvm/build/
 *.log
 .DS_Store
+._*

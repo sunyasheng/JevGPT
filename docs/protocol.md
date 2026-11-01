@@ -32,3 +32,20 @@ GPT input includes uncached, cache-read and cache-write tokens, each counted onc
 Frozen nominal prices per million tokens: GPT uncached input $5, cached input $0.50, output $30; Jev input $0.042. Jev usage includes both region judgments and local continuation/context gates. Research costs exclude the answer grader, probes, local compute and unreported usage; they are not account invoices. The release's fresh-run collector explicitly flags missing usage instead of inventing token counts.
 
 `scripts/report.py --check` reconstructs every unrounded scalar from JevGPT's per-item records, checks token costs and verifies the result against `results/paper.json`. `evaluation/neuclir.py` reproduces every per-topic nDCG, recall, precision and F1 value of the original `ir_measures` evaluation within `1e-12` on the pinned official qrels.
+
+## CMASS extension
+
+CMASS results are separate from the original two paper rows. The frozen records
+and hashes in `results/cmass.jsonl` reproduce the README through
+`python scripts/report.py --benchmark cmass --check`.
+
+The official CMASS prompt templates, protocol and metrics are vendored unchanged.
+JevGPT's wrapper supplies GPT-6.1-Sol/high, an 8,192-token judge output cap and
+the TAB/CR/LF-normalized question used in generation. Model/deployment overrides
+are recorded. These wrapper settings are distinct from the upstream templates.
+The original campaign retained every judge response, including invalid attempts;
+portable evaluation keeps the first completed response, leaving invalid or
+interrupted judgments unknown. It retries only explicit HTTP 429/5xx failures.
+Scalar gold-echo outer JSON quotes may be normalized while the raw response and
+Boolean verdict stay unchanged. See [CMASS](cmass.md) for the full workflow and
+`provenance/cmass-adaptation.json` for packaging changes.

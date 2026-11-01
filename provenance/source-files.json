@@ -1,9 +1,10 @@
 {
   "runtime/pi-serini/scripts/run_neuclir_unified_medium_v1.ts": {
+    "portability_change": "Parameterize the research model with --model and an openai/gpt-5.5 default; relocate the model/effort audit hook into this release.",
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json.",
+    "release_sha256": "b7eb66ee8e0f528208d04e697e60dd10be96492f04ab021ff91c463ebe8a3cf7",
     "source": "neuclir-hybrid50/source-snapshot/scripts/run_neuclir_unified_medium_v1.ts",
-    "source_sha256": "e363fe50c2db90ac8b8b35c4c106f3e1210d7ba3cf5646c17ba7ab1bd9065e5f",
-    "release_sha256": "5a0995fcfdc23a3cef1c4f90d5b50b30bbdcfc533da17ecd550815d9bc8ed28e",
-    "portability_change": "Parameterize the research model with --model and an openai/gpt-5.5 default; relocate the model/effort audit hook into this release."
+    "source_sha256": "e363fe50c2db90ac8b8b35c4c106f3e1210d7ba3cf5646c17ba7ab1bd9065e5f"
   },
   "runtime/pi-serini/src/benchmarks/browsecomp_plus.ts": {
     "source": "neuclir-hybrid50/source-snapshot/src/benchmarks/browsecomp_plus.ts",
@@ -18,10 +19,11 @@
     "source_sha256": "e4d56e3b1649ff0871a3cfe80ced48fd07f171980b3be6e8eccf53eb93e26651"
   },
   "runtime/pi-serini/src/benchmarks/registry.ts": {
+    "portability_change": "Register only BrowseComp-Plus and NeuCLIR; remove unrelated MSMARCO/template imports and registrations.",
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json.",
+    "release_sha256": "0e43da400f43351b0a0fd938aa23dd650ae66801e29ded6879f4865feee3fc2d",
     "source": "neuclir-hybrid50/source-snapshot/src/benchmarks/registry.ts",
-    "source_sha256": "a1f19b872ec44858930911d7a4b0b7a129dc50f37b06ca1a907919fac8b9bbca",
-    "release_sha256": "90a9265c2f416ff850a4eda464233f94a1fea671ec21b50248efb2ffc6492fa2",
-    "portability_change": "Register only BrowseComp-Plus and NeuCLIR; remove unrelated MSMARCO/template imports and registrations."
+    "source_sha256": "a1f19b872ec44858930911d7a4b0b7a129dc50f37b06ca1a907919fac8b9bbca"
   },
   "runtime/pi-serini/src/benchmarks/run_manifest.ts": {
     "source": "neuclir-hybrid50/source-snapshot/src/benchmarks/run_manifest.ts",
@@ -184,6 +186,8 @@
     "source_sha256": "c9ce06097103b51402914f2a6d58e2e28ef6140c4ca5aace4eb9c5d10fd8a67d"
   },
   "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts": {
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json.",
+    "release_sha256": "574cf5974ddb850554fec5779b31071b62a93fb15c9ec63e455a8887a8d244ec",
     "source": "neuclir-hybrid50/source-snapshot/src/extensions/pi_search_jev_hybrid_v2.ts",
     "source_sha256": "255b62666dbea7adb4f0708d379a3f68fb5d9320890ccd327368ab127de0329e"
   },
@@ -212,10 +216,10 @@
     "source_sha256": "17ed5196a41f86fbd92f12827022cb4b4c5ba2d91257e5273de330988dbb100d"
   },
   "runtime/pi-serini/src/orchestration/query_set.ts": {
-    "source": "neuclir-hybrid50/source-snapshot/src/orchestration/query_set.ts",
-    "source_sha256": "420116d6a4c12f736edbf83929dfab867d0567936fc941eefe0908746be45a47",
+    "portability_change": "Point CLI help and examples to the release launcher; execution logic is unchanged.",
     "release_sha256": "b91e7b512ee9d3df9d75138938307708a924911deb8dc1eae3f2120ea49993d9",
-    "portability_change": "Point CLI help and examples to the release launcher; execution logic is unchanged."
+    "source": "neuclir-hybrid50/source-snapshot/src/orchestration/query_set.ts",
+    "source_sha256": "420116d6a4c12f736edbf83929dfab867d0567936fc941eefe0908746be45a47"
   },
   "runtime/pi-serini/src/orchestration/run_pi_benchmark.ts": {
     "source": "neuclir-hybrid50/source-snapshot/src/orchestration/run_pi_benchmark.ts",
@@ -326,6 +330,8 @@
     "source_sha256": "4b393a5a1322d1d6cc70ebf684521010d2777b38667ca4030aac1f0099cc3dae"
   },
   "runtime/pi-serini/src/pi-search/tool_handlers.ts": {
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json.",
+    "release_sha256": "da1b2a78da69c301589cb1b03c90563e41c0ba0a81f23cd39aa1e6a72b6579fd",
     "source": "neuclir-hybrid50/source-snapshot/src/pi-search/tool_handlers.ts",
     "source_sha256": "811635d971c8184471b4fcac5f727e35af10f62e8af1da4bd91f11faab31fcf6"
   },
@@ -398,16 +404,16 @@
     "source_sha256": "dd45945bfe60ce2e4d9c7ab98723a826e92e6866564c1972db2f5d6e92eddb75"
   },
   "runtime/pi-serini/tests/jev_auto_scan_v1.test.ts": {
-    "source": "neuclir-runtime/tests/jev_auto_scan_v1.test.ts",
-    "source_sha256": "f21f9b358ea04feb8bda27be57cac9ae8c49acd146605f123e562952af849dda",
+    "portability_change": "Replace the BrowseComp-Plus questions used as inputs in the clue-extraction test with invented questions of the same structure, so no BrowseComp-Plus question appears in plain text.",
     "release_sha256": "a7f8a5e283c04cbfa93047cf7aac116dd6695e3723626377f55aad60ae5ad0eb",
-    "portability_change": "Replace the BrowseComp-Plus questions used as inputs in the clue-extraction test with invented questions of the same structure, so no BrowseComp-Plus question appears in plain text."
+    "source": "neuclir-runtime/tests/jev_auto_scan_v1.test.ts",
+    "source_sha256": "f21f9b358ea04feb8bda27be57cac9ae8c49acd146605f123e562952af849dda"
   },
   "runtime/pi-serini/tests/jev_document_ranking.test.ts": {
-    "source": "neuclir-runtime/tests/jev_document_ranking.test.ts",
-    "source_sha256": "1212aef7d5919e95f19912963258266701bb9458cd90cf989e6e82b57ff1a482",
+    "portability_change": "Replace a machine-specific splitter Python path with JEV_SPLITTER_PYTHON or python3.",
     "release_sha256": "d5022fbbfc9d392df73c60a9eeaeed17b671c6c334cdee0b1886a50242ad2d1a",
-    "portability_change": "Replace a machine-specific splitter Python path with JEV_SPLITTER_PYTHON or python3."
+    "source": "neuclir-runtime/tests/jev_document_ranking.test.ts",
+    "source_sha256": "1212aef7d5919e95f19912963258266701bb9458cd90cf989e6e82b57ff1a482"
   },
   "runtime/pi-serini/tests/jev_passage_units_v1.test.ts": {
     "source": "neuclir-runtime/tests/jev_passage_units_v1.test.ts",
@@ -430,20 +436,20 @@
     "source_sha256": "b3ee2e62cf047920ab6725b4d63f8c9ba089dd5fce087649941176a4576ed765"
   },
   "runtime/pi-serini/package.json": {
-    "source": "neuclir-runtime/package.json",
-    "source_sha256": "3a3718b1e3b3b8d7a1df98d39c8f5f544d039e70b04d8c55fe7faf958c829419",
+    "portability_change": "Limit npm scripts to the included test, typecheck and Java-build entry points; dependency declarations and the lockfile are unchanged.",
     "release_sha256": "6f4891030372999f61ed6e297bf647ab5f17a3a1f342004e2e4c7a446e7c9e69",
-    "portability_change": "Limit npm scripts to the included test, typecheck and Java-build entry points; dependency declarations and the lockfile are unchanged."
+    "source": "neuclir-runtime/package.json",
+    "source_sha256": "3a3718b1e3b3b8d7a1df98d39c8f5f544d039e70b04d8c55fe7faf958c829419"
   },
   "runtime/pi-serini/package-lock.json": {
     "source": "neuclir-runtime/package-lock.json",
     "source_sha256": "95b2752a3b39f2af99ef06ef6066e78062b43baf5c7dd40e93328b7e7298e59b"
   },
   "runtime/pi-serini/tsconfig.json": {
-    "source": "neuclir-runtime/tsconfig.json",
-    "source_sha256": "71840f24e6a1a075c635ac7f93daba391f979dd08f0356081bff8c7b28be257f",
+    "portability_change": "Include the standalone TypeScript worker scripts in type checking.",
     "release_sha256": "5257ecf9aaceeae4b308ccf97adaab5c07fa7a6d970134bc123e5c6a4102e170",
-    "portability_change": "Include the standalone TypeScript worker scripts in type checking."
+    "source": "neuclir-runtime/tsconfig.json",
+    "source_sha256": "71840f24e6a1a075c635ac7f93daba391f979dd08f0356081bff8c7b28be257f"
   },
   "runtime/pi-serini/LICENSE": {
     "source": "neuclir-runtime/LICENSE",
@@ -490,17 +496,125 @@
     "source_sha256": "a580afd0716e99a1c43fb297a950620a55980305aae9fcd236141101a7e21803"
   },
   "evaluation/browsecomp_prompt.txt": {
+    "extracted_sha256": "732dd73cab327aca3bc0d6357d0c2254c0fdeeb8928d2c51edc51648d1be4fb8",
     "source": "BrowseComp-Plus/search_agent/prompts.py:GRADER_TEMPLATE",
-    "source_file_sha256": "3d3494557870ff4442b2be077ab16faad4e1bcbc2279267337f265286ca724aa",
-    "extracted_sha256": "732dd73cab327aca3bc0d6357d0c2254c0fdeeb8928d2c51edc51648d1be4fb8"
+    "source_file_sha256": "3d3494557870ff4442b2be077ab16faad4e1bcbc2279267337f265286ca724aa"
   },
   "evaluation/browsecomp_parser.py": {
+    "extracted_sha256": "fd7c7048a0c7a6e247d7d1c0c961b228f65f671cf3459083ce6bf1c7b9cfff76",
     "source": "BrowseComp-Plus/scripts_evaluation/evaluate_with_openai.py:parse_judge_response",
-    "source_file_sha256": "8d213f62e95084e32bf183d7a39c2e107ecff8178226dae978303152d57d7740",
-    "extracted_sha256": "fd7c7048a0c7a6e247d7d1c0c961b228f65f671cf3459083ce6bf1c7b9cfff76"
+    "source_file_sha256": "8d213f62e95084e32bf183d7a39c2e107ecff8178226dae978303152d57d7740"
   },
   "results/neuclir.trec": {
     "source": "output/neuclirbench-assay-hybrid105-20261005/trec-runs/assay.trec",
     "source_sha256": "cf70b5a02dcadef3f8792a64bb75ad26c0834f9b91ff9354eab7f508cc62d8b4"
+  },
+  "configs/cmass.json": {
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
+    "release_sha256": "e2ef5ee5ace6376842d5b62d25a3ac5d68fd2f69a480cfe49ceddfa6f7d4f515",
+    "source": "cmass-sol61/evaluated-source/configs/cmass.json",
+    "source_sha256": "5ffee05cff284461bc3b996d063b2d71fdeabe4f962c8bba64e020c7f6aaa725"
+  },
+  "evaluation/cmass.py": {
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
+    "release_sha256": "3f169c326bcc2ab0ab9e2a0e0041ffd14798d85d1d31d4fdc4571d6c65449251",
+    "source": "cmass-sol61/evaluated-source/evaluation/cmass.py",
+    "source_sha256": "a05a9ddcc12a10394399fbaca9390ea6641ad8960fb2b766b177a0b70b512fea"
+  },
+  "evaluation/cmass_protocol/LICENSE": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/LICENSE",
+    "source_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "evaluation/cmass_protocol/PIIKA_LICENSE": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/PIIKA_LICENSE",
+    "source_sha256": "a217ba1f8fcce6c5b207620d0e7786592b20833138a25e03d815b276028d7f7f"
+  },
+  "evaluation/cmass_protocol/PROVENANCE.md": {
+    "release_change": "CMASS packaging and formatting; see provenance/cmass-adaptation.json.",
+    "release_sha256": "080cd16aecaf100238a52427c0f31822a3ee71a6ad13c1db743df0dfc688418c",
+    "source": "cmass-sol61/evaluated-source/evaluation/cmass_protocol/PROVENANCE.md",
+    "source_sha256": "0badccc80e589590fbd8628ed2173d77da249d7a5d7688b4105435a734f29fa8"
+  },
+  "evaluation/cmass_protocol/metrics.py": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/metrics.py",
+    "source_sha256": "763c467f71f4fb65dde24dc2ef10e206895b84083ffdd94d5fb80aafc84d0c2d"
+  },
+  "evaluation/cmass_protocol/prompts/closed_book.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/closed_book.txt",
+    "source_sha256": "607a0cdebd3a287e51f41c8427bb900851ec754e703bb6096e774d70c817e03f"
+  },
+  "evaluation/cmass_protocol/prompts/closed_book_dsqa.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/closed_book_dsqa.txt",
+    "source_sha256": "66790fd67560b5434cb8ac4382edc274945821701bbeffd9ea2ea4af20f71241"
+  },
+  "evaluation/cmass_protocol/prompts/dsqa_complete_set.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/dsqa_complete_set.txt",
+    "source_sha256": "0cc3a4c29270ee54d000a97b9d6ee91023f5d697fe0e3d0136ef5068ceea7bce"
+  },
+  "evaluation/cmass_protocol/prompts/dsqa_judge.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/dsqa_judge.txt",
+    "source_sha256": "85c097a86b1c3702cedec05dbedd1575259510c9413b1bf9fae8b70b5c31c33f"
+  },
+  "evaluation/cmass_protocol/prompts/gold_answer_judge.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/gold_answer_judge.txt",
+    "source_sha256": "e44a9fa86472a3645e4947c81a20a8eae3bc35d8cf3c589b4fbf8c4bec533588"
+  },
+  "evaluation/cmass_protocol/prompts/piika.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/piika.txt",
+    "source_sha256": "cd79dfb7ed0359cfd5bd49f2befe88810e288d14b994d24d57f19e5c82c5a53b"
+  },
+  "evaluation/cmass_protocol/prompts/piika_dsqa.txt": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/prompts/piika_dsqa.txt",
+    "source_sha256": "b2b3dde0ccc286ed1bc2327d0b72f0cee27d85e37d2f56f869d6dada83967b80"
+  },
+  "evaluation/cmass_protocol/protocol.py": {
+    "source": "https://github.com/castorini/cmass/blob/c99792cc025a8f1feba7b9b2d03309ed5964e85b/evaluation/protocol.py",
+    "source_sha256": "82560f9b3d6c307d9d42329827ccd8d704ccf529b7d636829ddb0285f28644a3"
+  },
+  "runtime/pi-serini/scripts/run_cmass_v1.ts": {
+    "source": "cmass-sol61/evaluated-source/runtime/pi-serini/scripts/run_cmass_v1.ts",
+    "source_sha256": "7f0bb2f92a0dfa3ee07db6137dac59d37f270b55a8fa0a2c4cc1fc30d3d8688a"
+  },
+  "runtime/pi-serini/src/benchmarks/cmass.ts": {
+    "source": "cmass-sol61/evaluated-source/runtime/pi-serini/src/benchmarks/cmass.ts",
+    "source_sha256": "9649d65372c719493d6ec5d61cefd7dd93c42508da87fb23ff12cfec7c36a6ba"
+  },
+  "runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts": {
+    "source": "cmass-sol61/evaluated-source/runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts",
+    "source_sha256": "84a1937cbd393b3e9548d73664190c3ebeede2fed9bb02f3424eec6a027feeb8"
+  },
+  "runtime/pi-serini/tests/pi-search/backend_limits.test.ts": {
+    "source": "cmass-sol61/evaluated-source/runtime/pi-serini/tests/pi-search/backend_limits.test.ts",
+    "source_sha256": "1ab1fadd0de97f3f02a3fe5a1ecc7dfad35b00ca0c1291579f2678fd8cbcea01"
+  },
+  "scripts/collect.py": {
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
+    "release_sha256": "2643897f1d1e3ec826a2340fde0343e28e6853a4e06a46486794ed69662c65c7",
+    "source": "cmass-sol61/evaluated-source/scripts/collect.py",
+    "source_sha256": "2a85f0eb2a2c703780dd6e4f4085054c4619a837afb3fa26284c7b3ba358fec0"
+  },
+  "scripts/prepare_cmass.py": {
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
+    "release_sha256": "5f680ec0ee2f1e26fffbe150212a8138f55891f18216477ea994ae357012d9ee",
+    "source": "cmass-sol61/evaluated-source/scripts/prepare_cmass.py",
+    "source_sha256": "c9f5be6af04fc879fae966fb59c82a69ded93770bfa81815557dbd4ca4adf5f5"
+  },
+  "scripts/prepare_data.py": {
+    "release_change": "CMASS release documentation/packaging; evaluated source hash retained.",
+    "release_sha256": "0e69ef0ed37f134491078adafe792f2f9e5d5c9a9433b1d4e764c5f337f9499f",
+    "source": "cmass-sol61/evaluated-source/scripts/prepare_data.py",
+    "source_sha256": "9a10acf7205ddd7a635303df2b030f85b67f62051788597f88d2c4235af0e962"
+  },
+  "scripts/run.py": {
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
+    "release_sha256": "612b8bf51b204150a23eeb3ead38b0a9a6d0c27a885eb754cdc12a32f2072f5d",
+    "source": "cmass-sol61/evaluated-source/scripts/run.py",
+    "source_sha256": "249c972339682c70bc308239472dbff3f15f0ae913aefb0c17a8ec808dffabb6"
+  },
+  "services/cmass_bridge.py": {
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
+    "release_sha256": "ca0bedbb54d6fbefa6f12e3e0ada98ee8568249afa48a4c214a6171e66553381",
+    "source": "cmass-sol61/evaluated-source/services/cmass_bridge.py",
+    "source_sha256": "0fb05527e59376b29a825acc7bc664a268457f6ff1efc494e167a9f1fcfb7839"
   }
 }

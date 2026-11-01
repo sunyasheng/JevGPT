@@ -117,7 +117,7 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
 | **Overall — DSQA strict** | **395 / 423** | **93.38%** |
 | **Overall — DSQA relaxed** | **397 / 423** | **93.85%** |
 
-DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
+DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run and verify](docs/cmass.md).
 
 ## 🚀 Quick start
 
@@ -143,6 +143,7 @@ Install the runtime, prepare the data and configure model access with the [repro
 ```bash
 python scripts/run.py browsecomp --out runs/browsecomp
 python scripts/run.py neuclir --out runs/neuclir
+python scripts/run.py cmass --model cmass/gpt-6.1-sol --out runs/cmass
 ```
 
 - `--dry-run` prints the frozen settings, the selected IDs and the first worker command without starting services.
@@ -168,8 +169,8 @@ BrowseComp-Plus and CMASS trajectories use the official BrowseComp-Plus canary e
 | `runtime/pi-serini/` | Pi-Serini runtime and the JevGPT evidence readers, imported from the evaluated code |
 | `configs/` | Frozen settings for each task |
 | `scripts/` | Data preparation, experiment launcher, accounting and table generation |
-| `services/` | NeuCLIRBench hybrid BM25 service and document adapter |
-| `evaluation/` | Official BrowseComp-Plus grader prompt and parser, NeuCLIRBench metrics |
+| `services/` | NeuCLIRBench hybrid BM25 and CMASS ClimbMix services/adapters |
+| `evaluation/` | BrowseComp-Plus and CMASS graders, NeuCLIRBench metrics |
 | `results/`, `splits/` | Per-item records, rankings and the original cohort and attempt selections |
 | `provenance/` | Source mappings, pinned data versions and file hashes |
 | `assets/` | Figures from the paper and an AI-generated banner |

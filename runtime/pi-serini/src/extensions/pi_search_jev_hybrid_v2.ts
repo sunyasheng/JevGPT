@@ -15,6 +15,7 @@ import {
   stripBenchmarkIrrelevantSystemPromptSections,
 } from "../pi-search/prompt_policy";
 import { PiSearchBackendRuntime } from "../pi-search/searcher/runtime";
+import { createPiSearchBackend } from "../pi-search/searcher/adapters/create";
 import type { HybridBm25Backend } from "../pi-search/searcher/adapters/passage_bm25/hybrid";
 import { createHybridPiSearchBackend } from "../search-providers/anserini/hybrid_backend_factory";
 import { createRoutingReader, gptSourceBudget } from "./jev_context_selection_reader_v1";
@@ -34,6 +35,18 @@ import {
 } from "./jev_auto_scan_v1";
 
 export default function registerHybridFindV2(pi: ExtensionAPI) {
+  registerJevAnswerV2(pi, "hybrid");
+}
+
+/** Share the released reader, evidence memory and auto-scan with document-only CMASS. */
+export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "document") {
+  const documentOnly = retrieval === "document";
+  const retrievalDescription = documentOnly
+    ? "Results are whole documents ranked by ClimbMix BM25, identified by their original docids."
+    : "Results combine whole-document and passage rankings, one result per document, each shown with the document title. Short documents appear as docid; long documents appear as their best-matching section docid#n.";
+  const navigationDescription = documentOnly
+    ? retrievalDescription
+    : "search combines a whole-document ranking and a passage ranking into one result per document, shown with the document title; short documents appear as docid and long documents as their best-matching section docid#n.";
   const hostOverride = installHostOverride(process.env);
   const gptBudget = gptSourceBudget();
   const batchSize = Number(process.env.JEV_BATCH_SIZE ?? 30);
@@ -56,7 +69,7 @@ export default function registerHybridFindV2(pi: ExtensionAPI) {
   let backend: HybridBm25Backend | undefined;
   const runtime = new PiSearchBackendRuntime(resolvePiSearchExtensionConfigFromEnv(process.env), {
     createBackend: (cwd, config) =>
-      (backend = createHybridPiSearchBackend(cwd, config, process.env, audit)),
+      documentOnly ? createPiSearchBackend(cwd, config) : (backend = createHybridPiSearchBackend(cwd, config, process.env, audit)),
   });
   const resolveUnit: ResolveUnit = (id) => backend?.getUnitMapping(id);
   const store = new EvidenceStore();
@@ -142,7 +155,7 @@ export default function registerHybridFindV2(pi: ExtensionAPI) {
             promptGuidelines: (tool.promptGuidelines ?? [])
               .filter((s) => !s.includes("read_document"))
               .concat(
-                `Results combine whole-document and passage rankings, one result per document, each shown with the document title. Short documents appear as docid; long documents appear as their best-matching section docid#n. Use jev_find with search_id to inspect up to ${batchSize} cached results, starting with 10 in parallel. No need to page through previews or list every id first. Ask questions that can reveal useful evidence or the next entity; one result need not satisfy every clue.`,
+                `${retrievalDescription} Use jev_find with search_id to inspect up to ${batchSize} cached results, starting with 10 in parallel. No need to page through previews or list every id first. Ask questions that can reveal useful evidence or the next entity; one result need not satisfy every clue.`,
               ),
             async execute(...args) {
               const result = await tool.execute(...args);
@@ -257,7 +270,7 @@ export default function registerHybridFindV2(pi: ExtensionAPI) {
   pi.registerTool({
     name: "jev_find",
     label: "Jev Batch Find and Read",
-    description: `Read up to ${batchSize} ranked results (short documents or sections of long documents) in one call. Jev starts with explicit targets or up to 10 ranked results, can add 10 at a time, read up to two bounded source pages, or yield partial evidence when this ranking stops adding located evidence. Supply search_id for cached BM25 ranks, OR explicit ids (passage ids docid#n, or parent docids for a full-document scan) with their cached ranking as fallback. Returns up to ${gptBudget} UTF-16 characters of verbatim source in parent-document coordinates (docid, original lines, source_offsets_utf16), any remaining omissions, and coverage of your current verification questions. Additional original excerpts may extend beyond the source used for Jev's local assessment; review them yourself. complete and unresolved_queries apply only to this call; neither decides whether the original question needs more research. You own that decision using the full conversation. Before another search, check evidence already returned and identify the specific uncertainty and promising lead it could resolve. Use a supported answer with explicit qualifications when further verification is unlikely to change the identification; never claim an unresolved clue is proven. assessment_status=unavailable means the latest local judgment failed, not that evidence is insufficient. Review returned source and any last_successful_assessment within its recorded scope. Raw source memory is automatic; no evidence-state editing is required.`,
+    description: `Read up to ${batchSize} ranked results ${documentOnly ? "whole documents" : "(short documents or sections of long documents)"} in one call. Jev starts with explicit targets or up to 10 ranked results, can add 10 at a time, read up to two bounded source pages, or yield partial evidence when this ranking stops adding located evidence. Supply search_id for cached BM25 ranks, OR explicit ids (passage ids docid#n, or parent docids for a full-document scan) with their cached ranking as fallback. Returns up to ${gptBudget} UTF-16 characters of verbatim source in parent-document coordinates (docid, original lines, source_offsets_utf16), any remaining omissions, and coverage of your current verification questions. Additional original excerpts may extend beyond the source used for Jev's local assessment; review them yourself. complete and unresolved_queries apply only to this call; neither decides whether the original question needs more research. You own that decision using the full conversation. Before another search, check evidence already returned and identify the specific uncertainty and promising lead it could resolve. Use a supported answer with explicit qualifications when further verification is unlikely to change the identification; never claim an unresolved clue is proven. assessment_status=unavailable means the latest local judgment failed, not that evidence is insufficient. Review returned source and any last_successful_assessment within its recorded scope. Raw source memory is automatic; no evidence-state editing is required.`,
     promptSnippet: `For discovery, give search_id and independent questions; defaults to at most ${batchSize} results, starting with 10 in parallel. Use offset for the next rank batch.`,
     promptGuidelines: [
       `Prefer the default ${batchSize}-result ranking batch during candidate discovery instead of asking about single results. Stop when evidence is sufficient; no need to fill a batch for a small targeted follow-up.`,
@@ -319,7 +332,7 @@ export default function registerHybridFindV2(pi: ExtensionAPI) {
         resolved_docids: selected.docids,
         ranking: selected.ranking,
         batch_size: batchSize,
-        unit: "hybrid",
+        unit: retrieval,
       });
       const result = await find(
         {
@@ -387,7 +400,7 @@ export default function registerHybridFindV2(pi: ExtensionAPI) {
       type: "navigation_start",
       active_tools: pi.getActiveTools(),
       batch_size: batchSize,
-      retrieval_unit: "hybrid",
+      retrieval_unit: retrieval,
       auto_scan: autoScanEnabled
         ? {
             top: autoScanTop,
@@ -434,7 +447,7 @@ export default function registerHybridFindV2(pi: ExtensionAPI) {
   pi.on("before_agent_start", async (event) => {
     const systemPrompt =
       stripBenchmarkIrrelevantSystemPromptSections(event.systemPrompt) +
-      `\nDocument navigation: search combines a whole-document ranking and a passage ranking into one result per document, shown with the document title; short documents appear as docid and long documents as their best-matching section docid#n. Use jev_find with a cached search_id and independent evidence questions to inspect up to ${batchSize} ranked results. You need not preview all ids or manage intermediate batches. Ranked discovery starts with up to 10 results and expands by 10. Explicit ids start with those sources and may expand through their cached ranking. Jev controls this call's progressive expansion and up to two bounded context reads; it assesses only the current verification questions. Returned evidence carries the parent docid, original line numbers and source_offsets_utf16 in the full document; read_document(parent docid, start_index) reads surrounding original context. You are responsible for deciding whether the original research question needs another search or can be answered, using the full conversation and previously returned source. Before continuing, identify what evidence is still missing, whether it could change the candidate identification, and which concrete new source or search lead could resolve it. Do not restart verification solely because complete=false, a local clue is unresolved, or a fact is absent from Jev's selected history. Avoid repeating searches that only reconfirm already supported clues. Keep entities and relations linked; contradictory source or a material identification gap warrants further investigation. When the answer is supported but a remaining clue cannot be verified with promising available leads, answer with an explicit qualification instead of inventing support. complete and unresolved_queries apply only to the current tool call. stop_reason=no_progress describes this ranking, not absence of a fact. assessment_status=unavailable or not_assessed means no current judgment; it does not create new evidence gaps. Review any last_successful_assessment only within its recorded query/source scope. Evidence memory is maintained automatically. Native read_document remains available after one Jev attempt per document or ranking; use its bounded pages for missing context. Missing or omitted source never proves absence.` +
+      `\nDocument navigation: ${navigationDescription} Use jev_find with a cached search_id and independent evidence questions to inspect up to ${batchSize} ranked results. You need not preview all ids or manage intermediate batches. Ranked discovery starts with up to 10 results and expands by 10. Explicit ids start with those sources and may expand through their cached ranking. Jev controls this call's progressive expansion and up to two bounded context reads; it assesses only the current verification questions. Returned evidence carries the parent docid, original line numbers and source_offsets_utf16 in the full document; read_document(parent docid, start_index) reads surrounding original context. You are responsible for deciding whether the original research question needs another search or can be answered, using the full conversation and previously returned source. Before continuing, identify what evidence is still missing, whether it could change the candidate identification, and which concrete new source or search lead could resolve it. Do not restart verification solely because complete=false, a local clue is unresolved, or a fact is absent from Jev's selected history. Avoid repeating searches that only reconfirm already supported clues. Keep entities and relations linked; contradictory source or a material identification gap warrants further investigation. When the answer is supported but a remaining clue cannot be verified with promising available leads, answer with an explicit qualification instead of inventing support. complete and unresolved_queries apply only to the current tool call. stop_reason=no_progress describes this ranking, not absence of a fact. assessment_status=unavailable or not_assessed means no current judgment; it does not create new evidence gaps. Review any last_successful_assessment only within its recorded query/source scope. Evidence memory is maintained automatically. Native read_document remains available after one Jev attempt per document or ranking; use its bounded pages for missing context. Missing or omitted source never proves absence.` +
       (autoScanEnabled
         ? `\nAuto-scan: after each search, Jev scans in the background the top ${autoScanTop} ranked results that were not scanned before, against clue statements taken from the question. When it locates clue text, a notice (AUTO_SCAN_NOTICES, or auto_scan_notices inside a jev_find result) is attached to your next tool result with verbatim excerpts, parent docids, original lines and offsets. Treat located results as leads: inspect a promising one with jev_find(docids=[...]) or read_document(parent docid), and reconsider your current candidate when a notice points elsewhere. A notice never proves an answer, and the absence of a notice never proves absence.`
         : "");
