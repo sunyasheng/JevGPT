@@ -105,9 +105,7 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
 
 ### CMASS
 
-We also evaluate JevGPT on the [ClimbMix Agentic Search Suite (CMASS)](https://github.com/castorini/cmass), introduced by [Sharifymoghaddam et al.](https://arxiv.org/abs/2608.20317). CMASS projects BrowseComp-Plus (BCP), Total Recall QA (TRQA), DeepSearchQA (DSQA) and HotpotQA onto a shared ClimbMix retrieval corpus.
-
-This evaluation uses **GPT-6.1-Sol at high reasoning effort** for System Two, a **1,800-second budget per question**, the [CMASS v2026.10.25 dataset](https://huggingface.co/datasets/castorini/cmass/tree/v2026.10.25), and the official CMASS grading prompts. It covers **423 distinct questions**.
+[CMASS](https://github.com/castorini/cmass) · **423 questions** · **GPT-6.1-Sol/high** · **1,800s budget per question** ([dataset v2026.10.25](https://huggingface.co/datasets/castorini/cmass/tree/v2026.10.25)).
 
 | Dataset / scoring | Correct / total | Accuracy |
 | --- | ---: | ---: |
@@ -119,9 +117,7 @@ This evaluation uses **GPT-6.1-Sol at high reasoning effort** for System Two, a 
 | **Overall — DSQA strict** | **395 / 423** | **93.38%** |
 | **Overall — DSQA relaxed** | **397 / 423** | **93.85%** |
 
-DSQA strict requires the complete answer set with no incorrect extras; relaxed accepts a nonempty correct subset with no incorrect extras. The two overall rows each count the same 423 questions once and differ only in the DSQA scoring rule.
-
-[Per-question records](https://huggingface.co/datasets/yashengsun/JevGPT-runs/blob/main/records/cmass-sol61-high-1800s.jsonl), [exact aggregates](https://huggingface.co/datasets/yashengsun/JevGPT-runs/blob/main/records/cmass-sol61-high-1800s-summary.json), and [trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs/tree/main/trajectories/cmass-sol61-high-1800s) are available on Hugging Face. The [offline verification script](https://huggingface.co/datasets/yashengsun/JevGPT-runs/blob/main/scripts/verify_cmass_sol61.py) rebuilds the table without model calls. Missing usage and incomplete costs remain `null` in the released records.
+DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
 
 ## 🚀 Quick start
 
@@ -163,7 +159,7 @@ The per-item records in `results/` are enough to rebuild the original paper rows
 hf download yashengsun/JevGPT-runs --repo-type dataset --local-dir runs/paper
 ```
 
-The BrowseComp-Plus trajectories are encrypted with the official BrowseComp-Plus canary, as in the benchmark itself; the dataset card shows how to decrypt them. The NeuCLIRBench trajectories are in plain text. CMASS is available as the `cmass_sol61` configuration; its trajectories use the same canary encoding, with decoding instructions in the dataset card.
+BrowseComp-Plus and CMASS trajectories use the official BrowseComp-Plus canary encoding; the dataset card explains local decoding. NeuCLIRBench trajectories are in plain text.
 
 ## 🗂️ Repository layout
 
