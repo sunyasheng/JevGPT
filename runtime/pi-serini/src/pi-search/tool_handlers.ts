@@ -75,6 +75,7 @@ export async function executeSearchTool(
   ctx: ToolExecutionContext,
   deps: ToolHandlerDeps,
 ) {
+  const questionEpoch = deps.searchStore.captureQuestion();
   const backend = deps.backendRuntime.getBackend(ctx.cwd);
   const rawQuery = String(params.query ?? "").trim();
   if (!rawQuery) {
@@ -98,7 +99,7 @@ export async function executeSearchTool(
     serverInitMs: response.timingMs?.backendInit,
     serverUptimeMs: response.timingMs?.backendUptime,
   };
-  const cached = deps.searchStore.createSearch(rawQuery, queryMode, response.hits);
+  const cached = deps.searchStore.createSearch(rawQuery, queryMode, response.hits, questionEpoch);
   const page = buildSearchPage(cached, 1, SEARCH_FIRST_PAGE_LIMIT, searchTiming);
   const fullPageJson = JSON.stringify(page, null, 2);
   const rendered = truncateSearchOutput(

@@ -2,7 +2,10 @@
 
 This adapter runs JevGPT on [CMASS](https://github.com/castorini/cmass): BCP (80),
 TRQA (68), DSQA (71) and HotpotQA (204). It reuses the released Jev evidence
-reader, memory and background scan with whole-document ClimbMix BM25 retrieval.
+reader, memory and background scan with two retrieval variants:
+**JevGPT-BM25** (whole-document ClimbMix BM25) and **JevGPT-HybridBM25**
+(document + passage BM25 with the BM25 and fusion settings of the paper's
+BrowseComp-Plus runs).
 
 ## Rebuild the released results
 
@@ -10,11 +13,13 @@ No credentials, corpus or model calls are needed:
 
 ```bash
 python3 scripts/report.py --benchmark cmass --check --out artifacts/cmass
+python3 scripts/report.py --benchmark cmass-hybrid --check --out artifacts/cmass
 ```
 
-The 423 numeric records in `results/cmass.jsonl` and the cohort in
-`splits/cmass.json` are identical to the published
-[Hugging Face records](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
+The numeric records in `results/cmass.jsonl` and `results/cmass-hybrid.jsonl`
+and their cohorts in `splits/` are identical to the published
+[Hugging Face records](https://huggingface.co/datasets/yashengsun/JevGPT-runs)
+(subsets `cmass_bm25` and `cmass_hybrid_bm25`).
 The report includes DSQA strict/relaxed and both overall criteria, each counting
 423 questions once. Encoded trajectories and their decoder remain on Hugging
 Face. Questions, answers and source documents are not included in the GitHub
@@ -23,7 +28,13 @@ records. Hashes connect each record to its answer, grade and trajectory.
 Published rows use one finalized, validated output per fixed question. The
 [execution and selection ledger](../provenance/cmass-selection.json) records the
 selection rule, artifact counts, saved outcomes and service events. Resource
-figures cover the selected outputs. The commands below start a fresh run and
+figures cover the selected outputs. The hybrid release has one selected entry per
+question. Its 80 BCP questions ran before the search-ID lifetime fix described
+below; three of them (bcp__176, bcp__979, bcp__538) retain Jev 502/503 service
+failures, and later diagnostic reruns are not included. The two variants also
+differ in document BM25 parameters and cache depth (100 vs 1,000 hits per
+search), so they are not a single-factor ablation
+([provenance](../provenance/cmass-hybrid.json)). The commands below start a fresh run and
 do not repeat the archived campaign's additional executions.
 
 ## Prepare inputs
@@ -125,6 +136,40 @@ use `--allow-model-change` only for a new configuration or deployment alias.
 Model availability and authentication depend on your provider. The released
 interface uses standard Pi provider configuration and a standard Responses
 judge; account-specific brokers and workstation service managers are not needed.
+
+## Hybrid BM25 variant
+
+JevGPT-HybridBM25 adds a passage index and a small Java service in
+`services/cmass_hybrid/`. Document BM25 (k1=25, b=1) uses the index above;
+passage BM25 (k1=0.9, b=0.4) uses non-overlapping 250-word passages. The
+extension fuses both rankings with an equal-weight convex combination, shows up
+to two passages for documents over 8,000 UTF-16 units, and reads each passage
+from its parent document with exact UTF-16 coordinates. The BM25 and fusion
+settings match the paper's BrowseComp-Plus runs; CMASS passages have no title
+prefix and use Anserini 2.3.0. `configs/cmass-hybrid.json` also keeps
+search IDs valid for the whole question instead of the last 32 searches.
+
+```bash
+JAR=/path/to/anserini-2.3.0-fatjar.jar
+javac -cp "$JAR" -d build/cmass-hybrid services/cmass_hybrid/*.java
+java -Xmx48g -cp "$JAR:build/cmass-hybrid" io.anserini.index.IndexCollection \
+  -collection ClimbMixPassageCollection -input data/cmass/corpus \
+  -index data/cmass/passage-index -generator DefaultLuceneDocumentGenerator \
+  -threads 16 -memoryBuffer 4096
+java -Xmx8g -cp "$JAR:build/cmass-hybrid" SearchService \
+  data/cmass/index 127.0.0.1 29761 document 553240576 25 1 &
+java -Xmx20g -cp "$JAR:build/cmass-hybrid" SearchService \
+  data/cmass/passage-index 127.0.0.1 29762 passage 1372692008 0.9 0.4 &
+python scripts/run.py cmass --retrieval hybrid --model cmass/gpt-6.1-sol \
+  --out runs/cmass-hybrid
+```
+
+The passage index stores no text and must contain 1,372,692,008 passages. The
+evaluated index was built per batch of shards with the same command and merged
+with `IndexTools merge NEW_INDEX BATCH...`, which links segments without
+re-indexing. Each service refuses a different document count; the launcher
+checks both services' counts and BM25 settings before any question starts.
+Grade and report as below, with `--benchmark cmass-hybrid` for the report.
 
 ## Run, grade and report
 

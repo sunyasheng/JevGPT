@@ -49,16 +49,20 @@ def main():
         elif digest != source.get("release_sha256") or not (source.get("portability_change") or source.get("release_change")):
             raise ValueError(f"Unrecorded change to imported code: {name}")
     verify_paper(paper_rows())
-    cmass = released_report()
-    verify_cmass(cmass)
+    variants = ("bm25", "hybrid")  # README columns: JevGPT-BM25, JevGPT-HybridBM25
+    cmass = {variant: released_report(variant) for variant in variants}
+    for variant in variants:
+        verify_cmass(cmass[variant], variant)
     section = (ROOT / "README.md").read_text().split("### CMASS\n", 1)[1].split("\n## ", 1)[0]
     observed = []
     for line in section.splitlines():
         if line.startswith("|"):
             cells = [c.strip().replace("*", "") for c in line.strip("|").split("|")]
-            if len(cells) == 3 and re.fullmatch(r"\d+\s*/\s*\d+", cells[1]):
-                observed.append((cells[1].replace(" ", ""), cells[2].removesuffix("%")))
-    if observed != [(row[1], row[2]) for row in table_rows(cmass)]:
+            found = [re.fullmatch(r"(\d+) / (\d+) \((\d+\.\d\d)%\)", c) for c in cells[1:]]
+            if len(cells) == 3 and all(found):
+                observed.append(tuple((m[1] + "/" + m[2], m[3]) for m in found))
+    expected = list(zip(*[[(row[1], row[2]) for row in table_rows(cmass[v])] for v in variants]))
+    if not expected or observed != expected:
         raise ValueError("README CMASS table differs from the frozen records")
     bcp = read_jsonl(ROOT / "results/browsecomp.jsonl")
     split = read_json(ROOT / "splits/browsecomp.json")
@@ -71,7 +75,7 @@ def main():
     neuclir = read_json(ROOT / "splits/neuclir.json")
     check_cohorts("NeuCLIR", neuclir, 105)
     print(json.dumps({"release_files": len(listed), "imported_files": len(sources),
-                      "unchanged_imports": unchanged, "paper_rows_verified": 2, "cmass_questions_verified": 423, "status": "passed"}, indent=2))
+                      "unchanged_imports": unchanged, "paper_rows_verified": 2, "cmass_questions_verified": 423, "cmass_variants_verified": 2, "status": "passed"}, indent=2))
 
 
 if __name__ == "__main__":

@@ -27,6 +27,8 @@ import {
 } from "./tool_handlers";
 
 export type PiSearchExtensionOptions = {
+  /** Shared with an extension that also uses the search IDs (hybrid v2). */
+  searchStore?: SearchSessionStore;
   executeSearch?: typeof executeSearchTool;
   resolveConfig?: (env: NodeJS.ProcessEnv) => PiSearchExtensionConfig;
   backendRuntime?: PiSearchBackendRuntime;
@@ -41,7 +43,7 @@ export function registerPiSearchExtension(
 ): void {
   const extensionConfig =
     options.resolveConfig?.(process.env) ?? resolvePiSearchExtensionConfigFromEnv(process.env);
-  const searchStore = new SearchSessionStore();
+  const searchStore = options.searchStore ?? new SearchSessionStore();
   const backendRuntime =
     options.backendRuntime ??
     new PiSearchBackendRuntime(extensionConfig, {

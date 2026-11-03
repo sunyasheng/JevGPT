@@ -9,6 +9,7 @@ assets/cost-quality.png
 assets/method.png
 assets/teaser.png
 configs/browsecomp.json
+configs/cmass-hybrid.json
 configs/cmass-models.example.json
 configs/cmass.json
 configs/neuclir.json
@@ -36,6 +37,7 @@ inputs/neuclir-topics.jsonl
 licenses/BrowseComp-Plus-LICENSE
 provenance/cmass-adaptation.json
 provenance/cmass-data.json
+provenance/cmass-hybrid.json
 provenance/cmass-index.json
 provenance/cmass-selection.json
 provenance/data-sources.json
@@ -48,6 +50,8 @@ requirements-data.txt
 requirements-neuclir-server.txt
 requirements.txt
 results/browsecomp.jsonl
+results/cmass-hybrid-summary.json
+results/cmass-hybrid.jsonl
 results/cmass-summary.json
 results/cmass.jsonl
 results/neuclir.jsonl
@@ -102,6 +106,7 @@ runtime/pi-serini/src/extensions/jev_ranking_auto_scan_v1.ts
 runtime/pi-serini/src/extensions/jev_region_judge_v2.ts
 runtime/pi-serini/src/extensions/jev_research_progress_v2.ts
 runtime/pi-serini/src/extensions/jev_routing_v1.ts
+runtime/pi-serini/src/extensions/pi_search_jev_cmass_hybrid_v1.ts
 runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts
 runtime/pi-serini/src/extensions/pi_search_jev_context_selection_v1.ts
 runtime/pi-serini/src/extensions/pi_search_jev_find_read_v1.ts
@@ -156,6 +161,7 @@ runtime/pi-serini/src/search-providers/anserini/bm25_rpc_client.ts
 runtime/pi-serini/src/search-providers/anserini/bm25_server_process.ts
 runtime/pi-serini/src/search-providers/anserini/bm25_stdio_rpc_client.ts
 runtime/pi-serini/src/search-providers/anserini/bm25_tcp_rpc_client.ts
+runtime/pi-serini/src/search-providers/anserini/cmass_hybrid_backend.ts
 runtime/pi-serini/src/search-providers/anserini/hybrid_backend_factory.ts
 runtime/pi-serini/src/search-providers/anserini/passage_backend_factory.ts
 runtime/pi-serini/src/search-providers/anserini/pi_search_backend_factory.ts
@@ -167,9 +173,11 @@ runtime/pi-serini/tests/jev_document_ranking.test.ts
 runtime/pi-serini/tests/jev_passage_units_v1.test.ts
 runtime/pi-serini/tests/jev_ranking_auto_scan_v1.test.ts
 runtime/pi-serini/tests/pi-search/backend_limits.test.ts
+runtime/pi-serini/tests/pi-search/cmass_hybrid_backend.test.ts
 runtime/pi-serini/tests/pi-search/hybrid_bm25_adapter.test.ts
 runtime/pi-serini/tests/pi-search/passage_bm25_adapter.test.ts
 runtime/pi-serini/tests/pi-search/prompt_policy.test.ts
+runtime/pi-serini/tests/question_search_lifetime.test.ts
 runtime/pi-serini/tsconfig.json
 scripts/check_release.py
 scripts/cmass_config.py
@@ -187,10 +195,14 @@ scripts/run.py
 scripts/setup_browsecomp.py
 scripts/transport_audit.mjs
 services/cmass_bridge.py
+services/cmass_hybrid/ClimbMixPassageCollection.java
+services/cmass_hybrid/IndexTools.java
+services/cmass_hybrid/SearchService.java
 services/cmass_search.py
 services/neuclir_bridge.py
 services/neuclir_hybrid.py
 splits/browsecomp.json
+splits/cmass-hybrid.json
 splits/cmass.json
 splits/neuclir.json
 tests/test_cmass.py

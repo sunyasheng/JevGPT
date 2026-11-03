@@ -9,6 +9,7 @@ import { Type } from "typebox";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { resolvePiSearchExtensionConfigFromEnv } from "../pi-search/config";
 import { registerPiSearchExtension } from "../pi-search/extension";
+import { questionLifetimeEnabled, SearchSessionStore } from "../pi-search/search_cache";
 import {
   dumpPromptSnapshot,
   getSubmitNowDelayMs,
@@ -18,6 +19,7 @@ import { PiSearchBackendRuntime } from "../pi-search/searcher/runtime";
 import { createPiSearchBackend } from "../pi-search/searcher/adapters/create";
 import type { HybridBm25Backend } from "../pi-search/searcher/adapters/passage_bm25/hybrid";
 import { createHybridPiSearchBackend } from "../search-providers/anserini/hybrid_backend_factory";
+import { createCmassHybridBackend } from "../search-providers/anserini/cmass_hybrid_backend";
 import { createRoutingReader, gptSourceBudget } from "./jev_context_selection_reader_v1";
 import { EvidenceStore } from "./jev_evidence_store_v2";
 import { ResearchProgress } from "./jev_research_progress_v2";
@@ -69,11 +71,14 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
   let backend: HybridBm25Backend | undefined;
   const runtime = new PiSearchBackendRuntime(resolvePiSearchExtensionConfigFromEnv(process.env), {
     createBackend: (cwd, config) =>
-      documentOnly ? createPiSearchBackend(cwd, config) : (backend = createHybridPiSearchBackend(cwd, config, process.env, audit)),
+      process.env.CMASS_HYBRID === "1" ? (backend = createCmassHybridBackend(process.env, audit)) : (documentOnly ? createPiSearchBackend(cwd, config) : (backend = createHybridPiSearchBackend(cwd, config, process.env, audit))),
   });
   const resolveUnit: ResolveUnit = (id) => backend?.getUnitMapping(id);
-  const store = new EvidenceStore();
-  const progress = new ResearchProgress();
+  // Paper runs keep the last 32 searches; CMASS hybrid keeps every search ID for the question.
+  const questionLifetime = questionLifetimeEnabled(process.env);
+  const searchStore = new SearchSessionStore(questionLifetime ? Infinity : 32);
+  let store = new EvidenceStore();
+  let progress = new ResearchProgress();
   let deadline = Infinity;
   let find = createRoutingReader({
     store,
@@ -82,11 +87,14 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
   });
   let originalQuestion = "";
   let clues: string[] = [];
-  const rankings = new Map<string, string[]>(),
+  let rankings = new Map<string, string[]>(),
     seen = new Set<string>(),
     attempted = new Set<string>();
   let readPage = createPagedDocumentReader(audit);
-  const scanner = createAutoScanner({
+  const newScanner = () => {
+    // Capture question-owned objects: late old callbacks cannot touch the next question.
+    const questionStore = store, questionSeen = seen, questionAttempted = attempted;
+    return createAutoScanner({
     scan: createBatchFindReader({
       env: process.env,
       observe: (r) => audit({ ...r, scanner: "auto_scan" }),
@@ -95,7 +103,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
     }),
     resolveUnit,
     audit,
-    store,
+    store: questionStore,
     top: autoScanTop,
     maxDocs: autoScanMaxDocs,
     excerptChars: autoScanExcerpt,
@@ -106,15 +114,17 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
     remainingTimeMs: () => deadline - performance.now(),
     onScanned: (units, parents) => {
       for (const id of units) {
-        seen.add(id);
-        attempted.add(id);
+        questionSeen.add(id);
+        questionAttempted.add(id);
       }
       for (const id of parents) {
-        seen.add(id);
-        attempted.add(id);
+        questionSeen.add(id);
+        questionAttempted.add(id);
       }
     },
   });
+  };
+  let scanner = newScanner();
   const deliver = (tool: string): Notice[] => {
     const notices = scanner.drain();
     if (notices.length)
@@ -129,20 +139,39 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
       });
     return notices;
   };
-  const reset = () => {
-    find.reset();
-    find = createRoutingReader({
-      store,
-      progress,
-      remainingTimeMs: () => deadline - performance.now(),
-    });
-    readPage = createPagedDocumentReader(audit);
-    rankings.clear();
-    seen.clear();
-    attempted.clear();
-    originalQuestion = "";
-    clues = [];
-    scanner.reset();
+  const reset = (ending = false) => {
+    if (questionLifetime) {
+      if (ending) searchStore.endQuestion(); else searchStore.beginQuestion();
+      scanner.stop();
+      find.reset();
+      // Replace instead of reusing objects that asynchronous old operations still reference.
+      store = new EvidenceStore();
+      progress = new ResearchProgress();
+      rankings = new Map<string, string[]>();
+      seen = new Set<string>();
+      attempted = new Set<string>();
+      find = createRoutingReader({ store, progress, remainingTimeMs: () => deadline - performance.now() });
+      readPage = createPagedDocumentReader(audit);
+      originalQuestion = "";
+      clues = [];
+      scanner = newScanner();
+      if (ending) scanner.stop();
+    } else {
+      // Paper runtime: clear in place; search IDs follow the 32-search limit.
+      find.reset();
+      find = createRoutingReader({
+        store,
+        progress,
+        remainingTimeMs: () => deadline - performance.now(),
+      });
+      readPage = createPagedDocumentReader(audit);
+      rankings.clear();
+      seen.clear();
+      attempted.clear();
+      originalQuestion = "";
+      clues = [];
+      scanner.reset();
+    }
     audit({ type: "evidence_reset" });
   };
   const facade = new Proxy(pi, {
@@ -158,7 +187,9 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
                 `${retrievalDescription} Use jev_find with search_id to inspect up to ${batchSize} cached results, starting with 10 in parallel. No need to page through previews or list every id first. Ask questions that can reveal useful evidence or the next entity; one result need not satisfy every clue.`,
               ),
             async execute(...args) {
+              const questionEpoch = searchStore.captureQuestion();
               const result = await tool.execute(...args);
+              searchStore.assertQuestion(questionEpoch);
               const details = result.details as {
                 searchId?: string;
                 retrievedDocids?: string[];
@@ -171,7 +202,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
                   String((args[1] as { query?: string }).query ?? ""),
                   details.retrievedDocids,
                 );
-                while (rankings.size > 32) rankings.delete(rankings.keys().next().value!);
+                if (!questionLifetime) while (rankings.size > 32) rankings.delete(rankings.keys().next().value!);
                 if (autoScanEnabled) {
                   const ctx = args[4] as { cwd: string };
                   scanner.onSearch(
@@ -222,11 +253,13 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
               "For truncated pages, next_start_index points to the first unread UTF-16 source position. Keep the original line numbers for citations. source_offsets_utf16 from jev_find and auto-scan notices use the same parent-document coordinates.",
             ],
             async execute(id, params, signal, _update, ctx) {
+              const questionEpoch = searchStore.captureQuestion();
               if (!attempted.has(params.docid))
                 throw new Error(
                   "First use jev_find for this document or its search ranking; then read_document may supply missing context.",
                 );
               const result = await readPage(params, runtime.getBackend(ctx.cwd), signal, id);
+              searchStore.assertQuestion(questionEpoch);
               const source_call = `read_document:${id}`;
               audit({
                 type: "evidence_commit",
@@ -266,7 +299,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
       };
     },
   });
-  registerPiSearchExtension(facade, { backendRuntime: runtime });
+  registerPiSearchExtension(facade, { backendRuntime: runtime, searchStore });
   pi.registerTool({
     name: "jev_find",
     label: "Jev Batch Find and Read",
@@ -317,6 +350,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
       }),
     }),
     async execute(_id, params, signal, _update, ctx) {
+      const questionEpoch = searchStore.captureQuestion();
       const selected = selectBatch(params, rankings, seen, batchSize);
       // For a known source, reuse its most recent already-cached ranking as fallback.
       if (params.docids) {
@@ -345,6 +379,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
         runtime.getBackend(ctx.cwd),
         signal,
       );
+      searchStore.assertQuestion(questionEpoch);
       for (const id of result.details.attemptedDocids) {
         seen.add(id);
         attempted.add(id);
@@ -419,7 +454,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
   pi.on("input", async (event) => {
     if (event.text.includes("\nQuestion: ") || !originalQuestion) {
       const question = event.text.split("\nQuestion: ").at(-1) ?? event.text;
-      if (question !== originalQuestion) {
+      if ((questionLifetime && event.text.includes("\nQuestion: ")) || question !== originalQuestion) {
         reset();
         originalQuestion = question;
         clues = clueQueriesFromQuestion(question);
@@ -429,6 +464,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
     const text = updateHybridWorkflow(event.text, batchSize);
     if (text !== event.text) return { action: "transform" as const, text };
   });
+  if (questionLifetime) pi.on("session_shutdown", async () => { reset(true); });
   pi.on("agent_start", async () => {
     const delay = getSubmitNowDelayMs();
     deadline = delay === null ? Infinity : performance.now() + delay;

@@ -186,8 +186,8 @@
     "source_sha256": "c9ce06097103b51402914f2a6d58e2e28ef6140c4ca5aace4eb9c5d10fd8a67d"
   },
   "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts": {
-    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json.",
-    "release_sha256": "574cf5974ddb850554fec5779b31071b62a93fb15c9ec63e455a8887a8d244ec",
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json. CMASS hybrid: CMASS_HYBRID service backend; search-ID question lifetime, question-owned objects and shutdown handling only with PI_SEARCH_QUESTION_LIFETIME=1; see provenance/cmass-hybrid.json.",
+    "release_sha256": "e44736b9e728989e82fee3fb42540290c4ea33590a444aab3b82ef7693f9130b",
     "source": "neuclir-hybrid50/source-snapshot/src/extensions/pi_search_jev_hybrid_v2.ts",
     "source_sha256": "255b62666dbea7adb4f0708d379a3f68fb5d9320890ccd327368ab127de0329e"
   },
@@ -234,6 +234,8 @@
     "source_sha256": "cdc17be30d56fcea3ee334c700310a8d6e3a375b86b3185a1f94ccfb869474e3"
   },
   "runtime/pi-serini/src/pi-search/extension.ts": {
+    "release_change": "CMASS hybrid: accept a shared search store; see provenance/cmass-hybrid.json.",
+    "release_sha256": "a0fa0504b4e18c7dff59fb4977a69823c1da706c131b04ff795590bd6cd1d1fb",
     "source": "neuclir-hybrid50/source-snapshot/src/pi-search/extension.ts",
     "source_sha256": "382e5cdfc1176aa9b288a0a8d319d76c6c0e98e4488d57a9daebeebf7c04e7ec"
   },
@@ -266,6 +268,8 @@
     "source_sha256": "b7724bdcbe607ddd2246967257f948b8aad9aab2e1764aad92c2e77fc67da54e"
   },
   "runtime/pi-serini/src/pi-search/search_cache.ts": {
+    "release_change": "CMASS hybrid: search-ID question lifetime behind PI_SEARCH_QUESTION_LIFETIME; see provenance/cmass-hybrid.json.",
+    "release_sha256": "795b128986edec9bfb7f6faa6ae83984a4053a46274207758a1e865357986c87",
     "source": "neuclir-hybrid50/source-snapshot/src/pi-search/search_cache.ts",
     "source_sha256": "f2ac5d67c3e21caa10fa1eded9a4785e6a5c99b9addf3a01ce3ae20442d5b6c1"
   },
@@ -330,8 +334,8 @@
     "source_sha256": "4b393a5a1322d1d6cc70ebf684521010d2777b38667ca4030aac1f0099cc3dae"
   },
   "runtime/pi-serini/src/pi-search/tool_handlers.ts": {
-    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json.",
-    "release_sha256": "da1b2a78da69c301589cb1b03c90563e41c0ba0a81f23cd39aa1e6a72b6579fd",
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json. CMASS hybrid: search-ID question lifetime behind PI_SEARCH_QUESTION_LIFETIME; see provenance/cmass-hybrid.json.",
+    "release_sha256": "f2557bd21bcdc291fe5db461396a91c810a34429cd20ef5517ad38a2b51bbb8f",
     "source": "neuclir-hybrid50/source-snapshot/src/pi-search/tool_handlers.ts",
     "source_sha256": "811635d971c8184471b4fcac5f727e35af10f62e8af1da4bd91f11faab31fcf6"
   },
@@ -606,8 +610,8 @@
     "source_sha256": "9a10acf7205ddd7a635303df2b030f85b67f62051788597f88d2c4235af0e962"
   },
   "scripts/run.py": {
-    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json.",
-    "release_sha256": "612b8bf51b204150a23eeb3ead38b0a9a6d0c27a885eb754cdc12a32f2072f5d",
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json. CMASS hybrid: --retrieval hybrid with both service checks; see provenance/cmass-hybrid.json.",
+    "release_sha256": "e4468ce3a968500688645d628bf19dd182d631da10cfa8c3a666c03492a625cf",
     "source": "cmass-sol61/evaluated-source/scripts/run.py",
     "source_sha256": "249c972339682c70bc308239472dbff3f15f0ae913aefb0c17a8ec808dffabb6"
   },
@@ -616,5 +620,39 @@
     "release_sha256": "ca0bedbb54d6fbefa6f12e3e0ada98ee8568249afa48a4c214a6171e66553381",
     "source": "cmass-sol61/evaluated-source/services/cmass_bridge.py",
     "source_sha256": "0fb05527e59376b29a825acc7bc664a268457f6ff1efc494e167a9f1fcfb7839"
+  },
+  "runtime/pi-serini/src/extensions/pi_search_jev_cmass_hybrid_v1.ts": {
+    "release_change": "The evaluated hybrid-mode CMASS entry under a separate name; the document-BM25 entry stays unchanged.",
+    "release_sha256": "d5c903308010e4672a9ac5d13bfcd1b33e4befdf2762ea537d6e614fb86902a1",
+    "source": "cmass-hybrid/search-lifetime-v16/runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts",
+    "source_sha256": "a8f0440d212ed3d2a17bd99257aebb227e07079705e4025e9f134ee0d005962a"
+  },
+  "runtime/pi-serini/src/search-providers/anserini/cmass_hybrid_backend.ts": {
+    "release_change": "Header comment only.",
+    "release_sha256": "1c342a7f2223f1136755144a687cfccb6ecfa8481ef3d828718c76545609b929",
+    "source": "cmass-hybrid/search-lifetime-v16/runtime/pi-serini/src/search-providers/anserini/cmass_hybrid_backend.ts",
+    "source_sha256": "43c3a20157cd0fb2faab42effbf3870113ae5dd4d1d253d6f48ea7d861f38588"
+  },
+  "runtime/pi-serini/tests/pi-search/cmass_hybrid_backend.test.ts": {
+    "source": "cmass-hybrid/search-lifetime-v16/runtime/pi-serini/tests/pi-search/cmass_hybrid_backend.test.ts",
+    "source_sha256": "1cbcdd218ac8854d7c52a7089882158d18251b9504f7f391309ccf8896770713"
+  },
+  "runtime/pi-serini/tests/question_search_lifetime.test.ts": {
+    "release_change": "Compares the opt-in lifetime with the paper limit in the same release code instead of a removed baseline checkout.",
+    "release_sha256": "e654950dd9c6a0f1c0bab90a44465eb65f99f7ced62243048735b5472bee2f6f",
+    "source": "cmass-hybrid/search-lifetime-v16/runtime/pi-serini/tests/question_search_lifetime_v16.test.ts",
+    "source_sha256": "87b97675465dcbdc5660eb7692d2de36253c1f671f4da2ad8cd40ef60c4f6ec2"
+  },
+  "services/cmass_hybrid/ClimbMixPassageCollection.java": {
+    "source": "cmass-hybrid/build-v5/src/ClimbMixPassageCollection.java",
+    "source_sha256": "f31824f1cd138ae55cd886912abf573cecd20c1f4bfe08dbb5c12c044818d715"
+  },
+  "services/cmass_hybrid/IndexTools.java": {
+    "source": "cmass-hybrid/build-v5/src/IndexTools.java",
+    "source_sha256": "ddca29c3f6a517ec0271dc6ad77b4224ad8db4f9e909c877159330acd3e679ac"
+  },
+  "services/cmass_hybrid/SearchService.java": {
+    "source": "cmass-hybrid/build-v5/src/SearchService.java",
+    "source_sha256": "be163de22e84a5c0b36e52a0b4705ebe313c1a2a463b2402fff1f021297e27fa"
   }
 }

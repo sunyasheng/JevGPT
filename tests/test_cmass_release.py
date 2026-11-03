@@ -27,8 +27,8 @@ from scripts.cmass_results import (
     verify_selection,
 )
 from scripts.collect import collect_trial
-from scripts.common import sha256, write_json, write_jsonl
-from scripts.cmass_config import validate_health, validate_budget
+from scripts.common import read_jsonl, sha256, write_json, write_jsonl
+from scripts.cmass_config import validate_health, validate_budget, validate_hybrid_health
 from services.cmass_search import handler, document
 
 
@@ -431,6 +431,79 @@ class ReleaseTests(unittest.TestCase):
             result = subprocess.run(cmd, capture_output=True, text=True)
             self.assertNotEqual(result.returncode, 0)
             self.assertFalse(out.exists())
+
+class HybridReleaseTests(unittest.TestCase):
+    def test_hybrid_records_reproduce_the_published_aggregates(self):
+        result = released_report("hybrid")
+        verify_release(result, "hybrid")
+        self.assertEqual(result["all"]["strict_correct"], 395)
+        self.assertEqual(result["all"]["relaxed_correct"], 398)
+        self.assertEqual(result["by_dataset"]["bcp"]["strict_correct"], 68)
+        self.assertEqual(result["all"]["input_tokens_total"], 244760022)
+        self.assertIsNone(result["all"]["jev_input_tokens_total"])
+        self.assertEqual(result["all"]["jev_requests_missing_usage"], 22)
+        self.assertTrue(result["by_dataset"]["trqa"]["usage_complete"])
+        self.assertFalse(result["by_dataset"]["trqa"]["accounting_complete"])
+        rows = [dict(r) for r in read_jsonl(ROOT / "results/cmass-hybrid.jsonl")[:2]]
+        rows[0].update(input_tokens_total=None, usage_unknown=True)  # e.g. no assistant messages
+        self.assertIsNone(summarize(rows)["all"]["input_tokens_total"])
+
+    def test_hybrid_services_must_match_both_full_indexes(self):
+        config = json.loads((ROOT / "configs/cmass-hybrid.json").read_text())
+        health = {
+            "document": dict(ready=True, mode="document", documents=553240576, bm25={"b": 1.0, "k1": 25.0}),
+            "passage": dict(ready=True, mode="passage", documents=1372692008, bm25={"b": 0.4, "k1": 0.9}),
+        }
+        self.assertIs(validate_hybrid_health(health, config), health)
+        for side, key, value in (
+            ("document", "bm25", {"k1": 0.9, "b": 0.4}),
+            ("passage", "documents", 1000),
+            ("passage", "mode", "document"),
+            ("document", "ready", False),
+        ):
+            changed = copy.deepcopy(health)
+            changed[side][key] = value
+            with self.assertRaises(ValueError):
+                validate_hybrid_health(changed, config)
+
+    def test_hybrid_dry_run_selects_its_config_and_document_mode_drops_inherited_switches(self):
+        import os
+
+        with tempfile.TemporaryDirectory() as tmp:
+            base = [sys.executable, str(ROOT / "scripts/run.py"), "cmass", "--out", tmp + "/run", "--dry-run"]
+            plan = json.loads(subprocess.run(base + ["--retrieval", "hybrid"], capture_output=True,
+                                             text=True, check=True).stdout)
+            self.assertEqual(plan["retrieval_variant"], "hybrid")
+            self.assertEqual(plan["config_sha256"], sha256(ROOT / "configs/cmass-hybrid.json"))
+            self.assertEqual(plan["workers"], 4)
+            self.assertIn("src/extensions/pi_search_jev_cmass_hybrid_v1.ts", plan["first_command"])
+            other = subprocess.run([sys.executable, str(ROOT / "scripts/run.py"), "neuclir", "--out",
+                                    tmp + "/n", "--dry-run", "--retrieval", "hybrid"], capture_output=True, text=True)
+            self.assertNotEqual(other.returncode, 0)
+            neuclir = json.loads(subprocess.run([sys.executable, str(ROOT / "scripts/run.py"), "neuclir", "--out",
+                                                 tmp + "/n", "--dry-run"], capture_output=True, text=True, check=True).stdout)
+            self.assertNotIn("retrieval_variant", neuclir)
+        from scripts.run import environment
+
+        config = json.loads((ROOT / "configs/cmass.json").read_text())
+        with patch.dict(os.environ, {"CMASS_HYBRID": "1", "PI_SEARCH_QUESTION_LIFETIME": "1"}):
+            env = environment(config, argparse.Namespace(benchmark="cmass", retrieval="document"))
+        self.assertNotIn("CMASS_HYBRID", env)
+        self.assertNotIn("PI_SEARCH_QUESTION_LIFETIME", env)
+        hybrid = json.loads((ROOT / "configs/cmass-hybrid.json").read_text())
+        args = argparse.Namespace(benchmark="cmass", retrieval="hybrid", document_url="http://d", passage_url="http://p")
+        env = environment(hybrid, args)
+        self.assertEqual((env["CMASS_HYBRID"], env["PI_SEARCH_QUESTION_LIFETIME"]), ("1", "1"))
+        self.assertEqual((env["CMASS_HYBRID_DOCUMENT_URL"], env["CMASS_HYBRID_PASSAGE_URL"]), ("http://d", "http://p"))
+
+    def test_hybrid_backend_constants_match_the_config(self):
+        hybrid = json.loads((ROOT / "configs/cmass-hybrid.json").read_text())["hybrid"]
+        source = (ROOT / "runtime/pi-serini/src/search-providers/anserini/cmass_hybrid_backend.ts").read_text()
+        expected = (f"shortChars:{hybrid['short_chars_utf16']},fusion:\"{hybrid['fusion']}\",lambda:.5,"
+                    f"passagesPerDoc:{hybrid['passages_per_doc']}")
+        self.assertEqual(hybrid["lambda"], 0.5)
+        self.assertIn(expected, source)
+        self.assertIn(f"previewWindow:{hybrid['preview_window']}", source)
 
 
 if __name__ == "__main__":

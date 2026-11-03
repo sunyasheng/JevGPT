@@ -35,6 +35,7 @@
 
 ## 🔥 News
 
+- **2026-11-03** · [CMASS](#cmass) adds **JevGPT-HybridBM25**: document + passage BM25 with the paper's BrowseComp-Plus BM25 and fusion settings. Code, records and trajectories are included.
 - **2026-11-01** · [CMASS results](#cmass) with GPT-6.1-Sol/high are available: 423 questions, with per-question records and trajectories on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
 - **2026-10-14** · Code released: the JevGPT runtime, frozen configurations, evaluation scripts and per-item records for Tables 1 and 2.
 - **2026-10-14** · Run outputs (per-item records and full trajectories) are on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
@@ -107,17 +108,17 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
 
 [CMASS](https://github.com/castorini/cmass) · **423 questions** · **GPT-6.1-Sol/high** · **1,800s budget per question** ([dataset v2026.10.25](https://huggingface.co/datasets/castorini/cmass/tree/v2026.10.25)).
 
-| Dataset / scoring | Correct / total | Accuracy |
+| Dataset / scoring | JevGPT-BM25 | JevGPT-HybridBM25 |
 | --- | ---: | ---: |
-| BCP | 65 / 80 | **81.25%** |
-| TRQA | 66 / 68 | **97.06%** |
-| DSQA — strict | 68 / 71 | **95.77%** |
-| DSQA — relaxed | 70 / 71 | **98.59%** |
-| HotpotQA | 196 / 204 | **96.08%** |
-| **Overall — DSQA strict** | **395 / 423** | **93.38%** |
-| **Overall — DSQA relaxed** | **397 / 423** | **93.85%** |
+| BCP | 65 / 80 (81.25%) | 68 / 80 (85.00%) |
+| TRQA | 66 / 68 (97.06%) | 66 / 68 (97.06%) |
+| DSQA — strict | 68 / 71 (95.77%) | 66 / 71 (92.96%) |
+| DSQA — relaxed | 70 / 71 (98.59%) | 69 / 71 (97.18%) |
+| HotpotQA | 196 / 204 (96.08%) | 195 / 204 (95.59%) |
+| **Overall — strict** | **395 / 423 (93.38%)** | **395 / 423 (93.38%)** |
+| **Overall — relaxed** | **397 / 423 (93.85%)** | **398 / 423 (94.09%)** |
 
-DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run and verify](docs/cmass.md).
+**JevGPT-BM25** retrieves whole documents with BM25. **JevGPT-HybridBM25** fuses document and passage BM25 with the paper's BrowseComp-Plus settings. The two runs also differ in BM25 parameters and runtime details, so this is not a single-factor ablation. DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run and verify](docs/cmass.md).
 
 ## 🚀 Quick start
 

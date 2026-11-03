@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-03",
+  "base_commit": "79848ee6637ebde05108dd2c3ca66550d2781cc8",
+  "records": {
+    "huggingface": "yashengsun/JevGPT-runs",
+    "revision": "4883c324c68cab4ece5c334ef1dc2a97bfbf6ada",
+    "subset": "cmass_hybrid_bm25",
+    "identical_files": {
+      "results/cmass-hybrid.jsonl": "records/cmass-hybrid-bm25-sol61-high-1800s.jsonl",
+      "results/cmass-hybrid-summary.json": "records/cmass-hybrid-bm25-sol61-high-1800s-summary.json",
+      "splits/cmass-hybrid.json": "records/split-cmass-hybrid-bm25-sol61-high-1800s.json"
+    },
+    "protocol": "records/cmass-hybrid-bm25-sol61-high-1800s-protocol.json",
+    "sha256": {
+      "results/cmass-hybrid.jsonl": "0a82592c95a9883032a80f299d4517ae82c33f9fcb22f95b41a0a160f414e2d5",
+      "results/cmass-hybrid-summary.json": "58c76113afe3dd0af2fc3a540cf6824f3aa8a496b749f8f698297dbb91c53d45",
+      "splits/cmass-hybrid.json": "91c044ba614c0a9b2c19e368955daa7e2b881d2e742203d2044be22c0ce12ae9"
+    },
+    "summary_note": "accounting_complete in the published summary means complete token usage (usage_complete in scripts/cmass_results.py); GPT cost is unknown."
+  },
+  "retrieval": {
+    "kind": "lexical-document-passage-bm25",
+    "document": {
+      "k1": 25,
+      "b": 1,
+      "count": 553240576
+    },
+    "passage": {
+      "k1": 0.9,
+      "b": 0.4,
+      "count": 1372692008
+    },
+    "fusion": "cc",
+    "lambda": 0.5,
+    "shortChars": 8000,
+    "passagesPerDoc": 2,
+    "previewWindow": 50
+  },
+  "passage_index": {
+    "corpus": "karpathy/climbmix-400b-shuffle",
+    "corpus_revision": "915333b4f8b8684f39aeaafea600fea6f43fb703",
+    "collection": "ClimbMixPassageCollection (services/cmass_hybrid)",
+    "words_per_passage": 250,
+    "overlap": 0,
+    "passage_id": "cmasspass_<parent docid>_<zero-based index>",
+    "stored_text": false,
+    "passages": 1372692008,
+    "anserini_jar_sha256": "375848a9bb0a7514d2a8fe13df20086961570991bf20343abf0e5312af977def",
+    "build": "103 shard batches, IndexCollection -threads 16 -memoryBuffer 4096 each, merged with IndexTools merge (hardlinked segments)"
+  },
+  "services": {
+    "document": "SearchService <document index> 127.0.0.1 29761 document 553240576 25 1 (-Xmx8g)",
+    "passage": "SearchService <passage index> 127.0.0.1 29762 passage 1372692008 .9 .4 (-Xmx20g)"
+  },
+  "runtime_groups": {
+    "bcp80": "Pre-fix runtime: the last 32 search IDs and rankings stay cached (PI_SEARCH_QUESTION_LIFETIME unset).",
+    "remaining343": "search-lifetime-v16: search IDs stay valid until the question ends (PI_SEARCH_QUESTION_LIFETIME=1, the configs/cmass-hybrid.json default)."
+  },
+  "evaluated_config": {
+    "path": "configs/cmass.json in the hybrid run root",
+    "sha256": "1b82afeb19bf6d1805190aca1254168ac3e7849621ca4b4efd3bee224536f3b4",
+    "bm25": {
+      "k1": 25,
+      "b": 1
+    },
+    "passage_bm25": {
+      "k1": 0.9,
+      "b": 0.4
+    },
+    "environment_added": {
+      "CMASS_HYBRID": "1",
+      "CMASS_HYBRID_DOCUMENT_URL": "http://127.0.0.1:29761",
+      "CMASS_HYBRID_PASSAGE_URL": "http://127.0.0.1:29762"
+    }
+  },
+  "evaluated_sources_sha256": {
+    "bcp80": {
+      "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts": "0755a9f4028599fae96950b4338d2501ed05a8229b583d7af2854e73a3d97dc9",
+      "runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts": "a8f0440d212ed3d2a17bd99257aebb227e07079705e4025e9f134ee0d005962a",
+      "runtime/pi-serini/src/search-providers/anserini/cmass_hybrid_backend.ts": "43c3a20157cd0fb2faab42effbf3870113ae5dd4d1d253d6f48ea7d861f38588",
+      "runtime/pi-serini/src/pi-search/search_cache.ts": "f2ac5d67c3e21caa10fa1eded9a4785e6a5c99b9addf3a01ce3ae20442d5b6c1",
+      "runtime/pi-serini/src/pi-search/extension.ts": "382e5cdfc1176aa9b288a0a8d319d76c6c0e98e4488d57a9daebeebf7c04e7ec",
+      "runtime/pi-serini/src/pi-search/tool_handlers.ts": "da1b2a78da69c301589cb1b03c90563e41c0ba0a81f23cd39aa1e6a72b6579fd"
+    },
+    "remaining343": {
+      "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts": "f91f437af03e2ec01afaddef51916b0d5761478746a3e9341fe84ea010cc0365",
+      "runtime/pi-serini/src/extensions/pi_search_jev_cmass_v1.ts": "a8f0440d212ed3d2a17bd99257aebb227e07079705e4025e9f134ee0d005962a",
+      "runtime/pi-serini/src/search-providers/anserini/cmass_hybrid_backend.ts": "43c3a20157cd0fb2faab42effbf3870113ae5dd4d1d253d6f48ea7d861f38588",
+      "runtime/pi-serini/src/pi-search/search_cache.ts": "dba59bafb167b6c4a7ca1df27dccd7f82ee4f12c312bb82cabcac3f97f55c11c",
+      "runtime/pi-serini/src/pi-search/extension.ts": "b7655906bfd41107edfda9ada97c5d92fabd77cbc8448769be87ed789ec40be1",
+      "runtime/pi-serini/src/pi-search/tool_handlers.ts": "f2557bd21bcdc291fe5db461396a91c810a34429cd20ef5517ad38a2b51bbb8f"
+    },
+    "services": {
+      "services/cmass_hybrid/SearchService.java": "be163de22e84a5c0b36e52a0b4705ebe313c1a2a463b2402fff1f021297e27fa",
+      "services/cmass_hybrid/ClimbMixPassageCollection.java": "f31824f1cd138ae55cd886912abf573cecd20c1f4bfe08dbb5c12c044818d715",
+      "services/cmass_hybrid/IndexTools.java": "ddca29c3f6a517ec0271dc6ad77b4224ad8db4f9e909c877159330acd3e679ac"
+    }
+  },
+  "release_changes": [
+    "configs/cmass-hybrid.json = the evaluated config (sha 1b82afeb...) plus a separate extension name, PI_SEARCH_QUESTION_LIFETIME=1, workers 4 (the evaluated controller ran up to 4 questions with workers 1 per launcher), and descriptive retrieval/hybrid/provider blocks; the backend hardcodes the hybrid constants and a test checks they match. scripts/run.py --retrieval hybrid sets the CMASS_HYBRID service environment and checks both services before the run and each question, as the evaluated launcher did.",
+    "pi_search_jev_cmass_hybrid_v1.ts is the evaluated pi_search_jev_cmass_v1.ts (hybrid mode) under a separate name, so the document-BM25 entry stays unchanged.",
+    "The v16 search-ID lifetime, question-owned objects and session_shutdown handling apply only with PI_SEARCH_QUESTION_LIFETIME=1; without it the extension matches the pre-fix runtime used for BCP80 and the paper runs. registerPiSearchExtension accepts the shared store. v16's default lifetime hooks (disabled in the evaluated run) and its endQuestion call on process exit are omitted.",
+    "cmass_hybrid_backend.ts changes only its header comment. The Java sources are byte-identical."
+  ],
+  "comparability": "Document BM25 parameters, hybrid ranking/preview, cache runtime and execution conditions differ from old document-only cohort. Not a single-factor causal ablation. JevGPT-BM25 caches up to 100 hits per search; HybridBM25 up to 1000. BCP80 ran on the pre-fix cache; bcp__176, bcp__979 and bcp__538 had Jev 502/503 service failures and remain in the cohort."
+}

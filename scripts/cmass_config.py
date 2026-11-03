@@ -17,6 +17,27 @@ def validate_health(health, config):
     return health
 
 
+def validate_hybrid_health(health, config):
+    """services/cmass_hybrid/SearchService.java: one document and one passage service."""
+    retrieval = config["retrieval"]
+    expected = {
+        "document": (retrieval["documents"], config["bm25"]),
+        "passage": (retrieval["passages"], config["passage_bm25"]),
+    }
+    for side, (count, bm25) in expected.items():
+        found = health.get(side) or {}
+        if (
+            found.get("ready") is not True
+            or found.get("mode") != side
+            or found.get("documents") != count
+            or found.get("bm25") != bm25
+        ):
+            raise ValueError(
+                f"CMASS hybrid {side} service does not match the full-corpus BM25 configuration"
+            )
+    return health
+
+
 def validate_budget(config):
     if config["submit_now_seconds"] != int(config["timeout_seconds"] * 0.7):
         raise ValueError("CMASS reminder must match the runtime's 0.7 timeout ratio")

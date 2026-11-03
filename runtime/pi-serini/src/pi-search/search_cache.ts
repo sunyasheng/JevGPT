@@ -13,15 +13,49 @@ function formatSearchRequestSummary(cached: Pick<CachedSearch, "rawQuery">): str
   return [`Plain query: ${JSON.stringify(cached.rawQuery)}`];
 }
 
+/** CMASS hybrid opts in: search IDs stay valid until the question ends instead of the last 32. */
+export function questionLifetimeEnabled(env: NodeJS.ProcessEnv = process.env): boolean {
+  return env.PI_SEARCH_QUESTION_LIFETIME === "1";
+}
+
 export class SearchSessionStore {
   private readonly searchCache = new Map<string, CachedSearch>();
   private searchCounter = 0;
+  private questionEpoch = 0;
+  private questionOpen = true;
+
+  constructor(private readonly maxCachedSearches = MAX_CACHED_SEARCHES) {}
+
+  /** A question owns its rankings. IDs never alias a later question's IDs. */
+  beginQuestion(): void {
+    this.questionEpoch += 1;
+    this.questionOpen = true;
+    this.searchCache.clear();
+  }
+
+  endQuestion(): void {
+    this.questionEpoch += 1;
+    this.questionOpen = false;
+    this.searchCache.clear();
+  }
+
+  captureQuestion(): number {
+    this.assertQuestion(this.questionEpoch);
+    return this.questionEpoch;
+  }
+
+  assertQuestion(epoch: number): void {
+    if (!this.questionOpen || epoch !== this.questionEpoch)
+      throw new Error("Search operation belongs to an ended question.");
+  }
 
   createSearch(
     rawQuery: string,
     queryMode: string,
     results: SearchBackendSearchHit[],
+    epoch = this.questionEpoch,
   ): CachedSearch {
+    this.assertQuestion(epoch);
     this.searchCounter += 1;
     const searchId = `s${this.searchCounter}`;
     const cached: CachedSearch = {
@@ -41,7 +75,7 @@ export class SearchSessionStore {
   }
 
   private evictOldSearches(): void {
-    while (this.searchCache.size > MAX_CACHED_SEARCHES) {
+    while (this.searchCache.size > this.maxCachedSearches) {
       const oldestEntry = this.searchCache.entries().next().value as
         | [string, CachedSearch]
         | undefined;

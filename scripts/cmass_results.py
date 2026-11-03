@@ -14,6 +14,13 @@ except ImportError:
 
 DATASETS = ("bcp", "trqa", "dsqa", "hotpotqa")
 ID_PATTERN = re.compile(r"(bcp|trqa|dsqa|hotpotqa)__[A-Za-z0-9_-]+")
+# Two frozen releases over the same 423 questions; see README and docs/cmass.md.
+VARIANTS = {
+    "bm25": dict(records="results/cmass.jsonl", summary="results/cmass-summary.json",
+                 split="splits/cmass.json", cohort="cmass-sol61-high-1800s"),
+    "hybrid": dict(records="results/cmass-hybrid.jsonl", summary="results/cmass-hybrid-summary.json",
+                   split="splits/cmass-hybrid.json", cohort="cmass-hybrid-bm25-sol61-high-1800s"),
+}
 RECALL_SCOPES = {
     "search_shown_docids": "IDs actually displayed by search/result previews; Recall@all scope.",
     "tool_visible_docids": "IDs in all model-visible tool text, including Jev notices.",
@@ -96,6 +103,12 @@ def summarize(rows, qrels=None):
         ):
             values = [r.get(key) for r in items]
             result["known_" + key] = sum(v for v in values if type(v) is int and v >= 0)
+        # Collected records set these per-record totals to null whenever usage is unknown.
+        gpt_complete = all(type(r.get("input_tokens_total")) is int for r in items)
+        jev_complete = all(type(r.get("jev_input_tokens_total")) is int for r in items)
+        for key, complete in (("input_tokens", gpt_complete), ("cached_input_tokens", gpt_complete),
+                              ("output_tokens", gpt_complete), ("jev_input_tokens", jev_complete)):
+            result[key + "_total"] = result["known_" + key] if complete else None
         for key in ("jev_requests_missing_usage", "gpt_requests_missing_usage"):
             values = [r.get(key) for r in items]
             result[key] = (
@@ -107,9 +120,9 @@ def summarize(rows, qrels=None):
             and result["gpt_cost_usd_mean"] is not None
             else None
         )
+        result["usage_complete"] = not result["items_with_unknown_usage"]
         result["accounting_complete"] = (
-            not result["items_with_unknown_usage"]
-            and result["total_cost_usd"] is not None
+            result["usage_complete"] and result["total_cost_usd"] is not None
         )
         if qrels is not None:
             result["recall"] = {}
@@ -172,21 +185,24 @@ def table_rows(report):
     ]
 
 
-def released_report():
-    rows = read_jsonl(ROOT / "results/cmass.jsonl")
-    ids = read_json(ROOT / "splits/cmass.json")["all"]
+def released_report(variant="bm25"):
+    rows = read_jsonl(ROOT / VARIANTS[variant]["records"])
+    ids = read_json(ROOT / VARIANTS[variant]["split"])["all"]
     if set(by_id(rows)) != set(ids):
         raise ValueError("Released CMASS records do not cover the frozen cohort")
     validate_ids(ids)
     return summarize(rows)
 
 
-def verify_release(report):
-    expected = read_json(ROOT / "results/cmass-summary.json")
+def verify_release(report, variant="bm25"):
+    expected = read_json(ROOT / VARIANTS[variant]["summary"])
 
     def compare(actual, reference, path):
         for key, value in reference.items():
             found = actual.get(key)
+            if variant == "hybrid" and key == "accounting_complete":
+                # The published hybrid summary uses this name for usage_complete; GPT cost stays unknown.
+                found = actual["usage_complete"]
             if isinstance(value, dict):
                 compare(found, value, path + "." + key)
             elif type(value) is float:
@@ -198,7 +214,46 @@ def verify_release(report):
                 raise ValueError("CMASS release mismatch: " + path + "." + key)
 
     compare(report, {key: expected[key] for key in ("all", "by_dataset")}, "cmass")
-    verify_selection()
+    if variant == "bm25":
+        verify_selection()
+    else:
+        verify_hybrid_records()
+
+
+def check_jev_cost(row):
+    if row["jev_requests_missing_usage"] and (
+        row["jev_cost_usd"] is not None or row["jev_input_tokens_total"] is not None
+    ):
+        raise ValueError("Incomplete Jev usage must not have a total cost")
+    if row["jev_cost_usd"] is not None and not math.isclose(
+        row["jev_cost_usd"], row["jev_input_tokens"] * 0.042 / 1e6, abs_tol=1e-10
+    ):
+        raise ValueError("CMASS Jev cost mismatch")
+
+
+def verify_hybrid_records():
+    """One selected entry per question; BCP80 used the earlier cache, the rest question lifetime."""
+    files = VARIANTS["hybrid"]
+    bound = read_json(ROOT / "provenance/cmass-hybrid.json")["records"]["sha256"]
+    if any(sha256(ROOT / files[key]) != bound[files[key]] for key in ("records", "summary", "split")):
+        raise ValueError("CMASS hybrid files differ from the published records")
+    rows = read_jsonl(ROOT / files["records"])
+    if [r["query_id"] for r in rows] != read_json(ROOT / files["split"])["all"]:
+        raise ValueError("CMASS hybrid records and split disagree")
+    if set(read_json(ROOT / VARIANTS["bm25"]["split"])["all"]) != {r["query_id"] for r in rows}:
+        raise ValueError("CMASS variants must cover the same questions")
+    for row in rows:
+        group = "original-local-hybrid-bcp80" if row["dataset"] == "bcp" else "search-lifetime-v16"
+        if (
+            row["model"] != "gpt-6.1-sol"
+            or row["reasoning_effort"] != "high"
+            or row["cohort"] != files["cohort"]
+            or row["attempt"] != 1
+            or row["retriever"] != "document-passage-hybrid-bm25"
+            or row["runtime_group"] != group
+        ):
+            raise ValueError("Unexpected CMASS hybrid model/settings/cohort")
+        check_jev_cost(row)
 
 
 def verify_selection():
@@ -227,14 +282,7 @@ def verify_selection():
             or row["cohort"] != "cmass-sol61-high-1800s"
         ):
             raise ValueError("Unexpected CMASS model/settings/cohort")
-        if row["jev_requests_missing_usage"] and (
-            row["jev_cost_usd"] is not None or row["jev_input_tokens_total"] is not None
-        ):
-            raise ValueError("Incomplete Jev usage must not have a total cost")
-        if row["jev_cost_usd"] is not None and not math.isclose(
-            row["jev_cost_usd"], row["jev_input_tokens"] * 0.042 / 1e6, abs_tol=1e-10
-        ):
-            raise ValueError("CMASS Jev cost mismatch")
+        check_jev_cost(row)
         if q not in histories:
             continue
         query_history = histories[q]
@@ -306,7 +354,7 @@ def verify_selection():
                 )
 
 
-def report_cli(args):
+def report_cli(args, variant="bm25"):
     if args.records or args.cohort:
         if not (args.records and args.cohort) or args.check:
             raise ValueError(
@@ -322,9 +370,9 @@ def report_cli(args):
             raise ValueError("CMASS records must match the complete selected cohort")
         report = summarize(rows)
     else:
-        report = released_report()
+        report = released_report(variant)
     if args.check:
-        verify_release(report)
+        verify_release(report, variant)
     headers = ["Dataset / criterion", "Correct / total", "Accuracy (%)"]
     cells = table_rows(report)
     markdown = (
@@ -337,15 +385,16 @@ def report_cli(args):
     if report["all"]["unknown_grades"]:
         markdown += f"\nUnresolved grades: {report['all']['unknown_grades']}; accuracy is unavailable.\n"
     if args.out:
+        stem = "cmass" if variant == "bm25" else "cmass-hybrid"
         args.out.mkdir(parents=True, exist_ok=True)
-        (args.out / "cmass.md").write_text(markdown, encoding="utf-8")
-        (args.out / "cmass.json").write_text(
+        (args.out / f"{stem}.md").write_text(markdown, encoding="utf-8")
+        (args.out / f"{stem}.json").write_text(
             json.dumps(report, indent=2, allow_nan=False) + "\n"
         )
         stream = io.StringIO()
         csv.writer(stream).writerows([headers] + cells)
-        (args.out / "cmass.csv").write_text(stream.getvalue())
-        (args.out / "cmass.tex").write_text(
+        (args.out / f"{stem}.csv").write_text(stream.getvalue())
+        (args.out / f"{stem}.tex").write_text(
             "\n".join(" & ".join(row) + r"\\" for row in cells) + "\n"
         )
     print(markdown)
