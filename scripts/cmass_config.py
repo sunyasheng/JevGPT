@@ -38,6 +38,24 @@ def validate_hybrid_health(health, config):
     return health
 
 
+def validate_pool_health(health, config):
+    """services/cmass_pool.py: the full corpus, the frozen BM25 settings and the pool limits."""
+    pool = config["pool"]
+    expected = {
+        "ready": True,
+        "mode": "pool",
+        "index": config["retrieval"]["index"],
+        "documents": config["retrieval"]["documents"],
+        "bm25": config["bm25"],
+        "documents_per_search": pool["documents_per_search"],
+        "grep_return_chars": pool["grep_return_chars"],
+        "grep_seconds": pool["grep_seconds"],
+    }
+    if any(health.get(key) != value for key, value in expected.items()):
+        raise ValueError("CMASS pool service does not match the pool_grep configuration")
+    return health
+
+
 def validate_budget(config):
     if config["submit_now_seconds"] != int(config["timeout_seconds"] * 0.7):
         raise ValueError("CMASS reminder must match the runtime's 0.7 timeout ratio")

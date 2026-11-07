@@ -2,10 +2,12 @@
 
 This adapter runs JevGPT on [CMASS](https://github.com/castorini/cmass): BCP (80),
 TRQA (68), DSQA (71) and HotpotQA (204). It reuses the released Jev evidence
-reader, memory and background scan with two retrieval variants:
-**JevGPT-BM25** (whole-document ClimbMix BM25) and **JevGPT-HybridBM25**
+reader, memory and background scan with three variants:
+**JevGPT-BM25** (whole-document ClimbMix BM25), **JevGPT-HybridBM25**
 (document + passage BM25 with the BM25 and fusion settings of the paper's
-BrowseComp-Plus runs).
+BrowseComp-Plus runs) and **JevGPT w/ pool_grep** (JevGPT-BM25 plus a
+per-question document pool with a full-text `pool_grep` tool; see
+[below](#pool_grep-variant)).
 
 ## Rebuild the released results
 
@@ -14,12 +16,14 @@ No credentials, corpus or model calls are needed:
 ```bash
 python3 scripts/report.py --benchmark cmass --check --out artifacts/cmass
 python3 scripts/report.py --benchmark cmass-hybrid --check --out artifacts/cmass
+python3 scripts/report.py --benchmark cmass-poolgrep --check --out artifacts/cmass
 ```
 
-The numeric records in `results/cmass.jsonl` and `results/cmass-hybrid.jsonl`
-and their cohorts in `splits/` are identical to the published
+The numeric records in `results/cmass.jsonl`, `results/cmass-hybrid.jsonl` and
+`results/cmass-poolgrep.jsonl` and their cohorts in `splits/` are identical to
+the published
 [Hugging Face records](https://huggingface.co/datasets/yashengsun/JevGPT-runs)
-(subsets `cmass_bm25` and `cmass_hybrid_bm25`).
+(subsets `cmass_bm25`, `cmass_hybrid_bm25` and `cmass_bm25_poolgrep`).
 The report includes DSQA strict/relaxed and both overall criteria, each counting
 423 questions once. Encoded trajectories and their decoder remain on Hugging
 Face. Questions, answers and source documents are not included in the GitHub
@@ -170,6 +174,42 @@ with `IndexTools merge NEW_INDEX BATCH...`, which links segments without
 re-indexing. Each service refuses a different document count; the launcher
 checks both services' counts and BM25 settings before any question starts.
 Grade and report as below, with `--benchmark cmass-hybrid` for the report.
+
+## pool_grep variant
+
+JevGPT w/ pool_grep keeps the JevGPT-BM25 retrieval, model, budget and judge
+and adds three things, all enabled by `--pool-grep`:
+
+1. **Document pool.** Every `search` also adds the query's top-1,000 BM25
+   documents, with their full text, to a pool that lasts for the question.
+2. **`pool_grep` tool.** System Two can grep the pool: `all_of` holds 1 to 4
+   case-insensitive RE2 patterns that must all occur in a document; `show`,
+   `near`, `window` (0 to 300 characters), `max_docs` (1 to 40) and `offset`
+   shape the result. It returns matching docids in best-rank order with up to
+   three text windows each, at most 8,000 characters, within 5 seconds, and
+   makes no model call. One prompt rule tells the model when to use it.
+3. **Shorter `jev_find` return.** Documents without excerpts and internal trace
+   fields are left out of the text shown to System Two; passages, coordinates
+   and notices are unchanged (`runtime/pi-serini/src/extensions/compact_find_output_v1.ts`).
+
+The pool is served by `services/cmass_pool.py` on the index host, next to
+`services/cmass_search.py`, with the same index, Anserini jar and BM25 settings
+(`pip install google-re2` there as well):
+
+```bash
+python services/cmass_pool.py --index /path/to/climbmix-index \
+  --anserini-jar /path/to/anserini-2.3.0-fatjar.jar --port 29782
+python scripts/run.py cmass --pool-grep --model cmass/gpt-6.1-sol \
+  --search-url http://127.0.0.1:19431 --pool-url http://127.0.0.1:29782 \
+  --workers 4 --out runs/cmass-poolgrep
+```
+
+`configs/cmass-poolgrep.json` is `configs/cmass.json` plus the pool settings and
+4 workers. The launcher checks the pool service's health (full corpus, BM25
+k1=0.9 b=0.4, 1,000 documents per search, 8,000-character cap) before any
+question starts. Grade as below and report with `--benchmark cmass-poolgrep`.
+Records: `results/cmass-poolgrep.jsonl` (with `pool_grep_calls` and
+`pool_size_final` per question); provenance: `provenance/cmass-poolgrep.json`.
 
 ## Run, grade and report
 

@@ -506,5 +506,77 @@ class HybridReleaseTests(unittest.TestCase):
         self.assertIn(f"previewWindow:{hybrid['preview_window']}", source)
 
 
+class PoolGrepReleaseTests(unittest.TestCase):
+    def test_poolgrep_records_reproduce_the_published_aggregates(self):
+        result = released_report("poolgrep")
+        verify_release(result, "poolgrep")
+        self.assertEqual(result["all"]["strict_correct"], 406)
+        self.assertEqual(result["all"]["relaxed_correct"], 408)
+        self.assertEqual(result["by_dataset"]["bcp"]["strict_correct"], 72)
+        published = json.loads((ROOT / "results/cmass-poolgrep-summary.json").read_text())
+        self.assertAlmostEqual(result["all"]["pool_grep_calls_mean"], published["all"]["pool_grep_calls_mean"])
+        self.assertAlmostEqual(result["all"]["pool_grep_calls_mean"], 790 / 423)
+        self.assertNotIn("pool_grep_calls_mean", released_report("bm25")["all"])
+
+    def test_pool_service_must_match_the_config(self):
+        from scripts.cmass_config import validate_pool_health
+
+        config = json.loads((ROOT / "configs/cmass-poolgrep.json").read_text())
+        health = dict(ready=True, mode="pool", index="climbmix-400b", documents=553240576,
+                      bm25={"k1": 0.9, "b": 0.4}, documents_per_search=1000, grep_return_chars=8000, grep_seconds=5)
+        self.assertIs(validate_pool_health(health, config), health)
+        for key, value in (("documents", 1000), ("bm25", {"k1": 25, "b": 1}), ("documents_per_search", 100), ("ready", False)):
+            with self.assertRaises(ValueError):
+                validate_pool_health({**health, key: value}, config)
+
+    def test_pool_grep_dry_run_selects_its_config_and_switch(self):
+        import os
+
+        with tempfile.TemporaryDirectory() as tmp:
+            base = [sys.executable, str(ROOT / "scripts/run.py"), "cmass", "--out", tmp + "/run", "--dry-run"]
+            plan = json.loads(subprocess.run(base + ["--pool-grep"], capture_output=True, text=True, check=True).stdout)
+            self.assertTrue(plan["pool_grep"])
+            self.assertEqual(plan["config_sha256"], sha256(ROOT / "configs/cmass-poolgrep.json"))
+            self.assertEqual(plan["workers"], 4)
+            self.assertIn("src/extensions/pi_search_jev_cmass_v1.ts", plan["first_command"])
+            plain = json.loads(subprocess.run(base, capture_output=True, text=True, check=True).stdout)
+            self.assertNotIn("pool_grep", plain)
+            self.assertNotEqual(subprocess.run(base + ["--pool-grep", "--retrieval", "hybrid"],
+                                               capture_output=True, text=True).returncode, 0)
+        from scripts.run import environment
+
+        config = json.loads((ROOT / "configs/cmass-poolgrep.json").read_text())
+        with patch.dict(os.environ, {"CMASS_POOL_URL": "http://stale"}):
+            env = environment(config, argparse.Namespace(benchmark="cmass", retrieval="document", pool_grep=True, pool_url="http://p"))
+            self.assertEqual(env["CMASS_POOL_URL"], "http://p")
+            env = environment(config, argparse.Namespace(benchmark="cmass", retrieval="document"))
+            self.assertNotIn("CMASS_POOL_URL", env)
+
+    def test_pool_grep_semantics(self):
+        try:
+            import re2  # noqa: F401
+        except ImportError:
+            self.skipTest("google-re2 is not installed")
+        from services.cmass_pool import Pool
+
+        pool = Pool()
+        pool.add([("d1", "Title one\nThe Faun poem against yon pine, forlorn yet divine."),
+                  ("d2", "Title two\nNo rhyme here."), ("d3", "Title three\npine trees and a divine view " * 3)], "s1")
+        pool.add([("d3", "ignored: already pooled"), ("d4", "Title four\nAnother pine, another divine.")], "s2")
+        self.assertEqual(pool.docs["d3"]["best_rank"], 1)
+        self.assertEqual(pool.docs["d3"]["search_id"], "s2")
+        result = pool.grep({"all_of": ["pine", "divine"], "window": 10})
+        self.assertEqual(result["returned_docids"], ["d1", "d3", "d4"])
+        self.assertEqual(result["matching_documents"], 3)
+        self.assertTrue(result["text"].startswith("pool size: 4; matching documents: 3; offset: 0\n"))
+        near = pool.grep({"all_of": ["pine"], "show": "pine", "near": "Faun", "window": 40})
+        self.assertEqual(near["returned_docids"], ["d1"])
+        paged = pool.grep({"all_of": ["pine"], "max_docs": 1, "offset": 1})
+        self.assertEqual((paged["returned_docids"], paged["truncated"], paged["next_offset"]), (["d3"], True, 2))
+        for bad in ({"all_of": []}, {"all_of": ["("]}, {"all_of": ["pine"], "window": 301}, {"all_of": ["pine"], "max_docs": 0}):
+            with self.assertRaises(ValueError):
+                pool.grep(bad)
+
+
 if __name__ == "__main__":
     unittest.main()

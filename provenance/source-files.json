@@ -186,8 +186,8 @@
     "source_sha256": "c9ce06097103b51402914f2a6d58e2e28ef6140c4ca5aace4eb9c5d10fd8a67d"
   },
   "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts": {
-    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json. CMASS hybrid: CMASS_HYBRID service backend; search-ID question lifetime, question-owned objects and shutdown handling only with PI_SEARCH_QUESTION_LIFETIME=1; see provenance/cmass-hybrid.json.",
-    "release_sha256": "e44736b9e728989e82fee3fb42540290c4ea33590a444aab3b82ef7693f9130b",
+    "release_change": "Register CMASS and share the evaluated document-only retrieval/runner while preserving the original benchmark defaults. See provenance/cmass-adaptation.json. CMASS hybrid: CMASS_HYBRID service backend; search-ID question lifetime, question-owned objects and shutdown handling only with PI_SEARCH_QUESTION_LIFETIME=1; see provenance/cmass-hybrid.json. CMASS pool_grep: with CMASS_POOL_URL (document retrieval only) every search adds its top-1,000 documents to the pool, the pool_grep tool and prompt rule are registered and the jev_find return is compacted; see provenance/cmass-poolgrep.json.",
+    "release_sha256": "60afe27cc1ddd86dff87fd20cc7fe6d073050e425ae41d2b30c04478707ca2e1",
     "source": "neuclir-hybrid50/source-snapshot/src/extensions/pi_search_jev_hybrid_v2.ts",
     "source_sha256": "255b62666dbea7adb4f0708d379a3f68fb5d9320890ccd327368ab127de0329e"
   },
@@ -610,8 +610,8 @@
     "source_sha256": "9a10acf7205ddd7a635303df2b030f85b67f62051788597f88d2c4235af0e962"
   },
   "scripts/run.py": {
-    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json. CMASS hybrid: --retrieval hybrid with both service checks; see provenance/cmass-hybrid.json.",
-    "release_sha256": "e4468ce3a968500688645d628bf19dd182d631da10cfa8c3a666c03492a625cf",
+    "release_change": "Portable CMASS integration, accounting and evaluator validation; see provenance/cmass-adaptation.json. CMASS hybrid: --retrieval hybrid with both service checks; see provenance/cmass-hybrid.json. CMASS pool_grep: --pool-grep selects configs/cmass-poolgrep.json, sets CMASS_POOL_URL and checks the pool service; see provenance/cmass-poolgrep.json.",
+    "release_sha256": "7c46b64f182da4090edd700f0e48cb37f873433711a593d2556a36a2bfb9542c",
     "source": "cmass-sol61/evaluated-source/scripts/run.py",
     "source_sha256": "249c972339682c70bc308239472dbff3f15f0ae913aefb0c17a8ec808dffabb6"
   },

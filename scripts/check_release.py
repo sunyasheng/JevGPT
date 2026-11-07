@@ -49,7 +49,7 @@ def main():
         elif digest != source.get("release_sha256") or not (source.get("portability_change") or source.get("release_change")):
             raise ValueError(f"Unrecorded change to imported code: {name}")
     verify_paper(paper_rows())
-    variants = ("bm25", "hybrid")  # README columns: JevGPT-BM25, JevGPT-HybridBM25
+    variants = ("bm25", "hybrid", "poolgrep")  # README columns: JevGPT-BM25, JevGPT-HybridBM25, JevGPT w/ pool_grep
     cmass = {variant: released_report(variant) for variant in variants}
     for variant in variants:
         verify_cmass(cmass[variant], variant)
@@ -59,7 +59,7 @@ def main():
         if line.startswith("|"):
             cells = [c.strip().replace("*", "") for c in line.strip("|").split("|")]
             found = [re.fullmatch(r"(\d+) / (\d+) \((\d+\.\d\d)%\)", c) for c in cells[1:]]
-            if len(cells) == 3 and all(found):
+            if len(cells) == 1 + len(variants) and all(found):
                 observed.append(tuple((m[1] + "/" + m[2], m[3]) for m in found))
     expected = list(zip(*[[(row[1], row[2]) for row in table_rows(cmass[v])] for v in variants]))
     if not expected or observed != expected:
@@ -75,7 +75,7 @@ def main():
     neuclir = read_json(ROOT / "splits/neuclir.json")
     check_cohorts("NeuCLIR", neuclir, 105)
     print(json.dumps({"release_files": len(listed), "imported_files": len(sources),
-                      "unchanged_imports": unchanged, "paper_rows_verified": 2, "cmass_questions_verified": 423, "cmass_variants_verified": 2, "status": "passed"}, indent=2))
+                      "unchanged_imports": unchanged, "paper_rows_verified": 2, "cmass_questions_verified": 423, "cmass_variants_verified": len(variants), "status": "passed"}, indent=2))
 
 
 if __name__ == "__main__":

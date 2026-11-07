@@ -11,6 +11,7 @@ assets/teaser.png
 configs/browsecomp.json
 configs/cmass-hybrid.json
 configs/cmass-models.example.json
+configs/cmass-poolgrep.json
 configs/cmass.json
 configs/neuclir.json
 docs/cmass.md
@@ -39,6 +40,7 @@ provenance/cmass-adaptation.json
 provenance/cmass-data.json
 provenance/cmass-hybrid.json
 provenance/cmass-index.json
+provenance/cmass-poolgrep.json
 provenance/cmass-selection.json
 provenance/data-sources.json
 provenance/file-hashes.json
@@ -52,6 +54,8 @@ requirements.txt
 results/browsecomp.jsonl
 results/cmass-hybrid-summary.json
 results/cmass-hybrid.jsonl
+results/cmass-poolgrep-summary.json
+results/cmass-poolgrep.jsonl
 results/cmass-summary.json
 results/cmass.jsonl
 results/neuclir.jsonl
@@ -75,6 +79,7 @@ runtime/pi-serini/src/benchmarks/types.ts
 runtime/pi-serini/src/evaluation/retrieval_eval_summary.ts
 runtime/pi-serini/src/evaluation/retrieval_metrics.ts
 runtime/pi-serini/src/evaluation/run_docid_views.ts
+runtime/pi-serini/src/extensions/compact_find_output_v1.ts
 runtime/pi-serini/src/extensions/jev_adaptive_overlap_v1.ts
 runtime/pi-serini/src/extensions/jev_auto_scan_v1.ts
 runtime/pi-serini/src/extensions/jev_context_selection_gate_v1.ts
@@ -115,6 +120,7 @@ runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v1.ts
 runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts
 runtime/pi-serini/src/extensions/pi_search_jev_ranking_autoscan_v1.ts
 runtime/pi-serini/src/extensions/pi_search_jev_unified_v1.ts
+runtime/pi-serini/src/extensions/pool_grep_v1.ts
 runtime/pi-serini/src/extensions/read_document_paged_v1.ts
 runtime/pi-serini/src/lib/json_validation.ts
 runtime/pi-serini/src/orchestration/benchmark_query_set_launch.ts
@@ -167,6 +173,7 @@ runtime/pi-serini/src/search-providers/anserini/passage_backend_factory.ts
 runtime/pi-serini/src/search-providers/anserini/pi_search_backend_factory.ts
 runtime/pi-serini/src/wrappers/downstream_tool_wrappers.ts
 runtime/pi-serini/tests/cmass_legacy.test.ts
+runtime/pi-serini/tests/compact_find_output_v1.test.ts
 runtime/pi-serini/tests/fixtures/cmass-legacy.json
 runtime/pi-serini/tests/jev_auto_scan_v1.test.ts
 runtime/pi-serini/tests/jev_document_ranking.test.ts
@@ -198,11 +205,13 @@ services/cmass_bridge.py
 services/cmass_hybrid/ClimbMixPassageCollection.java
 services/cmass_hybrid/IndexTools.java
 services/cmass_hybrid/SearchService.java
+services/cmass_pool.py
 services/cmass_search.py
 services/neuclir_bridge.py
 services/neuclir_hybrid.py
 splits/browsecomp.json
 splits/cmass-hybrid.json
+splits/cmass-poolgrep.json
 splits/cmass.json
 splits/neuclir.json
 tests/test_cmass.py

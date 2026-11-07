@@ -14,12 +14,14 @@ except ImportError:
 
 DATASETS = ("bcp", "trqa", "dsqa", "hotpotqa")
 ID_PATTERN = re.compile(r"(bcp|trqa|dsqa|hotpotqa)__[A-Za-z0-9_-]+")
-# Two frozen releases over the same 423 questions; see README and docs/cmass.md.
+# Three frozen releases over the same 423 questions; see README and docs/cmass.md.
 VARIANTS = {
     "bm25": dict(records="results/cmass.jsonl", summary="results/cmass-summary.json",
-                 split="splits/cmass.json", cohort="cmass-sol61-high-1800s"),
+                 split="splits/cmass.json", cohort="cmass-sol61-high-1800s", stem="cmass"),
     "hybrid": dict(records="results/cmass-hybrid.jsonl", summary="results/cmass-hybrid-summary.json",
-                   split="splits/cmass-hybrid.json", cohort="cmass-hybrid-bm25-sol61-high-1800s"),
+                   split="splits/cmass-hybrid.json", cohort="cmass-hybrid-bm25-sol61-high-1800s", stem="cmass-hybrid"),
+    "poolgrep": dict(records="results/cmass-poolgrep.jsonl", summary="results/cmass-poolgrep-summary.json",
+                     split="splits/cmass-poolgrep.json", cohort="cmass-bm25-poolgrep-sol61-high-1800s", stem="cmass-poolgrep"),
 }
 RECALL_SCOPES = {
     "search_shown_docids": "IDs actually displayed by search/result previews; Recall@all scope.",
@@ -95,6 +97,9 @@ def summarize(rows, qrels=None):
                 if valid and not (usage and result["items_with_unknown_usage"])
                 else None
             )
+        if all(type(r.get("pool_grep_calls")) is int and r["pool_grep_calls"] >= 0 for r in items):
+            # JevGPT w/ pool_grep records; absent from the other variants.
+            result["pool_grep_calls_mean"] = sum(r["pool_grep_calls"] for r in items) / len(items)
         for key in (
             "input_tokens",
             "cached_input_tokens",
@@ -200,8 +205,8 @@ def verify_release(report, variant="bm25"):
     def compare(actual, reference, path):
         for key, value in reference.items():
             found = actual.get(key)
-            if variant == "hybrid" and key == "accounting_complete":
-                # The published hybrid summary uses this name for usage_complete; GPT cost stays unknown.
+            if variant in ("hybrid", "poolgrep") and key == "accounting_complete":
+                # These published summaries use this name for usage_complete; GPT cost stays unknown.
                 found = actual["usage_complete"]
             if isinstance(value, dict):
                 compare(found, value, path + "." + key)
@@ -216,8 +221,35 @@ def verify_release(report, variant="bm25"):
     compare(report, {key: expected[key] for key in ("all", "by_dataset")}, "cmass")
     if variant == "bm25":
         verify_selection()
-    else:
+    elif variant == "hybrid":
         verify_hybrid_records()
+    else:
+        verify_poolgrep_records()
+
+
+def verify_poolgrep_records():
+    """JevGPT w/ pool_grep: one selected entry per question, identical to the Hugging Face records."""
+    files = VARIANTS["poolgrep"]
+    bound = read_json(ROOT / "provenance/cmass-poolgrep.json")["records"]["sha256"]
+    if any(sha256(ROOT / files[key]) != bound[files[key]] for key in ("records", "summary", "split")):
+        raise ValueError("CMASS pool_grep files differ from the published records")
+    rows = read_jsonl(ROOT / files["records"])
+    if [r["query_id"] for r in rows] != read_json(ROOT / files["split"])["all"]:
+        raise ValueError("CMASS pool_grep records and split disagree")
+    if set(read_json(ROOT / VARIANTS["bm25"]["split"])["all"]) != {r["query_id"] for r in rows}:
+        raise ValueError("CMASS variants must cover the same questions")
+    for row in rows:
+        if (
+            row["model"] != "gpt-6.1-sol"
+            or row["reasoning_effort"] != "high"
+            or row["cohort"] != files["cohort"]
+            or row["retriever"] != "document-bm25"
+            or row["runtime_group"] != "stage4-poolgrep-compact"
+            or type(row["pool_grep_calls"]) is not int
+            or row["pool_grep_calls"] < 0
+        ):
+            raise ValueError("Unexpected CMASS pool_grep model/settings/cohort")
+        check_jev_cost(row)
 
 
 def check_jev_cost(row):
@@ -385,7 +417,7 @@ def report_cli(args, variant="bm25"):
     if report["all"]["unknown_grades"]:
         markdown += f"\nUnresolved grades: {report['all']['unknown_grades']}; accuracy is unavailable.\n"
     if args.out:
-        stem = "cmass" if variant == "bm25" else "cmass-hybrid"
+        stem = VARIANTS[variant]["stem"]
         args.out.mkdir(parents=True, exist_ok=True)
         (args.out / f"{stem}.md").write_text(markdown, encoding="utf-8")
         (args.out / f"{stem}.json").write_text(

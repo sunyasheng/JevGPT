@@ -1,0 +1,49 @@
+{
+  "method": "JevGPT w/ pool_grep",
+  "system_two_model": "gpt-6.1-sol",
+  "thinking": "high",
+  "system_one_model": "jev-1.13.0",
+  "timeout_seconds": 1800,
+  "submit_now_seconds": 1260,
+  "batch_size": 60,
+  "gpt_source_chars": 100000,
+  "prices_usd_per_million": {
+    "input": null,
+    "cached_input": null,
+    "output": null,
+    "jev_input": 0.042
+  },
+  "benchmark": "cmass",
+  "workers": 4,
+  "extension": "src/extensions/pi_search_jev_cmass_v1.ts",
+  "prompt_variant": "plain_minimal",
+  "bm25": {
+    "k1": 0.9,
+    "b": 0.4
+  },
+  "environment": {
+    "JEV_AUTOSCAN_CONCURRENCY": "12",
+    "JEV_AUTOSCAN_MAX_DOCS": "3",
+    "JEV_AUTOSCAN_MIN_SCORE": "0.5",
+    "JEV_AUTOSCAN_RULE": "specificity",
+    "JEV_AUTOSCAN_TOP": "60"
+  },
+  "retriever": "climbmix-document-bm25",
+  "configured_context_tokens": 200000,
+  "max_output_tokens": 16384,
+  "provider": "cmass",
+  "retrieval": {
+    "index": "climbmix-400b",
+    "documents": 553240576,
+    "max_cached_hits": 100,
+    "preview_utf16": 500,
+    "preview_title_utf16": 220
+  },
+  "pool": {
+    "url": "http://127.0.0.1:29782",
+    "documents_per_search": 1000,
+    "grep_return_chars": 8000,
+    "grep_seconds": 5,
+    "jev_find_return": "compact"
+  }
+}

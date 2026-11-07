@@ -15,7 +15,7 @@ from urllib.parse import urlsplit
 
 from common import ROOT, RUNTIME, browsecomp_research_query, by_id, read_json, read_jsonl, sha256, write_json, write_jsonl
 from collect import collect_trial
-from cmass_config import validate_health as validate_cmass_health, validate_budget as validate_cmass_budget, validate_hybrid_health
+from cmass_config import validate_health as validate_cmass_health, validate_budget as validate_cmass_budget, validate_hybrid_health, validate_pool_health
 
 
 def inputs(path, benchmark):
@@ -56,7 +56,7 @@ def inputs(path, benchmark):
 def environment(config, args):
     # Do not inherit experimental knob overrides from another worktree/session.
     env = {k: v for k, v in os.environ.items()
-           if not k.startswith(("JEV_", "PI_BM25_", "PI_PASSAGE_", "PI_HYBRID_", "PI_SEARCH_", "INSPECT_", "CMASS_HYBRID"))}
+           if not k.startswith(("JEV_", "PI_BM25_", "PI_PASSAGE_", "PI_HYBRID_", "PI_SEARCH_", "INSPECT_", "CMASS_HYBRID", "CMASS_POOL"))}
     env.update(config["environment"])
     env.update(JEV_MODEL=config["system_one_model"], JEV_BATCH_SIZE=str(config["batch_size"]),
                JEV_GPT_SOURCE_CHARS=str(config["gpt_source_chars"]),
@@ -76,6 +76,8 @@ def environment(config, args):
         if args.retrieval == "hybrid":
             env.update(CMASS_HYBRID="1", CMASS_HYBRID_DOCUMENT_URL=args.document_url,
                        CMASS_HYBRID_PASSAGE_URL=args.passage_url)
+        if getattr(args, "pool_grep", False):
+            env["CMASS_POOL_URL"] = args.pool_url  # enables the pool, pool_grep and the compact jev_find return
     else:
         env["PI_SEARCH_TASK_MODE"] = "rank_documents"
     return env
@@ -218,6 +220,9 @@ def main():
     parser.add_argument("--workers", type=int, help="Defaults: 3 BCP, 4 NeuCLIR, 8 CMASS, 4 CMASS hybrid questions")
     parser.add_argument("--retrieval", choices=("document", "hybrid"), default="document",
                         help="CMASS: document BM25 (default) or document + passage hybrid BM25")
+    parser.add_argument("--pool-grep", action="store_true",
+                        help="JevGPT w/ pool_grep: CMASS document BM25 plus services/cmass_pool.py (configs/cmass-poolgrep.json)")
+    parser.add_argument("--pool-url", default="http://127.0.0.1:29782", help="CMASS pool_grep service")
     parser.add_argument("--document-url", default="http://127.0.0.1:29761", help="CMASS hybrid document service")
     parser.add_argument("--passage-url", default="http://127.0.0.1:29762", help="CMASS hybrid passage service")
     parser.add_argument("--doc-index", type=Path, default=ROOT / "data/browsecomp/document-index")
@@ -231,7 +236,10 @@ def main():
     args = parser.parse_args()
     if args.retrieval == "hybrid" and args.benchmark != "cmass":
         parser.error("--retrieval hybrid applies to CMASS only")
-    config_path = ROOT / "configs" / ("cmass-hybrid.json" if args.retrieval == "hybrid" else f"{args.benchmark}.json")
+    if args.pool_grep and (args.benchmark != "cmass" or args.retrieval != "document"):
+        parser.error("--pool-grep applies to CMASS document retrieval only")
+    config_path = ROOT / "configs" / ("cmass-hybrid.json" if args.retrieval == "hybrid"
+                                      else "cmass-poolgrep.json" if args.pool_grep else f"{args.benchmark}.json")
     config = read_json(config_path)
     args.model = args.model or config.get("provider", "openai") + "/" + config["system_two_model"]
     if args.benchmark == "cmass":
@@ -262,6 +270,7 @@ def main():
     if query_rows is not None and not set(ids) <= set(query_rows):
         parser.error("The question file is missing selected IDs")
     manifest = {"benchmark": args.benchmark, **({"retrieval_variant": args.retrieval} if args.benchmark == "cmass" else {}),
+                **({"pool_grep": True} if args.pool_grep else {}),
                 "ids": ids, "config": config, "model": args.model,
                 "workers": args.workers, "questions_sha256": sha256(args.questions) if query_rows else None,
                 "config_sha256": sha256(config_path),
@@ -294,7 +303,8 @@ def main():
         manifest["retrieval"] = {"doc_index": str(args.doc_index), "passage_index": str(args.passage_index),
                                  "doc_lengths_sha256": sha256(args.doc_lengths), "anserini_sha256": sha256(args.anserini_jar)}
     else:
-        names = ("document_url", "passage_url") if args.retrieval == "hybrid" else ("search_url",)
+        names = (("document_url", "passage_url") if args.retrieval == "hybrid"
+                 else ("search_url", "pool_url") if args.pool_grep else ("search_url",))
         for name in names:
             url = urlsplit(getattr(args, name))
             if url.scheme not in ("http", "https") or not url.netloc or url.username or url.password or url.query or url.fragment:
@@ -330,6 +340,10 @@ def main():
                 with urlopen(args.search_url.rstrip("/") + "/health", timeout=30,
                              context=ssl.create_default_context(cafile=certifi.where())) as response:
                     manifest["retrieval"]["fingerprint"] = validate_cmass_health(json.load(response), config)
+                if args.pool_grep:
+                    with urlopen(args.pool_url + "/health", timeout=30,
+                                 context=ssl.create_default_context(cafile=certifi.where())) as response:
+                        manifest["retrieval"]["pool_fingerprint"] = validate_pool_health(json.load(response), config)
         except Exception as error:
             parser.error("CMASS retrieval preflight failed (" + type(error).__name__ + "); no questions started")
     manifest["started_at"] = datetime.now(timezone.utc).isoformat()

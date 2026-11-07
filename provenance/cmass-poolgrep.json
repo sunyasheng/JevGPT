@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-07",
+  "base_commit": "2d851eda93c5e5480ce970d07ef3310da8100a1d",
+  "method": "JevGPT w/ pool_grep",
+  "records": {
+    "huggingface": "yashengsun/JevGPT-runs",
+    "revision": "c3fa84fd7fa4b54f677f5e5f9c3087a108bb5106",
+    "subset": "cmass_bm25_poolgrep",
+    "identical_files": {
+      "results/cmass-poolgrep.jsonl": "records/cmass-bm25-poolgrep-sol61-high-1800s.jsonl",
+      "results/cmass-poolgrep-summary.json": "records/cmass-bm25-poolgrep-sol61-high-1800s-summary.json",
+      "splits/cmass-poolgrep.json": "records/split-cmass-bm25-poolgrep-sol61-high-1800s.json"
+    },
+    "protocol": "records/cmass-bm25-poolgrep-sol61-high-1800s-protocol.json",
+    "sha256": {
+      "results/cmass-poolgrep.jsonl": "7a5112d7a1cf4cb1f90187f2ffe2d57b8f5670778b7df8a19cefca62de1dc76f",
+      "results/cmass-poolgrep-summary.json": "39aad545a5b819f58270c047b90d029270df7496277ebeabc4b98d5db7a3a6d3",
+      "splits/cmass-poolgrep.json": "d253256655cc53638ccb627d6723cfc9dffe712ea4a50702745e897781d109ec"
+    },
+    "summary_note": "accounting_complete in the published summary means complete token usage (usage_complete in scripts/cmass_results.py); GPT cost is unknown."
+  },
+  "changes_from_cmass_bm25": {
+    "document_pool": "Each search also adds its top-1,000 BM25 documents (k1=0.9, b=0.4, same index) with full text to a per-question pool.",
+    "pool_grep_tool": "System Two tool: RE2 co-occurrence over the pooled full text (all_of, show, near, window<=300, max_docs<=40, offset); at most 8,000 characters and 5 seconds per call; one added prompt rule.",
+    "jev_find_return": "The text shown to System Two omits documents without excerpts and internal trace fields; passages, coordinates, ranking and notices are unchanged."
+  },
+  "runtime": {
+    "config": "configs/cmass-poolgrep.json = configs/cmass.json plus the pool settings and 4 workers",
+    "switch": "scripts/run.py cmass --pool-grep sets CMASS_POOL_URL; without it the extension is the JevGPT-BM25 runtime",
+    "files": [
+      "runtime/pi-serini/src/extensions/pool_grep_v1.ts",
+      "runtime/pi-serini/src/extensions/compact_find_output_v1.ts",
+      "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts",
+      "services/cmass_pool.py"
+    ],
+    "pool_service": "services/cmass_pool.py --index <climbmix index> --anserini-jar <anserini-2.3.0 jar> --port 29782"
+  },
+  "comparability": "Same questions, model, budget and judge as JevGPT-BM25; the pool, the tool and the shorter jev_find return were added together, so this is not a single-factor ablation."
+}

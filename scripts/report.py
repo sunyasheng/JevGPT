@@ -120,16 +120,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Compare every unrounded paper value and GPT token cost")
     parser.add_argument("--out", type=Path, help="Write Markdown, JSON, CSV and LaTeX rows to a generated directory")
-    parser.add_argument("--benchmark", choices=tuple(COLUMNS) + ("cmass", "cmass-hybrid"))
+    parser.add_argument("--benchmark", choices=tuple(COLUMNS) + ("cmass", "cmass-hybrid", "cmass-poolgrep"))
     parser.add_argument("--records", type=Path, help="Scored JSONL from a new run")
     parser.add_argument("--cohort", type=Path, help="New run manifest.json (or a split with an all/ids list)")
     args = parser.parse_args()
-    if args.benchmark in ("cmass", "cmass-hybrid"):
+    if args.benchmark in ("cmass", "cmass-hybrid", "cmass-poolgrep"):
         try:
             from .cmass_results import report_cli
         except ImportError:
             from cmass_results import report_cli
-        report_cli(args, "hybrid" if args.benchmark == "cmass-hybrid" else "bm25")
+        report_cli(args, {"cmass": "bm25", "cmass-hybrid": "hybrid", "cmass-poolgrep": "poolgrep"}[args.benchmark])
         return
     if args.records or args.benchmark or args.cohort:
         if not (args.records and args.benchmark and args.cohort) or args.check:

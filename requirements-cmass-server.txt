@@ -1,2 +1,4 @@
 # Install on the ClimbMix index host, with JDK 21+ and the pinned Anserini jar.
 pyjnius==1.7.0
+# services/cmass_pool.py (JevGPT w/ pool_grep) also needs RE2:
+google-re2==1.1.20240702

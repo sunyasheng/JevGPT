@@ -5,6 +5,8 @@
 // from the question text, and located verbatim excerpts are attached as a notice to the model's
 // next tool result. Scans run in the background and never block the model.
 import { appendFileSync } from "node:fs";
+import { DeepPool, PoolGrepSchema, POOL_RULE } from "./pool_grep_v1";
+import { compactFindOutput } from "./compact_find_output_v1";
 import { Type } from "typebox";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { resolvePiSearchExtensionConfigFromEnv } from "../pi-search/config";
@@ -68,6 +70,8 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
     if (process.env.JEV_FIND_LOG)
       appendFileSync(process.env.JEV_FIND_LOG, JSON.stringify(record) + "\n");
   };
+  // JevGPT w/ pool_grep (CMASS document BM25 only): CMASS_POOL_URL names services/cmass_pool.py.
+  const pool = documentOnly && process.env.CMASS_POOL_URL ? new DeepPool(audit) : undefined;
   let backend: HybridBm25Backend | undefined;
   const runtime = new PiSearchBackendRuntime(resolvePiSearchExtensionConfigFromEnv(process.env), {
     createBackend: (cwd, config) =>
@@ -140,6 +144,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
     return notices;
   };
   const reset = (ending = false) => {
+    pool?.reset();
     if (questionLifetime) {
       if (ending) searchStore.endQuestion(); else searchStore.beginQuestion();
       scanner.stop();
@@ -196,6 +201,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
                 previewedDocids?: string[];
               };
               if (tool.name === "search" && details.searchId && details.retrievedDocids) {
+                await pool?.add(String((args[1] as { query?: string }).query ?? "").trim(), details.searchId, args[2]);
                 rankings.set(details.searchId, [...details.retrievedDocids]);
                 progress.recordSearch(
                   details.searchId,
@@ -426,8 +432,17 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
             : 0,
         })),
       });
-      return { ...result, content: [{ type: "text" as const, text: JSON.stringify(output) }] };
+      const shown = pool
+        ? compactFindOutput(output, params.docids ? { requestedDocids: params.docids, attemptedDocids: result.details.attemptedDocids } : undefined)
+        : output;
+      return { ...result, content: [{ type: "text" as const, text: JSON.stringify(shown) }] };
     },
+  });
+  if (pool) pi.registerTool({
+    name: "pool_grep", label: "Pool grep",
+    description: "Find full-text co-occurrence in the cumulative question pool. all_of contains 1 to 4 case-insensitive RE2 patterns (all must occur anywhere in a document). show defaults to all_of[0]; near requires the same window to match. window defaults to 150 characters each side (max 300), max_docs defaults to 20 (max 40), offset is zero-based. Returns pool size, matching count and ranked docids with title, best rank, search_id and at most 3 windows, capped at 8000 characters. Use offset to page. Patterns are at most 200 characters. Always provide reason first.",
+    parameters: PoolGrepSchema,
+    async execute(_id, params, signal) { return pool.grep(params, signal); },
   });
   pi.on("session_start", async () => {
     reset();
@@ -472,6 +487,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
   pi.on("agent_end", async () => {
     scanner.stop();
     audit({ type: "auto_scan_summary", ...scanner.stats });
+    pool?.finish();
   });
   pi.on("tool_call", async (event) => {
     if (event.toolName === "jev_find" && performance.now() >= deadline)
@@ -486,7 +502,7 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
       `\nDocument navigation: ${navigationDescription} Use jev_find with a cached search_id and independent evidence questions to inspect up to ${batchSize} ranked results. You need not preview all ids or manage intermediate batches. Ranked discovery starts with up to 10 results and expands by 10. Explicit ids start with those sources and may expand through their cached ranking. Jev controls this call's progressive expansion and up to two bounded context reads; it assesses only the current verification questions. Returned evidence carries the parent docid, original line numbers and source_offsets_utf16 in the full document; read_document(parent docid, start_index) reads surrounding original context. You are responsible for deciding whether the original research question needs another search or can be answered, using the full conversation and previously returned source. Before continuing, identify what evidence is still missing, whether it could change the candidate identification, and which concrete new source or search lead could resolve it. Do not restart verification solely because complete=false, a local clue is unresolved, or a fact is absent from Jev's selected history. Avoid repeating searches that only reconfirm already supported clues. Keep entities and relations linked; contradictory source or a material identification gap warrants further investigation. When the answer is supported but a remaining clue cannot be verified with promising available leads, answer with an explicit qualification instead of inventing support. complete and unresolved_queries apply only to the current tool call. stop_reason=no_progress describes this ranking, not absence of a fact. assessment_status=unavailable or not_assessed means no current judgment; it does not create new evidence gaps. Review any last_successful_assessment only within its recorded query/source scope. Evidence memory is maintained automatically. Native read_document remains available after one Jev attempt per document or ranking; use its bounded pages for missing context. Missing or omitted source never proves absence.` +
       (autoScanEnabled
         ? `\nAuto-scan: after each search, Jev scans in the background the top ${autoScanTop} ranked results that were not scanned before, against clue statements taken from the question. When it locates clue text, a notice (AUTO_SCAN_NOTICES, or auto_scan_notices inside a jev_find result) is attached to your next tool result with verbatim excerpts, parent docids, original lines and offsets. Treat located results as leads: inspect a promising one with jev_find(docids=[...]) or read_document(parent docid), and reconsider your current candidate when a notice points elsewhere. A notice never proves an answer, and the absence of a notice never proves absence.`
-        : "");
+        : "") + (pool ? `\n12. ${POOL_RULE}` : "");
     dumpPromptSnapshot(systemPrompt, event.prompt);
     return { systemPrompt };
   });
