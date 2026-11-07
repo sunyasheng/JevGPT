@@ -34,6 +34,5 @@
       "services/cmass_pool.py"
     ],
     "pool_service": "services/cmass_pool.py --index <climbmix index> --anserini-jar <anserini-2.3.0 jar> --port 29782"
-  },
-  "comparability": "Same questions, model, budget and judge as JevGPT-BM25; the pool, the tool and the shorter jev_find return were added together, so this is not a single-factor ablation."
+  }
 }

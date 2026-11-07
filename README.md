@@ -119,7 +119,7 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
 | **Overall — strict** | **395 / 423 (93.38%)** | **395 / 423 (93.38%)** | **406 / 423 (95.98%)** |
 | **Overall — relaxed** | **397 / 423 (93.85%)** | **398 / 423 (94.09%)** | **408 / 423 (96.45%)** |
 
-**JevGPT-BM25** retrieves whole documents with BM25. **JevGPT-HybridBM25** fuses document and passage BM25 with the paper's BrowseComp-Plus settings. **JevGPT w/ pool_grep** is JevGPT-BM25 plus a per-question pool of each search's top-1,000 documents, a `pool_grep` tool that greps their full text for co-occurring terms, and a shorter `jev_find` return (`python scripts/run.py cmass --pool-grep`). The runs also differ in BM25 parameters and runtime details, so this is not a single-factor ablation. DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run and verify](docs/cmass.md).
+**JevGPT-BM25** retrieves whole documents with BM25. **JevGPT-HybridBM25** fuses document and passage BM25 with the paper's BrowseComp-Plus settings. **JevGPT w/ pool_grep** is JevGPT-BM25 plus a per-question pool of each search's top-1,000 documents, a `pool_grep` tool that greps their full text for co-occurring terms, and a shorter `jev_find` return (`python scripts/run.py cmass --pool-grep`). DSQA follows the official strict/relaxed grading criteria. [Benchmark paper](https://arxiv.org/abs/2608.20317) · [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run and verify](docs/cmass.md).
 
 ## 🚀 Quick start
 

@@ -29,17 +29,8 @@ The report includes DSQA strict/relaxed and both overall criteria, each counting
 Face. Questions, answers and source documents are not included in the GitHub
 records. Hashes connect each record to its answer, grade and trajectory.
 
-Published rows use one finalized, validated output per fixed question. The
-[execution and selection ledger](../provenance/cmass-selection.json) records the
-selection rule, artifact counts, saved outcomes and service events. Resource
-figures cover the selected outputs. The hybrid release has one selected entry per
-question. Its 80 BCP questions ran before the search-ID lifetime fix described
-below; three of them (bcp__176, bcp__979, bcp__538) retain Jev 502/503 service
-failures, and later diagnostic reruns are not included. The two variants also
-differ in document BM25 parameters and cache depth (100 vs 1,000 hits per
-search), so they are not a single-factor ablation
-([provenance](../provenance/cmass-hybrid.json)). The commands below start a fresh run and
-do not repeat the archived campaign's additional executions.
+Published rows use one finalized, validated output per fixed question, and
+resource figures cover those outputs. The commands below start a fresh run.
 
 ## Prepare inputs
 
