@@ -191,7 +191,7 @@ def main():
             writer.writerows([headers, cells])
             (args.out / f"{benchmark}.csv").write_text(stream.getvalue())
             # Standalone row fragments, ready to insert into the manuscript tables.
-            tex = " & ".join(cells[:2] + [c if c != "—" else r"\textemdash{}" for c in cells[3:]]) + r"\\" + "\n"
+            tex = " & ".join([c.replace("_", r"\_") for c in cells[:2]] + [c if c != "—" else r"\textemdash{}" for c in cells[3:]]) + r"\\" + "\n"
             (args.out / f"{benchmark}.tex").write_text(tex)
     print(markdown)
     if args.check:
