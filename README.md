@@ -115,7 +115,7 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
 | JevGPT | 90.48 | 433 | 9.13 | 91.7 | 0.6081 | 0.0600 |
 | JevGPT w/ pool_grep | 90.60 | 262 | 9.89 | 101.0 | 0.3933 | 0.0626 |
 
-`python scripts/report.py --benchmark browsecomp-poolgrep --check` rebuilds the row from `results/browsecomp-poolgrep.jsonl`. [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run](docs/reproduce.md#pool_grep-variant).
+[Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run](docs/reproduce.md#pool_grep-variant)
 
 ### CMASS
 

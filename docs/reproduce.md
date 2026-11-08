@@ -100,7 +100,7 @@ python scripts/run.py browsecomp --pool-grep --out runs/browsecomp-poolgrep --dr
 python scripts/run.py browsecomp --pool-grep --out runs/browsecomp-poolgrep
 ```
 
-`configs/browsecomp-poolgrep.json` is `configs/browsecomp.json` plus the pool settings. Grade and report as below, with `runs/browsecomp-poolgrep` as the run directory. The released records are `results/browsecomp-poolgrep.jsonl`; `python scripts/report.py --benchmark browsecomp-poolgrep --check` rebuilds their row.
+`configs/browsecomp-poolgrep.json` is `configs/browsecomp.json` plus the pool settings. Grade and report as below, with `runs/browsecomp-poolgrep` as the run directory.
 
 ### Grade and report
 

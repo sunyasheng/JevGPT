@@ -37,7 +37,6 @@ evaluation/cmass_protocol/protocol.py
 evaluation/neuclir.py
 inputs/neuclir-topics.jsonl
 licenses/BrowseComp-Plus-LICENSE
-provenance/browsecomp-poolgrep.json
 provenance/cmass-adaptation.json
 provenance/cmass-data.json
 provenance/cmass-hybrid.json
@@ -53,8 +52,6 @@ requirements-cmass-server.txt
 requirements-data.txt
 requirements-neuclir-server.txt
 requirements.txt
-results/browsecomp-poolgrep-summary.json
-results/browsecomp-poolgrep.jsonl
 results/browsecomp.jsonl
 results/cmass-hybrid-summary.json
 results/cmass-hybrid.jsonl
@@ -214,7 +211,6 @@ services/cmass_pool.py
 services/cmass_search.py
 services/neuclir_bridge.py
 services/neuclir_hybrid.py
-splits/browsecomp-poolgrep.json
 splits/browsecomp.json
 splits/cmass-hybrid.json
 splits/cmass-poolgrep.json

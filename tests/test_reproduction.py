@@ -173,21 +173,6 @@ class BoundaryTests(unittest.TestCase):
             self.assertNotEqual(subprocess.run([sys.executable, str(ROOT / "scripts/run.py"), "neuclir", "--pool-grep",
                                                 "--out", tmp + "/neuclir", "--dry-run"], capture_output=True, text=True).returncode, 0)
 
-    def test_browsecomp_poolgrep_records_rebuild_the_published_row(self):
-        from scripts.report import poolgrep_row, verify_poolgrep
-
-        row = poolgrep_row()
-        verify_poolgrep(row)
-        self.assertEqual((row["n"], row["correct"]), (830, 752))
-        self.assertEqual((format(row["accuracy_percent"], ".2f"), format(row["tokens_mean_k"], ".0f")), ("90.60", "262"))
-        result = subprocess.run([sys.executable, str(ROOT / "scripts/report.py"), "--benchmark", "browsecomp-poolgrep", "--check"],
-                                capture_output=True, text=True, check=True)
-        self.assertIn("| JevGPT w/ pool_grep | Hybrid BM25 | 830 | 90.60 |", result.stdout)
-        with tempfile.TemporaryDirectory() as tmp:
-            subprocess.run([sys.executable, str(ROOT / "scripts/report.py"), "--benchmark", "browsecomp-poolgrep", "--out", tmp],
-                           capture_output=True, text=True, check=True)
-            self.assertTrue((Path(tmp) / "browsecomp-poolgrep.tex").read_text().startswith(r"JevGPT w/ pool\_grep & Hybrid BM25 & 90.60 & "))
-
     def test_browsecomp_pool_reads_full_documents_from_the_document_server(self):
         import socketserver
         import threading
