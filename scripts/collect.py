@@ -61,6 +61,8 @@ def collect_trial(folder, qid, benchmark, prices=None):
         "jev_requests": len(judgments), "jev_failed_requests": sum(not r.get("ok") for r in judgments),
         "search_calls": sum(e.get("type") == "tool_execution_start" and e.get("toolName") == "search"
                             for e in events),
+        "pool_grep_calls": sum(e.get("type") == "tool_execution_start" and e.get("toolName") == "pool_grep"
+                               for e in events),
         "elapsed_seconds": run["stats"]["elapsed_seconds"],
         "usage_unknown": bool(missing_gpt or missing_jev or not messages),
         "gpt_calls_missing_usage": missing_gpt, "jev_requests_missing_usage": missing_jev,

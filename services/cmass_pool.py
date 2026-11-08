@@ -45,11 +45,13 @@ class Pool:
         self.docs = {}
 
     def add(self, hits, search_id):
-        """hits: iterable of (docid, text) in rank order."""
+        """hits: iterable of (docid, text) in rank order; text may be a callable that loads the text."""
         for rank, (docid, text) in enumerate(hits, 1):
             docid = str(docid)
             old = self.docs.get(docid)
             if old is None:
+                if callable(text):
+                    text = text()
                 if not isinstance(text, str):
                     raise ValueError("Pool source missing")
                 title = " ".join(text.split("\n", 1)[0].split())[:220]

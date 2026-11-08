@@ -35,6 +35,7 @@
 
 ## 🔥 News
 
+- **2026-11-08** · `python scripts/run.py browsecomp --pool-grep` runs **JevGPT w/ pool_grep** on BrowseComp-Plus with the paper's Hybrid BM25 setting ([how to run](docs/reproduce.md#pool_grep-variant)).
 - **2026-11-07** · [CMASS](#cmass) adds **JevGPT w/ pool_grep**: a per-question document pool with a full-text `pool_grep` tool for System Two. 406/423 strict. Code, records and trajectories are included.
 - **2026-11-03** · [CMASS](#cmass) adds **JevGPT-HybridBM25**: document + passage BM25 with the paper's BrowseComp-Plus BM25 and fusion settings. Code, records and trajectories are included.
 - **2026-11-01** · [CMASS results](#cmass) with GPT-6.1-Sol/high are available: 423 questions, with per-question records and trajectories on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
@@ -150,6 +151,7 @@ python scripts/run.py cmass --model cmass/gpt-6.1-sol --out runs/cmass
 
 - `--dry-run` prints the frozen settings, the selected IDs and the first worker command without starting services.
 - `--ids 1,2` runs a BrowseComp-Plus subset; `--ids 200,201` runs a NeuCLIRBench subset.
+- `--pool-grep` runs JevGPT w/ pool_grep on BrowseComp-Plus or CMASS ([details](docs/reproduce.md#pool_grep-variant)).
 - Every live run writes to a fresh output directory and keeps failed outcomes.
 
 Live experiments need GPT and Jev access and the benchmark indexes.

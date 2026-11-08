@@ -91,6 +91,17 @@ python scripts/run.py browsecomp \
   --out runs/browsecomp
 ```
 
+### pool_grep variant
+
+`--pool-grep` runs JevGPT w/ pool_grep with the same Hybrid BM25 retrieval, model, budget and judge. Every `search` also adds the query's top-1,000 document-BM25 results, with their full text, to a pool that lasts for the question. System Two gets a `pool_grep` tool that greps the pool for co-occurring RE2 patterns, and `jev_find` returns its shorter compact form. The tool, the compact return and the pool limits are the ones described for [CMASS](cmass.md#pool_grep-variant). `scripts/run.py` starts the pool service, `services/browsecomp_pool.py`, next to each question's document server; it needs `pip install google-re2` in the launcher's Python environment.
+
+```bash
+python scripts/run.py browsecomp --pool-grep --out runs/browsecomp-poolgrep --dry-run
+python scripts/run.py browsecomp --pool-grep --out runs/browsecomp-poolgrep
+```
+
+`configs/browsecomp-poolgrep.json` is `configs/browsecomp.json` plus the pool settings. Grade and report as below, with `runs/browsecomp-poolgrep` as the run directory.
+
 ### Grade and report
 
 Grade the completed run separately, with the official BCP prompt and parser:

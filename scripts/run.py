@@ -164,7 +164,13 @@ def trial(qid, config, args, env):
                 passage = stack.enter_context(service(bm25_command(args, args.passage_index, config["passage_bm25"]), folder / "passage-backend.log", local))
                 local.update(PI_BM25_RPC_HOST=doc["host"], PI_BM25_RPC_PORT=str(doc["port"]),
                              PI_PASSAGE_RPC_HOST=passage["host"], PI_PASSAGE_RPC_PORT=str(passage["port"]))
-                write_json(folder / "backend.json", {"document": doc, "passage": passage})
+                backends = {"document": doc, "passage": passage}
+                if args.pool_grep:
+                    pool = stack.enter_context(service([sys.executable, str(ROOT / "services/browsecomp_pool.py"),
+                        "--document-host", doc["host"], "--document-port", str(doc["port"])], folder / "pool-backend.log", local))
+                    local["CMASS_POOL_URL"] = f"http://127.0.0.1:{pool['port']}"  # enables the pool, pool_grep and the compact jev_find return
+                    backends["pool"] = pool
+                write_json(folder / "backend.json", backends)
             elif args.benchmark == "cmass" and args.retrieval == "hybrid":
                 # The extension queries both services directly; this entry only configures the shared runtime.
                 health = hybrid_health(args, config)
@@ -221,7 +227,7 @@ def main():
     parser.add_argument("--retrieval", choices=("document", "hybrid"), default="document",
                         help="CMASS: document BM25 (default) or document + passage hybrid BM25")
     parser.add_argument("--pool-grep", action="store_true",
-                        help="JevGPT w/ pool_grep: CMASS document BM25 plus services/cmass_pool.py (configs/cmass-poolgrep.json)")
+                        help="JevGPT w/ pool_grep (configs/<benchmark>-poolgrep.json): BrowseComp-Plus with services/browsecomp_pool.py per question, or CMASS document BM25 with services/cmass_pool.py")
     parser.add_argument("--pool-url", default="http://127.0.0.1:29782", help="CMASS pool_grep service")
     parser.add_argument("--document-url", default="http://127.0.0.1:29761", help="CMASS hybrid document service")
     parser.add_argument("--passage-url", default="http://127.0.0.1:29762", help="CMASS hybrid passage service")
@@ -236,10 +242,10 @@ def main():
     args = parser.parse_args()
     if args.retrieval == "hybrid" and args.benchmark != "cmass":
         parser.error("--retrieval hybrid applies to CMASS only")
-    if args.pool_grep and (args.benchmark != "cmass" or args.retrieval != "document"):
-        parser.error("--pool-grep applies to CMASS document retrieval only")
+    if args.pool_grep and (args.benchmark == "neuclir" or args.retrieval != "document"):
+        parser.error("--pool-grep applies to BrowseComp-Plus and to CMASS document retrieval")
     config_path = ROOT / "configs" / ("cmass-hybrid.json" if args.retrieval == "hybrid"
-                                      else "cmass-poolgrep.json" if args.pool_grep else f"{args.benchmark}.json")
+                                      else f"{args.benchmark}-poolgrep.json" if args.pool_grep else f"{args.benchmark}.json")
     config = read_json(config_path)
     args.model = args.model or config.get("provider", "openai") + "/" + config["system_two_model"]
     if args.benchmark == "cmass":
@@ -302,6 +308,12 @@ def main():
                 parser.error(f"Missing BCP asset: {p}; see docs/reproduce.md#browsecomp-plus")
         manifest["retrieval"] = {"doc_index": str(args.doc_index), "passage_index": str(args.passage_index),
                                  "doc_lengths_sha256": sha256(args.doc_lengths), "anserini_sha256": sha256(args.anserini_jar)}
+        if args.pool_grep:
+            try:
+                import re2  # noqa: F401
+            except ImportError:
+                parser.error("Install google-re2 in this Python environment for services/browsecomp_pool.py")
+            manifest["retrieval"]["pool"] = config["pool"]
     else:
         names = (("document_url", "passage_url") if args.retrieval == "hybrid"
                  else ("search_url", "pool_url") if args.pool_grep else ("search_url",))

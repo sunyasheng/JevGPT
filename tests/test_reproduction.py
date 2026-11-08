@@ -158,6 +158,67 @@ class BoundaryTests(unittest.TestCase):
                 self.assertEqual(plan["config"]["submit_now_seconds"], 210)
                 self.assertFalse(out.exists())
 
+    def test_pool_grep_dry_run_selects_the_browsecomp_variant(self):
+        from common import sha256
+
+        with tempfile.TemporaryDirectory() as tmp:
+            base = [sys.executable, str(ROOT / "scripts/run.py"), "browsecomp", "--ids", "1", "--out", tmp + "/run", "--dry-run"]
+            plan = json.loads(subprocess.run(base + ["--pool-grep"], capture_output=True, text=True, check=True).stdout)
+            self.assertTrue(plan["pool_grep"])
+            self.assertEqual(plan["config_sha256"], sha256(ROOT / "configs/browsecomp-poolgrep.json"))
+            self.assertEqual(plan["config"]["pool"]["documents_per_search"], 1000)
+            self.assertEqual(plan["config"]["bm25"], {"k1": 25, "b": 1})
+            self.assertEqual(plan["config"]["timeout_seconds"], 300)
+            self.assertNotIn("pool_grep", json.loads(subprocess.run(base, capture_output=True, text=True, check=True).stdout))
+            self.assertNotEqual(subprocess.run([sys.executable, str(ROOT / "scripts/run.py"), "neuclir", "--pool-grep",
+                                                "--out", tmp + "/neuclir", "--dry-run"], capture_output=True, text=True).returncode, 0)
+
+    def test_browsecomp_pool_reads_full_documents_from_the_document_server(self):
+        import socketserver
+        import threading
+        from services.browsecomp_pool import DocumentServer
+        from services.cmass_pool import Pool
+
+        texts = {"d1": "Title one\nline two", "d2": "Title two\nmore", "d3": "Title three\nlong"}
+        reads = []
+
+        class Handler(socketserver.StreamRequestHandler):
+            def handle(self):
+                command = json.loads(self.rfile.readline())
+                if command["type"] == "search":
+                    expected = {"query_mode": "plain", "k": 1000, "rerank_clues": []}
+                    order = ["d1", "d2"] if command["query"] == "first" else ["d2", "d3", "missing", "d1"]
+                    data = {"results": [{"docid": d} for d in order]} if all(command[k] == v for k, v in expected.items()) else {}
+                else:
+                    reads.append(command["docid"])
+                    if command["docid"] == "missing" or (command["offset"], command["limit"]) != (1, 2147483647):
+                        data = {"found": False}
+                    elif command["docid"] == "d3":
+                        data = {"found": True, "truncated": True, "text": "Title three"}
+                    else:
+                        data = {"found": True, "truncated": False, "text": texts[command["docid"]]}
+                self.wfile.write((json.dumps({"id": command["id"], "success": True, "data": data}) + "\n").encode())
+
+        with socketserver.ThreadingTCPServer(("127.0.0.1", 0), Handler) as server:
+            threading.Thread(target=server.serve_forever, daemon=True).start()
+            try:
+                documents = DocumentServer(*server.server_address)
+                pool = Pool()
+                first = documents.search("first")
+                pool.add(first, "s1")
+                second = documents.search("second")
+                self.assertEqual([docid for docid, _ in second], ["d2", "d3", "missing", "d1"])
+                with self.assertRaises(ValueError):  # d3 is truncated
+                    pool.add(second[:2], "s2")
+                with self.assertRaises(ValueError):  # missing document
+                    second[2][1]()
+            finally:
+                server.shutdown()
+        self.assertEqual([docid for docid, _ in first], ["d1", "d2"])
+        self.assertEqual(pool.docs["d1"]["text"], "Title one\nline two")
+        self.assertEqual((pool.docs["d2"]["best_rank"], pool.docs["d2"]["search_id"]), (1, "s2"))
+        self.assertEqual(reads, ["d1", "d2", "d3", "missing"])  # each pooled document is read once
+
 
 if __name__ == "__main__":
     unittest.main()

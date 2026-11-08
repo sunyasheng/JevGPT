@@ -8,6 +8,7 @@ assets/bcp-evidence.png
 assets/cost-quality.png
 assets/method.png
 assets/teaser.png
+configs/browsecomp-poolgrep.json
 configs/browsecomp.json
 configs/cmass-hybrid.json
 configs/cmass-models.example.json
@@ -201,6 +202,7 @@ scripts/report.py
 scripts/run.py
 scripts/setup_browsecomp.py
 scripts/transport_audit.mjs
+services/browsecomp_pool.py
 services/cmass_bridge.py
 services/cmass_hybrid/ClimbMixPassageCollection.java
 services/cmass_hybrid/IndexTools.java

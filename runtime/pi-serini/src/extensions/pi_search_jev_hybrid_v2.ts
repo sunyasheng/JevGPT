@@ -70,8 +70,8 @@ export function registerJevAnswerV2(pi: ExtensionAPI, retrieval: "hybrid" | "doc
     if (process.env.JEV_FIND_LOG)
       appendFileSync(process.env.JEV_FIND_LOG, JSON.stringify(record) + "\n");
   };
-  // JevGPT w/ pool_grep (CMASS document BM25 only): CMASS_POOL_URL names services/cmass_pool.py.
-  const pool = documentOnly && process.env.CMASS_POOL_URL ? new DeepPool(audit) : undefined;
+  // JevGPT w/ pool_grep: CMASS_POOL_URL names the pool service (services/browsecomp_pool.py or services/cmass_pool.py).
+  const pool = process.env.CMASS_POOL_URL ? new DeepPool(audit) : undefined;
   let backend: HybridBm25Backend | undefined;
   const runtime = new PiSearchBackendRuntime(resolvePiSearchExtensionConfigFromEnv(process.env), {
     createBackend: (cwd, config) =>
