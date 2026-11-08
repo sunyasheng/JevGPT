@@ -6,7 +6,7 @@ import shutil
 import subprocess
 
 from common import ROOT, read_json, read_jsonl, sha256
-from report import paper_rows, verify_paper
+from report import paper_rows, poolgrep_row, table, verify_paper, verify_poolgrep
 from cmass_results import released_report, table_rows, verify_release as verify_cmass
 
 
@@ -48,7 +48,15 @@ def main():
             unchanged += 1
         elif digest != source.get("release_sha256") or not (source.get("portability_change") or source.get("release_change")):
             raise ValueError(f"Unrecorded change to imported code: {name}")
-    verify_paper(paper_rows())
+    paper = paper_rows()
+    verify_paper(paper)
+    poolgrep = poolgrep_row()
+    verify_poolgrep(poolgrep)
+    section = (ROOT / "README.md").read_text().split("### BrowseComp-Plus with pool_grep\n", 1)[1].split("\n#", 1)[0]
+    for benchmark, row in (("browsecomp", paper["browsecomp"]), ("browsecomp-poolgrep", poolgrep)):
+        cells = table(benchmark, row)[1]
+        if "| " + " | ".join([cells[0]] + cells[3:]) + " |" not in section:
+            raise ValueError("README BrowseComp-Plus pool_grep table differs from the records")
     variants = ("bm25", "hybrid", "poolgrep")  # README columns: JevGPT-BM25, JevGPT-HybridBM25, JevGPT w/ pool_grep
     cmass = {variant: released_report(variant) for variant in variants}
     for variant in variants:
@@ -75,7 +83,7 @@ def main():
     neuclir = read_json(ROOT / "splits/neuclir.json")
     check_cohorts("NeuCLIR", neuclir, 105)
     print(json.dumps({"release_files": len(listed), "imported_files": len(sources),
-                      "unchanged_imports": unchanged, "paper_rows_verified": 2, "cmass_questions_verified": 423, "cmass_variants_verified": len(variants), "status": "passed"}, indent=2))
+                      "unchanged_imports": unchanged, "paper_rows_verified": 2, "browsecomp_poolgrep_questions_verified": poolgrep["n"], "cmass_questions_verified": 423, "cmass_variants_verified": len(variants), "status": "passed"}, indent=2))
 
 
 if __name__ == "__main__":

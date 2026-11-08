@@ -35,7 +35,7 @@
 
 ## 🔥 News
 
-- **2026-11-08** · `python scripts/run.py browsecomp --pool-grep` runs **JevGPT w/ pool_grep** on BrowseComp-Plus with the paper's Hybrid BM25 setting ([how to run](docs/reproduce.md#pool_grep-variant)).
+- **2026-11-08** · [BrowseComp-Plus](#browsecomp-plus-with-pool_grep) adds **JevGPT w/ pool_grep** with the paper's Hybrid BM25 setting: 752/830 (90.60%). Code, records and trajectories are included.
 - **2026-11-07** · [CMASS](#cmass) adds **JevGPT w/ pool_grep**: a per-question document pool with a full-text `pool_grep` tool for System Two. 406/423 strict. Code, records and trajectories are included.
 - **2026-11-03** · [CMASS](#cmass) adds **JevGPT-HybridBM25**: document + passage BM25 with the paper's BrowseComp-Plus BM25 and fusion settings. Code, records and trajectories are included.
 - **2026-11-01** · [CMASS results](#cmass) with GPT-6.1-Sol/high are available: 423 questions, with per-question records and trajectories on [Hugging Face](https://huggingface.co/datasets/yashengsun/JevGPT-runs).
@@ -106,6 +106,17 @@ Time and cost are per-question or per-topic means. Cost covers both systems: GPT
   <em><b>Left:</b> quality versus API cost (upper left is better). <b>Right:</b> how gold evidence reaches the research loop on BrowseComp-Plus.</em>
 </p>
 
+### BrowseComp-Plus with pool_grep
+
+**JevGPT w/ pool_grep** adds a per-question pool of each search's top-1,000 documents, a `pool_grep` tool that greps their full text for co-occurring terms, and a shorter `jev_find` return to the paper's BrowseComp-Plus setting (`python scripts/run.py browsecomp --pool-grep`).
+
+| Method | Accuracy (%) | Tokens (K) | Searches | Time (s) | S2 ($) | S1 ($) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| JevGPT | 90.48 | 433 | 9.13 | 91.7 | 0.6081 | 0.0600 |
+| JevGPT w/ pool_grep | 90.60 | 262 | 9.89 | 101.0 | 0.3933 | 0.0626 |
+
+`python scripts/report.py --benchmark browsecomp-poolgrep --check` rebuilds the row from `results/browsecomp-poolgrep.jsonl`. [Records and trajectories](https://huggingface.co/datasets/yashengsun/JevGPT-runs) · [Run](docs/reproduce.md#pool_grep-variant).
+
 ### CMASS
 
 [CMASS](https://github.com/castorini/cmass) · **423 questions** · **GPT-6.1-Sol/high** · **1,800s budget per question** ([dataset v2026.10.25](https://huggingface.co/datasets/castorini/cmass/tree/v2026.10.25)).
@@ -158,7 +169,7 @@ Live experiments need GPT and Jev access and the benchmark indexes.
 
 ## 📦 Runs and trajectories
 
-The per-item records in `results/` are enough to rebuild the original paper rows. Those runs and the CMASS evaluation are available with System Two/System One trajectories on Hugging Face at [yashengsun/JevGPT-runs](https://huggingface.co/datasets/yashengsun/JevGPT-runs):
+The per-item records in `results/` are enough to rebuild the original paper rows. Those runs, the BrowseComp-Plus pool_grep run and the CMASS evaluation are available with System Two/System One trajectories on Hugging Face at [yashengsun/JevGPT-runs](https://huggingface.co/datasets/yashengsun/JevGPT-runs):
 
 ```bash
 hf download yashengsun/JevGPT-runs --repo-type dataset --local-dir runs/paper

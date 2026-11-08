@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-08",
+  "base_commit": "c4d2d263ec096e897d6e86cd233a851a6fc1d67f",
+  "method": "JevGPT w/ pool_grep",
+  "records": {
+    "huggingface": "yashengsun/JevGPT-runs",
+    "revision": "b93965dcffd022aa8c757f6e78884968815c217d",
+    "subset": "browsecomp_plus_poolgrep_encrypted",
+    "identical_files": {
+      "results/browsecomp-poolgrep.jsonl": "records/browsecomp-poolgrep.jsonl",
+      "results/browsecomp-poolgrep-summary.json": "records/browsecomp-poolgrep-summary.json",
+      "splits/browsecomp-poolgrep.json": "records/split-browsecomp-poolgrep.json"
+    },
+    "protocol": "records/browsecomp-poolgrep-protocol.json",
+    "sha256": {
+      "results/browsecomp-poolgrep.jsonl": "650582a7e80d52ff03088a1e6f0d247599ae62385d60f7614953b3c30ee18146",
+      "results/browsecomp-poolgrep-summary.json": "b37bb790f7cd540ef6da2ef45fdf34fe6fad31f72148ef70ac113e4b9c1a9024",
+      "splits/browsecomp-poolgrep.json": "354123317b5ed96c5abbe5cacbcdd160166aeb453b688353a9dd37fcf5c30ad9"
+    }
+  },
+  "changes_from_browsecomp": {
+    "document_pool": "Each search also adds its top-1,000 document-BM25 results (k1=25, b=1) with full text to a per-question pool.",
+    "pool_grep_tool": "System Two tool: RE2 co-occurrence over the pooled full text (all_of, show, near, window<=300, max_docs<=40, offset); at most 8,000 characters and 5 seconds per call; one added prompt rule.",
+    "jev_find_return": "System Two receives the compact jev_find return (runtime/pi-serini/src/extensions/compact_find_output_v1.ts); passages, coordinates, ranking and notices are unchanged."
+  },
+  "runtime": {
+    "config": "configs/browsecomp-poolgrep.json = configs/browsecomp.json plus the pool settings",
+    "switch": "scripts/run.py browsecomp --pool-grep starts services/browsecomp_pool.py next to each question's document server and sets CMASS_POOL_URL",
+    "files": [
+      "runtime/pi-serini/src/extensions/pool_grep_v1.ts",
+      "runtime/pi-serini/src/extensions/compact_find_output_v1.ts",
+      "runtime/pi-serini/src/extensions/pi_search_jev_hybrid_v2.ts",
+      "services/browsecomp_pool.py",
+      "services/cmass_pool.py"
+    ]
+  }
+}
